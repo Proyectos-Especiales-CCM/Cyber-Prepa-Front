@@ -1,0 +1,25 @@
+name: Pull Requests Workflow
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+jobs:
+  assign-author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Author Assign
+        if: github.event_name == 'pull_request_target'
+        uses: toshimaru/auto-author-assign@v1.1.0
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+  pr-labeler:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: TimonVS/pr-labeler-action@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/pr-labeler.yml

@@ -1,0 +1,5 @@
+feature: ['feature/*', 'feat/*']
+bug: ['fix/*', 'bug/*', 'hotfix/*']
+documentation: ['docs/*', 'doc/*', 'documentation/*']
+frontend: ['ui/*', 'ux/*', 'frontend/*' ,'style/*']
+enhancement: ['enhancement/*', 'enhance/*']
