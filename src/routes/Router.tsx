@@ -1,14 +1,15 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import { ROUTES } from "./constants";
 import PublicRouter from "./PublicRouter";
+import { SignUp } from "pages";
 
 const routes: RouteObject[] = [
      {
-          path: ROUTES.HOME,
+          path: "/",
           element: <PublicRouter />,
           children: [
-               { index: true, element: <Home />},
-               { path: "*", element: <ErrorPage /> },
+               { index: true, element: <SignUp />},
+               { path: "error", element: <ErrorPage /> },
           ]
      },
      {
