@@ -1,8 +1,12 @@
 import { createContext, useContext } from 'react';
 
-const AppContext = createContext(undefined);
+const AppContext = createContext(() => {
+  
+});
 
-export const AppContextProvider = () => {}
+export const AppContextProvider = () => {
+
+}
 
 export const useAppContext = () => {
      const context = useContext(AppContext);
@@ -10,5 +14,5 @@ export const useAppContext = () => {
        throw new Error('useAppContext must be used within an AppContextProvider');
      }
      return context;
-   };
+};
    
