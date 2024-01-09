@@ -1,5 +1,3 @@
-
-// Create Users
 import httpInstance from "../httpInstance";
 
 export const refreshToken = async (
