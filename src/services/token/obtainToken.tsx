@@ -1,5 +1,3 @@
-
-// Create Users
 import httpInstance from "../httpInstance";
 
 export const obtainToken = async (
@@ -19,8 +17,10 @@ export const obtainToken = async (
         .post(endpoint, JSON.stringify(requestBody), {
             headers: { 'Content-Type': 'application/json' },
         })
-        .then((response) => {
+        .then(async (response) => {
+            
             res = response;
+            
         })
         .catch((error) => {
             res = error.response;
