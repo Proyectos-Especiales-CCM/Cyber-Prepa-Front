@@ -1,0 +1,78 @@
+.container-size {
+  max-width: 340px;
+  min-width: 340px;
+}
+
+#nav-container-logo {
+  background-color: var(--color-bg-default);
+  box-shadow: var(--color-bg-default);
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin-left: auto;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-container {
+  background-color: #161A1E;
+  border-color: #1F2227;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.form-header {
+  font-size: 25p rgba(13, 39, 39, 0);
+  color: #f6f6f6;
+  font-weight: var(--base-text-weight-light);
+}
+
+.input-block {
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+.label-link {
+  float: right;
+  font-size: 12px;
+  right: 0;
+}
+
+.sign-in-btn {
+  margin-top: 16px;
+  display: block;
+  width: 100%;
+  text-align: center;
+  background-color: #2C7579;
+  color: white;
+}
+
+.form-control {
+  padding: 5px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-fg-default);
+  vertical-align: middle;
+  background-color: var(--color-bg-default);
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  transition: 80ms cubic-bezier(0.33, 1, 0.68, 1);
+  transition-property: color, background-color, box-shadow, border-color;
+}
+
+.label-container {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: var(--base-text-weight-normal);
+  text-align: left;
+}
+
+.form-control:focus {
+  border-color: #2C7579;
+  background-color: var(--color-bg-default);
+  box-shadow: 0 0 5px #2C7579;
+  outline: none;
+}/*# sourceMappingURL=login.css.map */

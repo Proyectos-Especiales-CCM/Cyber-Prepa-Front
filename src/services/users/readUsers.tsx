@@ -1,13 +1,11 @@
 import httpInstance from "../httpInstance";
 
-export const createUser = async (matricula: string) => {
+export const readUsers = async () => {
     let res;
-    const endpoint = `addUser`;
-
-    const requestBody = { matricula: matricula };
+    const endpoint = `users`;
 
     await httpInstance
-        .post(endpoint, JSON.stringify(requestBody), {
+        .get(endpoint, {
             headers: { 'Content-Type': 'application/json' },
         })
         .then((response) => {

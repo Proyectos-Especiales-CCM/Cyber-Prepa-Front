@@ -1,1 +1,6 @@
-export { SignUp } from "./SignUp"
+export { Login } from "./Login"
+export { Home } from "./Home"
+export { ErrorPage } from "./ErrorPage"
+export { Regulations } from "./Regulations"
+export { Admin } from "./Admin"
+export { Reports } from "./Reports"
