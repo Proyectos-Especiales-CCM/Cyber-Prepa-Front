@@ -1,18 +1,10 @@
-import cyberTecLogo from '/cybertec.svg'
-import './App.css'
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes/Router';
+
 
 function App() {
-
   return (
-    <>
-
-      <div>
-        <a href="https://github.com/Djmr5/Cyber-Prepa-Front" target="_blank">
-          <img src={cyberTecLogo} className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      
-    </>
+      <RouterProvider router={router} />
   )
 }
 
