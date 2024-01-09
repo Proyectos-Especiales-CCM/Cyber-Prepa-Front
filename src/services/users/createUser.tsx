@@ -1,4 +1,3 @@
-// Create Users
 import httpInstance from "../httpInstance";
 
 export const createUser = async (
