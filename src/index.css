@@ -11,15 +11,37 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --color-bg-default: #101216; /* Color fondo negro default */
+  --color-fg-default: #fff; /* Color letras blancas(foreground) default */
+  --color-bg-toggle: #efefef; /*  Color fondo blanco toggled */
+  --color-fg-toggle: #101216; /*  Color letras negras (foreground) toggled */
+  --color-header-bg-default: #0D1116;
+  --color-border-default: #2B2F35; /* Color de border negro default */
+  --color-border-mode: #b9b9b9; /* Color de border blanco toggled */
+  
+  --global-font: 'Roboto', sans-serif;
+  --base-text-weight-light: 300;
+  --base-text-weight-normal: 400;
+  --base-text-weight-medium: 500;
+  --base-text-weight-semibold: 600;
+
+  --toggle-size: 3rem;
+  --bar-size: calc(var(--toggle-size) / 8);
+  --bar-space: calc((var(--toggle-size) - (var(--bar-size) * 5)) / 2);
+  --bar2-top: calc(var(--bar-size) + var(--bar-space));
+  --bar3-top: calc(var(--bar2-top) * 2);
+  --cyber_map: 1000px;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
-a:hover {
-  color: #535bf2;
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 body {
@@ -28,41 +50,11 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  background-color: var(--color-bg-default);
+  color: var(--color-fg-default);
+  font-family: var(--global-font);
+  height: 100%;
+  padding: 0rem;
+  box-sizing: border-box;
+  flex-direction: column;
 }
