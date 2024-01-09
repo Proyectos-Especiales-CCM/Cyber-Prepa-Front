@@ -1,4 +1,3 @@
-// Read Users
 import httpInstance from "../httpInstance";
 
 export const patchUserById = async (
