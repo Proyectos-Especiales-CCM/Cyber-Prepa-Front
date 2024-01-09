@@ -1,31 +1,34 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import { ROUTES } from "./constants";
 import PublicRouter from "./PublicRouter";
-import { SignUp } from "pages";
+import AdminRouter from "./AdminRouter";
+import {  Home,
+          Login,
+          ErrorPage,
+          Regulations,
+          Admin,
+          Reports,
+     } from "../pages";
+import { ROUTES } from "./Constants";
 
 const routes: RouteObject[] = [
      {
-          path: "/",
+          path: ROUTES.HOME,
           element: <PublicRouter />,
           children: [
-               { index: true, element: <SignUp />},
-               { path: "error", element: <ErrorPage /> },
+               { index: true, element: <Home />},
+               { path: ROUTES.LOGIN, element: <Login /> },
+               { path: ROUTES.REGULATIONS, element: <Regulations /> },
+               { path: "*", element: <ErrorPage /> },
           ]
      },
      {
-          path: ROUTES.ADMIN_PROFILE,
+          path: ROUTES.HOME,
           element: <AdminRouter />,
           children: [
-               { index: true, element: <HomeAdmin /> },
+               { index: true, element: <Home /> },
                { path: "*", element: <ErrorPage /> },
-          ]
-     },
-     {
-          path: ROUTES.HOME_USER,
-          element: <UserRouter />,
-          children: [
-               { index: true, element: <HomeUser /> },
-               { path: "*", element: <ErrorPage /> },
+               { path: ROUTES.ADMIN, element: <Admin /> },
+               { path: ROUTES.REPORTS, element: <Reports /> },
           ]
      },
 ]
