@@ -1,14 +1,14 @@
-import { Header } from "components/Header"
-import { Outlet } from "react-router-dom"
+import { Outlet } from 'react-router-dom';
+import { Header, Footer } from '../components';
 
 const PublicRouter = () => {
   return (
-    <div>
-     <Header />
-          <Outlet />
-     <Footer />
-    </div>
-  )
-}
+    <>
+      <Header/>
+        <Outlet />
+      <Footer />
+    </>
+  );
+};
 
-export default PublicRouter
+export default PublicRouter;
