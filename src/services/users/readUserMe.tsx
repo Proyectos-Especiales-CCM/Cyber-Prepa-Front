@@ -5,7 +5,7 @@ export const readUserMe = async ( token: string,
                                   setUser: (userObject: UserObject) => void,
                                   setIsAdmin: (isAdmin: boolean) => void) => {
     let res;
-    const endpoint = `users/me`;
+    const endpoint = `users/me/`;
 
     await httpInstance
         .get(endpoint, {

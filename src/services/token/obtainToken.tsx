@@ -6,7 +6,7 @@ export const obtainToken = async (
 ) => {
      
     let res;
-    const endpoint = `token`;
+    const endpoint = `token/`;
 
     const requestBody = {
           email: email,
