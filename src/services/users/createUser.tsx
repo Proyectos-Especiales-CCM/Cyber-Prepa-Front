@@ -8,7 +8,7 @@ export const createUser = async (
     is_active: boolean
 ) => {
     let res;
-    const endpoint = `users`;
+    const endpoint = `users/`;
 
     const requestBody = {
         email: email,

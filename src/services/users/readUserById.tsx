@@ -2,7 +2,7 @@ import httpInstance from "../httpInstance";
 
 export const readUserById = async ( userId: number ) => {
     let res;
-    const endpoint = `users/?id=${userId}`;
+    const endpoint = `users/?id=${userId}/`;
 
     await httpInstance
         .get(endpoint, {

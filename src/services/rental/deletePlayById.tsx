@@ -2,7 +2,7 @@ import httpInstance from "../httpInstance";
 
 export const deletePlayById = async (playId: number) => {
     let res;
-    const endpoint = `rental/plays/?id=${playId}`;
+    const endpoint = `rental/plays/?id=${playId}/`;
 
     await httpInstance
         .delete(endpoint, {

@@ -4,7 +4,7 @@ export const readGameById = async (gameId: number,
                                    token?: string | undefined
                                    ) => {
     let res;
-    const endpoint = `rental/games/?id=${gameId}`;
+    const endpoint = `rental/games/?id=${gameId}/`;
 
     const headers = {
         'Content-Type': 'application/json',

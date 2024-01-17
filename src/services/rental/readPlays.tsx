@@ -2,7 +2,7 @@ import httpInstance from "../httpInstance";
 
 export const readPlays = async (token: string | undefined) => {
     let res;
-    const endpoint = `rental/plays`;
+    const endpoint = `rental/plays/`;
 
     const headers = {
         'Content-Type': 'application/json',

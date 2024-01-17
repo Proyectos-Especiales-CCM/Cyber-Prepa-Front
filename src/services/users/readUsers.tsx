@@ -2,7 +2,7 @@ import httpInstance from "../httpInstance";
 
 export const readUsers = async () => {
     let res;
-    const endpoint = `users`;
+    const endpoint = `users/`;
 
     await httpInstance
         .get(endpoint, {

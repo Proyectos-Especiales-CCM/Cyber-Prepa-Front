@@ -8,7 +8,7 @@ export const endPlaysById = async (
     file_route: string
      ) => {
     let res;
-    const endpoint = `rental/games/?id=${gameId}/end_all_plays`;
+    const endpoint = `rental/games/?id=${gameId}/end_all_plays/`;
 
     const requestBody = {
         name: name,

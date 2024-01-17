@@ -2,7 +2,7 @@ import httpInstance from "../httpInstance";
 
 export const deleteStudentById = async (studentId: number) => {
     let res;
-    const endpoint = `rental/students/?id=${studentId}`;
+    const endpoint = `rental/students/?id=${studentId}/`;
 
     await httpInstance
         .delete(endpoint, {

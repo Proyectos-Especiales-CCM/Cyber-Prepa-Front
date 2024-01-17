@@ -5,7 +5,7 @@ export const refreshToken = async (
 ) => {
      
     let res;
-    const endpoint = `token/refresh`;
+    const endpoint = `token/refresh/`;
 
     const requestBody = {
         refresh: refresh,

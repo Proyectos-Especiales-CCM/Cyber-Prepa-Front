@@ -7,7 +7,7 @@ export const createStudent = async (
     hash: string
 ) => {
     let res;
-    const endpoint = `rental/students`;
+    const endpoint = `rental/students/`;
 
     const requestBody = {
         id: id,

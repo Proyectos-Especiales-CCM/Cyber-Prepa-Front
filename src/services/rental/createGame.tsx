@@ -7,7 +7,7 @@ export const createGame = async (
     file_route: string
 ) => {
     let res;
-    const endpoint = `rental/games`;
+    const endpoint = `rental/games/`;
 
     const requestBody = {
      name: name,
