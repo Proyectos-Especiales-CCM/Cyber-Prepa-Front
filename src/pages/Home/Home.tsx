@@ -2,9 +2,9 @@ import { useAppContext } from "../../store/appContext/appContext";
 import { useEffect, useState } from "react";
 import { getGamesData } from "./getGames";
 import { Card } from "../../components";
-import './Home.css';
+import Config from "../../config";
 import { game } from "./types";
-import { readPlays } from "../../services";
+import './Home.css';
 
 const Home = () => {
 
@@ -34,7 +34,7 @@ const Home = () => {
   useEffect(() => {
 
     // Initialize WebSocket Connection
-    const updatesSocket = new WebSocket(`ws://${window.location.host}/ws/updates/`)
+    const updatesSocket = new WebSocket(`ws://172.174.255.29/ws/updates/`)
 
     // Handle messages received from the server
     updatesSocket.onmessage = function (e) {

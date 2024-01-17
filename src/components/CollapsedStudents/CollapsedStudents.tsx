@@ -3,6 +3,7 @@ import { CollapsedStudentItem, ScrollButtons } from ".."
 import { game } from "../../pages/Home/types";
 import { readGameById, readPlays } from "../../services";
 import { useEffect, useState } from "react";
+import Config from "../../config";
 
 
 interface CollapsedStudentProps {
@@ -22,7 +23,7 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
      useEffect(() => {
 
           // Initialize WebSocket Connection
-          const updatesSocket = new WebSocket(`ws://${window.location.host}/ws/updates/`)
+          const updatesSocket = new WebSocket(`ws://172.174.255.29/ws/updates/`)
       
           // Handle messages received from the server
           updatesSocket.onmessage = async function (e) {
