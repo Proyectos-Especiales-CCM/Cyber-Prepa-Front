@@ -2,7 +2,6 @@ import { useAppContext } from "../../store/appContext/appContext";
 import { useEffect, useState } from "react";
 import { getGamesData } from "./getGames";
 import { Card } from "../../components";
-import Config from "../../config";
 import { game } from "./types";
 import './Home.css';
 
@@ -17,8 +16,9 @@ const Home = () => {
   const [gamesData, setGamesData] = useState<game[]>([]);
   const [forceRender, setForceRender] = useState(false);
 
-
+  
   // -------------- USE EFFECTS -------------- //
+
   useEffect(() => {
     const fetchData = async() => {
       try {
@@ -29,7 +29,8 @@ const Home = () => {
       }
     }
     fetchData()
-  }, [user, tokens]);
+  }, []);
+  // }, [user, tokens]);
 
   useEffect(() => {
 
@@ -38,29 +39,21 @@ const Home = () => {
 
     // Handle messages received from the server
     updatesSocket.onmessage = function (e) {
-         const data = JSON.parse(e.data);
-         const message = data['message'];
-         const sender = data['sender'];
+        const data = JSON.parse(e.data);
+        const message = data['message'];
+        const sender = data['sender'];
 
-         // Only update the UI if the message was sent by another user
-         if (sender !== user) {
-              
-              // If user is authenticated, update the game cards and student list
-              if (user !== undefined) {
-                   if (message == 'Games updated') {
-                      setForceRender((prev) => !prev); // We update a state to force the component to re-render
-                   }
-              } else { // If user not authenticated, only update game cards
-                   if (message == 'Games updated') {
-                      setForceRender((prev) => !prev);
-                   }
-              }
+        // Only update the UI if the message was sent by another user
+        if (sender !== user) {     
+          if (message == 'Games updated') {
+            setForceRender((prev) => !prev); // Re-render component
           }
+        }
       }
   }, [])
 
 
-
+  // ------------- MAIN RENDER ------------- //
   return (
     <div className="cyber__wrapper">
       <div className="cyber__cards" id="cyberCards">
