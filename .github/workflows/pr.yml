@@ -4,15 +4,14 @@ on:
   pull_request_target:
     types: [opened, reopened]
 
+permissions:
+  pull-requests: write
+
 jobs:
   assign-author:
     runs-on: ubuntu-latest
     steps:
-      - name: Auto Author Assign
-        if: github.event_name == 'pull_request_target'
-        uses: toshimaru/auto-author-assign@v1.1.0
-        with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+      - uses: toshimaru/auto-author-assign@v2.0.0
   pr-labeler:
     permissions:
       contents: read

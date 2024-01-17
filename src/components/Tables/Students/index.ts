@@ -1,0 +1,1 @@
+export { default as studentColumns } from './Students';
