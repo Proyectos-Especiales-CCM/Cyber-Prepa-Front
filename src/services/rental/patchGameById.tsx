@@ -8,7 +8,7 @@ export const patchGameById = async (
     file_route: string
      ) => {
     let res;
-    const endpoint = `rental/games/?id=${gameId}`;
+    const endpoint = `rental/games/?id=${gameId}/`;
 
     const requestBody = {
         name: name,

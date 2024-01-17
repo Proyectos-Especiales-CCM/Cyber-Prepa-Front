@@ -6,7 +6,7 @@ export const createPlay = async (
     game: number,
 ) => {
     let res;
-    const endpoint = `rental/plays`;
+    const endpoint = `rental/plays/`;
 
     const requestBody = {
         ended: ended,

@@ -7,7 +7,7 @@ export const patchPlayById = async (
     game: number,
 ) => {
     let res;
-    const endpoint = `rental/plays/id=${playId}`;
+    const endpoint = `rental/plays/id=${playId}/`;
 
     const requestBody = {
         ended: ended,

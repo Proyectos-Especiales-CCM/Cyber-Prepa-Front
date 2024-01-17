@@ -2,7 +2,7 @@ import httpInstance from "../httpInstance";
 
 export const readStudents = async () => {
     let res;
-    const endpoint = `rental/students`;
+    const endpoint = `rental/students/`;
 
     await httpInstance
         .get(endpoint, {

@@ -1,45 +1,69 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { AppContextProps, AppState, Tokens, UserObject } from './types';
 
 const AppContext = createContext<AppState | undefined>(undefined);
 
 export const AppContextProvider = ({ children }: AppContextProps) => {
   
-    const [user, setUser] =               useState<UserObject | undefined>(undefined);
-    const [tokens, setTokens] =           useState<Tokens | undefined>(undefined);
-    const [admin, setIsAdmin] =           useState<boolean>(false);
+  const [user, setUser] = useState<UserObject | undefined>(() => {
+      const storedUser = localStorage.getItem('user');
+      return storedUser ? JSON.parse(storedUser) : undefined;
+  });
 
-    const setTokensState = (accessToken: string, refreshToken: string) => {
-      setTokens({ access_token: accessToken,
-                  refresh_token: refreshToken 
-                });
-    };
+  const [tokens, setTokens] = useState<Tokens | undefined>(() => {
+      const storedTokens = localStorage.getItem('tokens');
+      return storedTokens ? JSON.parse(storedTokens) : undefined;
+  });
 
-    const logOut = () => {
+  const [admin, setIsAdmin] = useState<boolean>(() => {
+      const storedAdmin = localStorage.getItem('isAdmin');
+      return storedAdmin ? JSON.parse(storedAdmin) : false;
+  });
+
+  const setTokensState = (accessToken: string, refreshToken: string) => {
+      const newTokens = { access_token: accessToken, refresh_token: refreshToken };
+      setTokens(newTokens);
+      localStorage.setItem('tokens', JSON.stringify(newTokens));
+  };
+
+  const logOut = () => {
       setUser(undefined);
       setTokens(undefined);
       setIsAdmin(false);
+      localStorage.removeItem('user');
       localStorage.removeItem('tokens');
-      localStorage.removeItem('userId');
       localStorage.removeItem('isAdmin');
-    };
+  };
 
-    return (
+  // Save to localStorage when user changes
+  useEffect(() => {
+      if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+      }
+  }, [user]);
+
+  // Save to localStorage when admin status changes
+  useEffect(() => {
+      localStorage.setItem('isAdmin', JSON.stringify(admin));
+  }, [admin]);
+
+  return (
       <AppContext.Provider
-        value={{
-          user,
-          setUser,
-          tokens,
-          setTokens: setTokensState,
-          admin,
-          setIsAdmin,
-          logOut: logOut,
-        }}
+          value={{
+              user,
+              setUser,
+              tokens,
+              setTokens: setTokensState,
+              admin,
+              setIsAdmin,
+              logOut: logOut,
+          }}
       >
-        {children}
+          {children}
       </AppContext.Provider>
-    );
+  );
 }
+
 
 export const useAppContext = () => {
   

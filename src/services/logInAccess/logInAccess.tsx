@@ -11,18 +11,16 @@ export const logInAccess = async (
      try {
           const response: Tokens | undefined = await obtainToken(email, password)
 
-          console.log("Response of Obtain Tokens Endpoint: ", response)
-
           if (response == undefined) {
                console.error("Could not generate/retrieve tokens");
                return undefined;
           }
 
           // Obtener los valores de access_token y refresh_token del response
-          const accessToken= response.data.refresh;
-          const refreshToken = response.data.access;
+          const accessToken= response.data.access;
+          const refreshToken = response.data.refresh;
 
-          // Check if either accessToken or refreshToken is undefined
+          // Checa si accessToken o refreshToken es undefined
           if (accessToken === undefined || refreshToken === undefined) {
                console.error("No active account found with the given credentials");
                return undefined;

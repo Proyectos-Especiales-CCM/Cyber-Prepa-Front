@@ -9,7 +9,7 @@ export const updateUserById = async (
           is_active: boolean
      ) => {
     let res;
-    const endpoint = `users/?id=${userId}`;
+    const endpoint = `users/?id=${userId}/`;
 
     const requestBody = {
           email: email,

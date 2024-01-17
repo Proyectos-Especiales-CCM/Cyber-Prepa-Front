@@ -1,12 +1,19 @@
 import httpInstance from "../httpInstance";
 
-export const readGameById = async (gameId: number) => {
+export const readGameById = async (gameId: number, 
+                                   token?: string | undefined
+                                   ) => {
     let res;
-    const endpoint = `rental/games/?id=${gameId}`;
+    const endpoint = `rental/games/?id=${gameId}/`;
+
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+    };
 
     await httpInstance
         .get(endpoint, {
-            headers: { 'Content-Type': 'application/json' },
+            headers
         })
         .then((response) => {
             res = response;
