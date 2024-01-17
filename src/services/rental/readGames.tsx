@@ -8,6 +8,7 @@ export const readGames = async (token: string | undefined) => {
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': `Bearer ${token}` }),
     };
+    console.log(headers)
 
     await httpInstance
         .get(endpoint, {
@@ -19,5 +20,6 @@ export const readGames = async (token: string | undefined) => {
         .catch((error) => {
             res = error.response;
         });
+
     return res;
 };

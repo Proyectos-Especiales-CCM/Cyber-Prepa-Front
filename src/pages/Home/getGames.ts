@@ -14,7 +14,7 @@ export const getGamesData = async (
     const res = await readGames(accessToken);
     const data = res?.data;
 
-    const availableGames = data.filter((game) => game.show === true);
+    const availableGames = data.filter((game) => game.show == true);
     
     return availableGames;
 
