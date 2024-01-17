@@ -15,7 +15,7 @@ export const readUserMe = async ( token: string,
         .then((response) => {
             res = response;
 
-            localStorage.setItem("userId", res.data.id.toString());
+            localStorage.setItem("user", res.data.id.toString());
 
             // Obtener los tokens del localStorage
             // const tokensJson = localStorage.getItem("tokens") ?? "";
