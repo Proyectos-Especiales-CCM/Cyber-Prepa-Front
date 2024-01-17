@@ -1,3 +1,11 @@
 export { Header } from './Header'
 export { Footer } from './Footer'
 export { Loading } from './Loading'
+export { ModalMessage } from './Modal'
+export { Modal } from './Modal'
+
+export { playColumns } from './Tables'
+export { gameColumns } from './Tables'
+export { studentColumns } from './Tables'
+export { userColumns } from './Tables'
+export { tableOptions } from './Tables'
