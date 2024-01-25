@@ -1,6 +1,7 @@
 import httpInstance from "../httpInstance";
+import { ApiResponse, Game } from "../types";
 
-export const readGames = async (token: string | undefined) => {
+export const readGames = async (token?: string): Promise<ApiResponse<Game>> => {
     let res;
     const endpoint = `rental/games/`;
 
@@ -14,11 +15,14 @@ export const readGames = async (token: string | undefined) => {
             headers
         })
         .then((response) => {
-            res = response;
+            res = {
+                data: response.data,
+                status: response.status,
+            };
         })
         .catch((error) => {
             res = error.response;
         });
 
-    return res;
+    return res || {} as ApiResponse<Game>;
 };

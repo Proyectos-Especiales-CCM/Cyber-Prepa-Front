@@ -36,3 +36,7 @@ export { patchPlayById } from "./rental/patchPlayById";
 export { deleteGameById } from "./rental/deleteGameById";
 export { deletePlayById } from "./rental/deletePlayById";
 export { deleteStudentById } from "./rental/deleteStudentById";
+
+
+// ------------------------------------------------------------------- UTILS
+export { changeIdToName } from "./rental/changeIdToName";

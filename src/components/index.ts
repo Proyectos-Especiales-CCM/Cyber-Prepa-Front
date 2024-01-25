@@ -11,6 +11,8 @@ export { EndPlayButton } from './EndPlayButton'
 export { ScrollButtons } from './ScrollButtons'
 export { ModalMessage } from './Modal'
 export { Modal } from './Modal'
+export { CreateUserPanel } from './CreateUserPanel'
+export { CreateGamePanel } from './CreateGamePanel'
 
 export { playColumns } from './Tables'
 export { gameColumns } from './Tables'

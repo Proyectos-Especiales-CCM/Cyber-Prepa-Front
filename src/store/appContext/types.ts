@@ -13,6 +13,10 @@ export interface Tokens {
   refresh_token: string;
 }
 
+export interface Token {
+  token: string;
+}
+
 export type AppState = {
   user: UserObject | undefined;
   setUser: (user: UserObject) => void;

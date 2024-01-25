@@ -3,9 +3,10 @@ import httpInstance from "../httpInstance";
 export const createUser = async (
     email: string,
     password: string,
-    is_admin: boolean,
-    theme: string,
-    is_active: boolean
+    token: string,
+    is_admin?: boolean,
+    theme?: string,
+    is_active?: boolean
 ) => {
     let res;
     const endpoint = `users/`;
@@ -18,15 +19,20 @@ export const createUser = async (
         is_active: is_active  
     }
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+    };
+
     await httpInstance
         .post(endpoint, JSON.stringify(requestBody), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
         })
         .then((response) => {
             res = response;
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
     return res;
 };

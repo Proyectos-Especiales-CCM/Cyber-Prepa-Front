@@ -1,18 +1,25 @@
 import httpInstance from "../httpInstance";
+import { ApiResponse, Student } from "../types";
 
-export const readStudents = async () => {
+export const readStudents = async (access_token: string): Promise<ApiResponse<Student>> => {
     let res;
     const endpoint = `rental/students/`;
 
     await httpInstance
         .get(endpoint, {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access_token}`
+            },
         })
         .then((response) => {
-            res = response;
+            res = {
+                data: response.data,
+                status: response.status,
+            }
         })
         .catch((error) => {
             res = error.response;
         });
-    return res;
+    return res || {} as ApiResponse<Student>;
 };

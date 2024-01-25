@@ -3,6 +3,7 @@ interface DateCellProps {
 }
 
 function formatCustomDate(dateString: string) {
+    if (!dateString) return '';
     const [datePart, timePart] = dateString.split('T');
     const [year, month, day] = datePart.split('-');
     const [hour, minute] = timePart.slice(0, 5).split(':');
