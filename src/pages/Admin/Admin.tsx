@@ -1,10 +1,10 @@
 import './admin.css'
 import MUIDataTable from "mui-datatables";
 import { Box, Button, Stack, IconButton } from "@mui/material";
-import { Delete, Visibility, VisibilityOff, Cancel, CheckCircle, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown } from '@mui/icons-material';
+import { Delete, Visibility, VisibilityOff, Cancel, CheckCircle, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown, Edit } from '@mui/icons-material';
 import { useAppContext } from "../../store/appContext/appContext";
 import { useState, useEffect } from "react";
-import { readPlays, readGames, readStudents, readUsers, patchUserById, changeIdToName } from "../../services";
+import { readPlays, readGames, readStudents, readUsers, patchGameById, patchUserById, deletePlayById, deleteGameById, changeIdToName } from "../../services";
 import {
   playColumns,
   gameColumns,
@@ -14,20 +14,26 @@ import {
   ModalMessage,
   Modal,
   CreateUserPanel,
-  CreateGamePanel
+  ModifyUserPanel,
+  CreateGamePanel,
+  ModifyGamePanel,
 } from "../../components";
 import { ApiResponse, Game, Play, Student, User } from '../../services/types';
 
 const Admin = () => {
   const { tokens, admin } = useAppContext();
 
+  // Variables de datos de las tablas
   const [gamesData, setGamesData] = useState<Game[]>([]);
   const [playsData, setPlaysData] = useState<Play[]>([]);
   const [sanctionsData, setSanctionsData] = useState([]);
   const [studentsData, setStudentsData] = useState<Student[]>([]);
   const [usersData, setUsersData] = useState<User[]>([]);
+  // Variables para tracking de filas seleccionadas en las tablas
+  const [playsSelected] = useState([]);
   const [gamesSelected] = useState([]);
   const [usersSelected] = useState([]);
+  // Variables de atributos de los modales
   const [modalAttr, setModalAttr] = useState({
     openModal: false,
     handleCloseModal: () => {
@@ -51,6 +57,7 @@ const Admin = () => {
     message: "Sample Message",
   });
 
+  // Métodos de los modales, cerrar y abrir (cambia el estado)
   const closeModal = () => {
     setModalAttr({
       ...modalAttr,
@@ -65,10 +72,73 @@ const Admin = () => {
       message: message,
     });
   }
+  // Métodos de actualización de datos de las tablas
+  /* Plays */
+  const updatePlaysData = async () => {
+    const response = await readPlays(tokens?.access_token ?? "");
+    response?.status === 200 ? setPlaysData(changeIdToName(response?.data, gamesData)) : console.error(response?.data);
+  }
+  const handleDeletePlay = async (selectedRows: any) => {
+    try {
+      for (const row of selectedRows.data) {
+        const index = row.dataIndex;
+
+        await deletePlayById(playsData[index].id, tokens?.access_token ?? "");
+      }
+      await updatePlaysData();
+      openModalMessage("success", "Partida/s eliminada/s correctamente.");
+    }
+    catch (error) {
+      openModalMessage("error", "Ha ocurrido un error al eliminar la/s partida/s.");
+      console.error(error);
+    }
+  }
+  /* Games */
   const updateGamesData = async () => {
-    const response = await readGames(tokens?.access_token ?? "");
+    const response = await readGames();
     response?.status === 200 ? setGamesData(response?.data) : console.error(response?.data);
   }
+  const handleUpdateGame = async (selectedRows: any, field: string, value: boolean | string) => {
+    try {
+      for (const row of selectedRows.data) {
+        const index = row.dataIndex;
+
+        let requestBody = {};
+        if (field === "show") {
+          requestBody = { show: value };
+        } else if (field === "name") {
+          requestBody = { name: value };
+        } else if (field === "file_route") {
+          requestBody = { file_route: value };
+        }
+
+        await patchGameById(gamesData[index].id, tokens?.access_token ?? "", requestBody);
+      }
+      await updateGamesData();
+      openModalMessage("success", "Juego/s actualizado/s correctamente.");
+    }
+    catch (error) {
+      openModalMessage("error", "Ha ocurrido un error al actualizar el/los juego/s.");
+      console.error(error);
+    }
+  }
+  const handleDeleteGame = async (selectedRows: any) => {
+    try {
+      for (const row of selectedRows.data) {
+        const index = row.dataIndex;
+
+        await deleteGameById(gamesData[index].id, tokens?.access_token ?? "");
+      }
+      await updateGamesData();
+      openModalMessage("success", "Juego/s eliminado/s correctamente.");
+    }
+    catch (error) {
+      openModalMessage("error", "Ha ocurrido un error al eliminar el/los juego/s.");
+      console.error(error);
+    }
+  }
+  // Métodos extra para cambiar el contenido del modal por el
+  // componente de creación de juego
   const setAddGameModal = () => {
     setModalAttr({
       ...modalAttr,
@@ -77,6 +147,23 @@ const Admin = () => {
       children: (<><CreateGamePanel openModalMessage={openModalMessage} closeModal={closeModal} updateGamesData={updateGamesData} /></>),
     });
   }
+  const setModifyGameModal = (selectedRows: any) => {
+    if (selectedRows.data.length !== 1) {
+      openModalMessage("error", "Solo debes seleccionar un juego para modificarlo.");
+      return;
+    }
+    const index = selectedRows.data[0].dataIndex;
+    const game = gamesData[index];
+
+    setModalAttr({
+      ...modalAttr,
+      openModal: true,
+      title: "Modificar Juego " + game.name,
+      children: (<><ModifyGamePanel openModalMessage={openModalMessage} closeModal={closeModal} updateGamesData={updateGamesData} gameId={game.id} prevName={game.name} prevShow={game.show} prevFileRoute={game.file_route} /></>),
+    });
+  }
+  
+  /* Users */
   const updateUsersData = async () => {
     const response: ApiResponse<User> = await readUsers(tokens?.access_token ?? "");
     response?.status === 200 ? setUsersData(response?.data) : console.error(response?.data);
@@ -104,12 +191,29 @@ const Admin = () => {
       console.error(error);
     }
   }
+  // Métodos extra para cambiar el contenido del modal por el
+  // componente de creación de usuario
   const setAddUserModal = () => {
     setModalAttr({
       ...modalAttr,
       openModal: true,
       title: "Añadir Usuario",
       children: (<><CreateUserPanel openModalMessage={openModalMessage} closeModal={closeModal} updateUsersData={updateUsersData} /></>),
+    });
+  }
+  const setModifyUserModal = (selectedRows: any) => {
+    if (selectedRows.data.length !== 1) {
+      openModalMessage("error", "Solo debes seleccionar un usuario para modificarlo.");
+      return;
+    }
+    const index = selectedRows.data[0].dataIndex;
+    const user = usersData[index];
+
+    setModalAttr({
+      ...modalAttr,
+      openModal: true,
+      title: "Modificar Usuario " + user.email,
+      children: (<><ModifyUserPanel openModalMessage={openModalMessage} closeModal={closeModal} updateUsersData={updateUsersData} userId={user.id} prevEmail={user.email} prevIsAdmin={user.is_admin} prevIsActive={user.is_active} /></>),
     });
   }
 
@@ -142,7 +246,11 @@ const Admin = () => {
           title={"Historial de Partidas"}
           data={playsData}
           columns={playColumns}
-          options={tableOptions}
+          options={{
+            ...tableOptions,
+            rowsSelected: playsSelected,
+            onRowsDelete: handleDeletePlay,
+          }}
           className="cyber__table"
         />
         <MUIDataTable
@@ -166,11 +274,21 @@ const Admin = () => {
                   <>
                     <Stack id='game-options' direction="row">
                       <IconButton
+                        aria-label="edit"
+                        color="info"
+                        size="large"
+                        onClick={() => {
+                          setModifyGameModal(selectedRows);
+                        }}
+                      >
+                        <Edit fontSize='inherit' />
+                      </IconButton>
+                      <IconButton
                         aria-label="show"
                         color="inherit"
                         size="large"
                         onClick={() => {
-                          console.log(selectedRows);
+                          handleUpdateGame(selectedRows, "show", true);
                         }}
                       >
                         <Visibility fontSize='inherit' />
@@ -180,7 +298,7 @@ const Admin = () => {
                         color="inherit"
                         size="large"
                         onClick={() => {
-                          console.log(selectedRows);
+                          handleUpdateGame(selectedRows, "show", false);
                         }}
                       >
                         <VisibilityOff fontSize='inherit' />
@@ -190,7 +308,7 @@ const Admin = () => {
                         color="error"
                         size="large"
                         onClick={() => {
-                          console.log(selectedRows);
+                          handleDeleteGame(selectedRows);
                         }}
                       >
                         <Delete fontSize='inherit' />
@@ -225,6 +343,16 @@ const Admin = () => {
                 customToolbarSelect: (selectedRows: object) =>
                   <>
                     <Stack id='user-options' direction="row">
+                      <IconButton
+                        aria-label="edit"
+                        color="info"
+                        size="large"
+                        onClick={() => {
+                          setModifyUserModal(selectedRows);
+                        }}
+                      >
+                        <Edit fontSize='inherit' />
+                      </IconButton>
                       <IconButton
                         aria-label="make-admin"
                         color="warning"
@@ -274,7 +402,6 @@ const Admin = () => {
         ) : (
           <></>
         )}
-        <Button onClick={() => console.log(playsData)}>Refresh Token</Button>
         <Modal {...modalAttr} />
         <ModalMessage {...modalMessageAttr} />
       </Box>

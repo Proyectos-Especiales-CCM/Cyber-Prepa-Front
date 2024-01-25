@@ -2,13 +2,21 @@ import httpInstance from "../httpInstance";
 
 export const patchGameById = async (
     gameId: number,
-    name: string,
-    show: boolean,
-    start_time: Date,
-    file_route: string
+    token: string,
+    {
+        name,
+        show,
+        start_time,
+        file_route,
+    }: {
+        name?: string;
+        show?: boolean;
+        start_time?: Date;
+        file_route?: string;
+    } = {}
      ) => {
     let res;
-    const endpoint = `rental/games/?id=${gameId}/`;
+    const endpoint = `rental/games/${gameId}/`;
 
     const requestBody = {
         name: name,
@@ -19,13 +27,16 @@ export const patchGameById = async (
 
     await httpInstance
         .patch(endpoint, JSON.stringify(requestBody), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
         })
         .then((response) => {
             res = response;
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
     return res;
 };

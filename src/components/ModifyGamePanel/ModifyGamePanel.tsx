@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Grid, FormControl, InputLabel, Input, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import { useAppContext } from "../../store/appContext/appContext";
-import { createGame } from '../../services';
+import { patchGameById } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const darkTheme = createTheme({
@@ -11,16 +11,21 @@ const darkTheme = createTheme({
 });
 
 
-interface CreateGamePanelProps {
+interface ModifyGamePanelProps {
     openModalMessage: (severity: string, message: string) => void;
     closeModal: () => void;
     updateGamesData: () => Promise<void>;
+    gameId: number;
+    prevName: string;
+    prevShow: boolean;
+    prevFileRoute: string;
 }
 
-const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, closeModal, updateGamesData }) => {
+const ModifyGamePanel: React.FC<ModifyGamePanelProps> = ({ openModalMessage, closeModal, updateGamesData, gameId, prevName, prevShow, prevFileRoute }) => {
     const { tokens, admin } = useAppContext();
-    const [name, setName] = useState('');
-    const [show, setShow] = useState(false);
+    const [name, setName] = useState(prevName);
+    const [show, setShow] = useState(prevShow);
+    const [fileRoute, setFileRoute] = useState(prevFileRoute);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setShow(event.target.checked);
@@ -35,16 +40,23 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
             return;
         }
 
+        // Request body
+        const requestBody = {
+            ...(name !== prevName && { name: name }),
+            ...(show !== prevShow && { show: show }),
+            ...(fileRoute !== prevFileRoute && { fileRoute: fileRoute }),
+        }
+
         try {
             // Mandar request para crear el usuario
-            await createGame(name, show, tokens?.access_token || '');
+            await patchGameById(gameId, tokens?.access_token || '', requestBody);
             // Cerrar modal y mostrar mensaje de éxito
             await updateGamesData();
             closeModal();
-            openModalMessage('success', 'Usuario creado exitosamente.');
+            openModalMessage('success', 'Usuario actualizado exitosamente.');
         } catch (error) {
             // Handle errors
-            openModalMessage('error', 'Lo sentimos, ha ocurrido un error al crear el usuario.');
+            openModalMessage('error', 'Lo sentimos, ha ocurrido un error al actualizar el usuario.');
             console.error('Error:', error);
         }
     };
@@ -56,7 +68,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                     <Grid container direction='column' spacing={2} padding={'1rem'}>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel htmlFor="name">Nombre del nuevo Juego</InputLabel>
+                                <InputLabel htmlFor="name">Nombre</InputLabel>
                                 <Input
                                     id="name"
                                     aria-describedby="name-helper-text"
@@ -64,6 +76,19 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                                     autoComplete="off"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="file-route">Nueva imagen</InputLabel>
+                                <Input
+                                    id="file-route"
+                                    aria-describedby="file-route-helper-text"
+                                    type='text'
+                                    autoComplete="off"
+                                    value={fileRoute}
+                                    onChange={(e) => setFileRoute(e.target.value)}
                                 />
                             </FormControl>
                         </Grid>
@@ -90,4 +115,4 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
         </>
     )
 }
-export default CreateGamePanel;
+export default ModifyGamePanel;

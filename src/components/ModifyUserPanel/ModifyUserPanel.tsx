@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import { useAppContext } from "../../store/appContext/appContext";
-import { createUser } from '../../services';
+import { patchUserById } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const darkTheme = createTheme({
@@ -10,21 +10,30 @@ const darkTheme = createTheme({
   },
 });
 
-interface CreateUserPanelProps {
+interface ModifyUserPanelProps {
   openModalMessage: (severity: string, message: string) => void;
   closeModal: () => void;
   updateUsersData: () => Promise<void>;
+  userId: number;
+  prevEmail: string;
+  prevIsAdmin: boolean;
+  prevIsActive: boolean;
 }
 
-const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, closeModal, updateUsersData }) => {
+const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, closeModal, updateUsersData, userId, prevEmail, prevIsAdmin, prevIsActive }) => {
   const { tokens, admin } = useAppContext();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(prevEmail);
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(prevIsAdmin);
+  const [isActive, setIsActive] = useState(prevIsActive);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleIsAdminChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsAdmin(event.target.checked);
+  };
+
+  const handleIsActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsActive(event.target.checked);
   };
 
   // Checa si el correo electrónico es válido
@@ -79,20 +88,32 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
     }
 
     // Validate email and password
-    if (!isEmailValid() || !arePasswordsMatching() || !isPasswordValid()) {
+    if (email && !isEmailValid()) {
+      return;
+    }
+    if (password && (!arePasswordsMatching() || !isPasswordValid())) {
       return;
     }
 
+    // Create request body
+    const requestBody = {
+      ...(email !== prevEmail && { email: email }),
+      ...(password && { password: password }), 
+      ...(isAdmin !== prevIsAdmin && { is_admin: isAdmin }),
+      ...(isActive !== prevIsActive && { is_active: isActive }),
+    };
+    
+
     try {
       // Mandar request para crear el usuario
-      await createUser(email, password, tokens?.access_token || '', isAdmin);
+      await patchUserById(userId, tokens?.access_token || '', requestBody);
       // Cerrar modal y mostrar mensaje de éxito
       await updateUsersData();
       closeModal();
-      openModalMessage('success', 'Usuario creado exitosamente.');
+      openModalMessage('success', 'Usuario actualizado exitosamente.');
     } catch (error) {
       // Handle errors
-      openModalMessage('error', 'Lo sentimos, ha ocurrido un error al crear el usuario.');
+      openModalMessage('error', 'Lo sentimos, ha ocurrido un error al actualizar el usuario.');
       console.error('Error:', error);
     }
   };
@@ -149,15 +170,29 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
                 <FormGroup>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={isAdmin} onChange={handleChange} name="is_admin" />
+                      <Checkbox checked={isAdmin} onChange={handleIsAdminChange} name="is_admin" />
                     }
                     label="Administrador"
                   />
                 </FormGroup>
               </FormControl>
             </Grid>
+            <Grid item xs={12}>
+              <FormControl
+                sx={{ m: 3 }}
+              >
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox checked={isActive} onChange={handleIsActiveChange} name="is_active" />
+                    }
+                    label="Activo"
+                  />
+                </FormGroup>
+              </FormControl>
+            </Grid>
             <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant="contained" color="success" type="submit">Añadir</Button>
+              <Button variant="contained" color="info" type="submit">Actualizar</Button>
             </Grid>
           </Grid>
         </ThemeProvider>
@@ -165,4 +200,4 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
     </>
   )
 }
-export default CreateUserPanel;
+export default ModifyUserPanel;
