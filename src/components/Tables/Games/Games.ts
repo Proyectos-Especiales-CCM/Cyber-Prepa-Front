@@ -1,4 +1,4 @@
-import { BooleanCell, DateCell } from "../CustomBodyCells";
+import { BooleanCell, DateCell, ImageCell } from "../CustomBodyCells";
 
 const gameColumns = [
     {
@@ -39,10 +39,10 @@ const gameColumns = [
         }
     },
     {
-        name: 'file_route',
-        label: 'Nombre del archivo de imagen',
+        name: 'image',
+        label: 'Imagen',
         options: {
-            display: 'excluded',
+            customBodyRender: (value: string) => ImageCell({ value }),
             filter: false,
         }
     }

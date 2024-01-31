@@ -8,6 +8,9 @@ export { readPlays } from "./rental/readPlays";
 export { readPlayById } from "./rental/readPlayById";
 export { readStudents } from "./rental/readStudents";
 export { readStudentById } from "./rental/readStudentById";
+export { readLogs } from "./rental/readLogs";
+export { readSanctions } from "./rental/readSanctions";
+export { readSanctionById } from "./rental/readSanctionById";
 
 
 // ------------------------------------------------------------------- POST
@@ -19,6 +22,7 @@ export { endPlaysById } from "./rental/endPlaysById";
 export { createPlay } from "./rental/createPlay";
 export { createStudent } from "./rental/createStudent";
 export { logInAccess } from "./logInAccess/logInAccess";
+export { createSanction } from "./rental/createSanction";
 
 
 // ------------------------------------------------------------------- PUT
@@ -30,12 +34,14 @@ export { updateGameById } from "./rental/updateGameById";
 export { patchUserById } from "./users/patchUserById";
 export { patchGameById } from "./rental/patchGameById";
 export { patchPlayById } from "./rental/patchPlayById";
+export { patchSanctionById } from "./rental/patchSanctionById";
 
 
 // ------------------------------------------------------------------- DELETE
 export { deleteGameById } from "./rental/deleteGameById";
 export { deletePlayById } from "./rental/deletePlayById";
 export { deleteStudentById } from "./rental/deleteStudentById";
+export { deleteSanctionById } from "./rental/deleteSanctionById";
 
 
 // ------------------------------------------------------------------- UTILS

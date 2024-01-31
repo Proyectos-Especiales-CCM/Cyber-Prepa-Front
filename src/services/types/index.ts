@@ -32,6 +32,22 @@ export interface User {
     is_active: boolean,
 }
 
+export interface Sanction {
+    id: number,
+    cause: string,
+    start_time: string,
+    end_time: string,
+    play: number,
+    student: string,
+}
+
+export interface Log {
+    line: number,
+    timestamp: string,
+    user: string,
+    action: string,
+}
+
 export interface ApiResponse<T> {
     data: T[]
     status: number

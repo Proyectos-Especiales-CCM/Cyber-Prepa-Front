@@ -4,12 +4,26 @@ import { Box, Button, Stack, IconButton } from "@mui/material";
 import { Delete, Visibility, VisibilityOff, Cancel, CheckCircle, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown, Edit } from '@mui/icons-material';
 import { useAppContext } from "../../store/appContext/appContext";
 import { useState, useEffect } from "react";
-import { readPlays, readGames, readStudents, readUsers, patchGameById, patchUserById, deletePlayById, deleteGameById, changeIdToName } from "../../services";
+import {
+  readPlays,
+  readGames,
+  readStudents,
+  readUsers,
+  readSanctions,
+  readLogs,
+  patchGameById,
+  patchUserById,
+  deletePlayById,
+  deleteGameById,
+  changeIdToName
+} from "../../services";
 import {
   playColumns,
   gameColumns,
   studentColumns,
   userColumns,
+  sanctionColumns,
+  logColumns,
   tableOptions,
   ModalMessage,
   Modal,
@@ -18,7 +32,7 @@ import {
   CreateGamePanel,
   ModifyGamePanel,
 } from "../../components";
-import { ApiResponse, Game, Play, Student, User } from '../../services/types';
+import { ApiResponse, Game, Play, Student, User, Sanction, Log } from '../../services/types';
 
 const Admin = () => {
   const { tokens, admin } = useAppContext();
@@ -26,13 +40,15 @@ const Admin = () => {
   // Variables de datos de las tablas
   const [gamesData, setGamesData] = useState<Game[]>([]);
   const [playsData, setPlaysData] = useState<Play[]>([]);
-  const [sanctionsData, setSanctionsData] = useState([]);
+  const [sanctionsData, setSanctionsData] = useState<Sanction>([]);
   const [studentsData, setStudentsData] = useState<Student[]>([]);
   const [usersData, setUsersData] = useState<User[]>([]);
+  const [logsData, setLogsData] = useState<Log[]>([]);
   // Variables para tracking de filas seleccionadas en las tablas
   const [playsSelected] = useState([]);
   const [gamesSelected] = useState([]);
   const [usersSelected] = useState([]);
+  const [sanctionsSelected] = useState([]);
   // Variables de atributos de los modales
   const [modalAttr, setModalAttr] = useState({
     openModal: false,
@@ -162,7 +178,7 @@ const Admin = () => {
       children: (<><ModifyGamePanel openModalMessage={openModalMessage} closeModal={closeModal} updateGamesData={updateGamesData} gameId={game.id} prevName={game.name} prevShow={game.show} prevFileRoute={game.file_route} /></>),
     });
   }
-  
+
   /* Users */
   const updateUsersData = async () => {
     const response: ApiResponse<User> = await readUsers(tokens?.access_token ?? "");
@@ -229,8 +245,8 @@ const Admin = () => {
       if (admin === true) {
         const studentResponse = await readStudents(tokens?.access_token ?? "");
         studentResponse?.status === 200 ? setStudentsData(studentResponse?.data) : console.error(studentResponse?.data);
-        //response = await readBecarios(tokens?.access_token ?? "");
-        //response?.status === 200 ? setBecariosData(response?.data) : console.log(response?.data);
+        const logResponse = await readLogs(tokens?.access_token ?? "");
+        logResponse?.status === 200 ? setLogsData(logResponse?.data) : console.log(logResponse?.data);
         const userResponse = await readUsers(tokens?.access_token ?? "");
         userResponse?.status === 200 ? setUsersData(userResponse?.data) : console.error(userResponse?.data);
       }
@@ -256,7 +272,7 @@ const Admin = () => {
         <MUIDataTable
           title={"Sanciones"}
           data={sanctionsData}
-          columns={["Estudiante", "Fecha y hora", "Detalle"]}
+          columns={sanctionColumns}
           options={tableOptions}
           className="cyber__table"
         />
@@ -326,10 +342,13 @@ const Admin = () => {
               className="cyber__table"
             />
             <MUIDataTable
-              title={"Historial de los Becarios"}
-              data={[]}
-              columns={["Usuario", "Fecha y hora", "Detalle"]}
-              options={tableOptions}
+              title={"Historial de los Usuarios"}
+              data={logsData}
+              columns={logColumns}
+              options={{
+                ...tableOptions,
+                selectableRows: "none",
+              }}
               className="cyber__table"
             />
             <MUIDataTable
