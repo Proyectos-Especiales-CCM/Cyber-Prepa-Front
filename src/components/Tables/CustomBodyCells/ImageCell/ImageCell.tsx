@@ -3,6 +3,7 @@ interface ImageCellProps {
 }
 
 export default function ImageCell(props: ImageCellProps) {
+    if (props.value === null) return null;
     const url = `${import.meta.env.VITE_API_BASE_URL}${props.value.slice(1)}`;
     return <img src={url} alt="Image" style={{ width: '50px', height: 'auto' }} />;
 }

@@ -2,8 +2,8 @@ import httpInstance from "../httpInstance";
 import { ApiResponse, Sanction } from "../types";
 
 export const patchSanctionById = async (
+    sanctionId: number,
     token: string,
-    id: number,
     {
         cause,
         end_time,
@@ -19,7 +19,7 @@ export const patchSanctionById = async (
     } = {}
 ): Promise<ApiResponse<Sanction>> => {
     let res;
-    const endpoint = `rental/sanctions/${id}/`;
+    const endpoint = `rental/sanctions/${sanctionId}/`;
 
     const requestBody = {
         cause: cause,
