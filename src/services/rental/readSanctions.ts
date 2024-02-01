@@ -1,13 +1,13 @@
 import httpInstance from "../httpInstance";
-import { ApiResponse, Play } from "../types";
+import { ApiResponse, Sanction } from "../types";
 
-export const readPlays = async (token: string | undefined): Promise<ApiResponse<Play>> => {
+export const readSanctions = async (token: string): Promise<ApiResponse<Sanction>> => {
     let res;
-    const endpoint = `rental/plays/`;
+    const endpoint = `rental/sanctions/`
 
     const headers = {
         'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` }),
+        'Authorization': `Bearer ${token}`,
     };
 
     await httpInstance
@@ -21,7 +21,7 @@ export const readPlays = async (token: string | undefined): Promise<ApiResponse<
             };
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
-    return res || {} as ApiResponse<Play>;
+    return res || {} as ApiResponse<Sanction>;
 };

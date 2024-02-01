@@ -1,28 +1,27 @@
+import { useState } from "react";
 import { useAppContext } from "../../store/appContext/appContext";
 import { CyberPrepaLogo, Loading } from "../../components";
 import { ROUTES } from "../../routes/Constants";
 import { useNavigate } from "react-router-dom";
-import { logInAccess } from "../../services"
-import { useState } from "react";
+import { logInAccess } from "../../services";
 import './login.css';
 
-const Login = () => {
 
+
+const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setUser, setTokens, setIsAdmin } = useAppContext();
 
-
   const accessLogin = async () => {
     if (email.length > 0 && password.length > 0) {
-      
-      // Validación de email con expresión regular
+      // Email validation with regular expression
       const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
       if (!emailValidation) {
-        console.log("Email invalido");
+        console.log("Invalid email");
         return;
       }
 
@@ -35,66 +34,61 @@ const Login = () => {
         setUser,
         setIsAdmin,
       ).then(async (res) => {
-          setIsLoading(false);
-          
-          if (res == null) {
-            console.log("user not found")
-            setEmail("")
-            setPassword("")
-          
-          } else {
-            console.log("user found")
-            navigate(ROUTES.HOME);            
-          }
-        });
+        setIsLoading(false);
+
+        if (res == null) {
+          console.log("User not found")
+          setEmail("")
+          setPassword("")
+
+        } else {
+          console.log("User found")
+          navigate(ROUTES.HOME);
+        }
+      });
     }
   }
-  
-  return (
-    <>
-      <div className="container container-size">
-        <div className="row d-flex justify-content-center align-items-center">
-          <CyberPrepaLogo size="200"/>
-        </div>
-        <div className="row d-flex justify-content-center align-content-center p-3 form-header">
-          Entrar a CyberTec
-        </div>
-        <div className="container mt-3 p-3 bg-dark.bg-gradient rounded login-container">
-          
-            
-            
-            <label htmlFor="username" className="label-container">Correo electrónico</label>
-            <input onChange={(event) => setEmail(event.target.value)}
-                   type="text" 
-                   className="form-control input-block js-login-field rounded" 
-                   id="username" 
-                   name="username" 
-                   placeholder="" 
-                   aria-label="Username" 
-            />
-            
-            <div className="position-relative">
-              <label className="label-container" htmlFor="password">Contraseña</label>
-              <input onChange={(event) => setPassword(event.target.value)}
-                     type="password" 
-                     name="password" 
-                     id="password" 
-                     className="form-control input-block rounded" 
-              />
-              <a href="" className="label-link position-absolute top-0">¿Olvidaste tu contraseña?</a>
 
-              <button onClick={accessLogin}
-                      className="btn btn-block sign-in-btn"
-                      disabled={isLoading} 
-                      value="login">
-                        {isLoading ? <Loading /> : 'Ingresar'}
-              </button>
+  return (
+    <div className='main-container'>
+      <div className='logo-container'>
+        <img src="../../src/assets/loginLogo.svg" alt="" style={{ width: '200%', height: '200%' }} />
+      </div>
+      <div className='form-container'>
+        <div className="header">
+          <div className="text">Login</div>
+          <div className="underline"></div>
+        </div>
+        <div className="inputs">
+          <div className="input">
+            <img src="../../src/assets/email.png" alt="" style={{ width: '10%', height: 'auto' }} />
+            <input
+              onChange={(event) => setEmail(event.target.value)}
+              type="email"
+              placeholder="Email"
+            />
+          </div>
+          <div className="input">
+            <img src="../../src/assets/password.png" alt="" style={{ width: '10%', height: 'auto' }} />
+            <input
+              onChange={(event) => setPassword(event.target.value)}
+              type="password"
+              placeholder="Password"
+            />
+          </div>
+        </div>
+        <div className="forgot-password">Lost Password? <span>Click Here!</span></div>
+        <div className="submit-container">
+          <button
+          onClick={accessLogin}
+          className={isLoading ? "submit gray" : "submit"}
+          disabled={isLoading}>
+            {isLoading ? <Loading /> : 'Login'}
+            </button>
             </div>
-          
         </div>
       </div>
-    </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

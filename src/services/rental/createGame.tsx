@@ -3,28 +3,30 @@ import httpInstance from "../httpInstance";
 export const createGame = async (
     name: string,
     show: boolean,
-    start_time: Date,
-    file_route: string
+    token: string,
+    file_route?: string,
 ) => {
     let res;
     const endpoint = `rental/games/`;
 
     const requestBody = {
-     name: name,
-     show: show,
-     start_time: start_time,
-     file_route: file_route
+        name: name,
+        show: show,
+        ...(file_route && { file_route: file_route }),
     }
 
     await httpInstance
         .post(endpoint, JSON.stringify(requestBody), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
         })
         .then((response) => {
             res = response;
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
     return res;
 };

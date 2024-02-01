@@ -1,16 +1,16 @@
 import httpInstance from "../httpInstance";
-import { ApiResponse, User } from "../types";
+import { ApiResponse, Sanction } from "../types";
 
-export const readUsers = async (access_token: string): Promise<ApiResponse<User>> => {
+export const readSanctionById = async (token: string, id: number): Promise<ApiResponse<Sanction>> => {
     let res;
-    const endpoint = `users/`;
+    const endpoint = `rental/sanctions/${id}/`;
 
     await httpInstance
         .get(endpoint, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access_token}`
-            },
+                'Authorization': `Bearer ${token}`,
+            }
         })
         .then((response) => {
             res = {
@@ -19,7 +19,7 @@ export const readUsers = async (access_token: string): Promise<ApiResponse<User>
             };
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
-    return res || {} as ApiResponse<User>;
+    return res || {} as ApiResponse<Sanction>;
 };
