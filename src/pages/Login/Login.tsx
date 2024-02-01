@@ -1,8 +1,8 @@
 import { useAppContext } from "../../store/appContext/appContext";
+import { CyberPrepaLogo, Loading } from "../../components";
 import { ROUTES } from "../../routes/Constants";
 import { useNavigate } from "react-router-dom";
 import { logInAccess } from "../../services"
-import { Loading } from "../../components";
 import { useState } from "react";
 import './login.css';
 
@@ -54,7 +54,7 @@ const Login = () => {
     <>
       <div className="container container-size">
         <div className="row d-flex justify-content-center align-items-center">
-          <img src="../../src/assets/loginLogo.svg"/>
+          <CyberPrepaLogo size="200"/>
         </div>
         <div className="row d-flex justify-content-center align-content-center p-3 form-header">
           Entrar a CyberTec

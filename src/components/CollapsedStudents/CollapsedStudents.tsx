@@ -16,7 +16,7 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
      const { user, tokens } = useAppContext();
      
      // --------------- USE STATES -------------- //
-     const [gamesData, setGamesData] = useState<game[]>([]);
+     const [playsData, setPlaysData] = useState<game[]>([]);
 
 
      // -------------- USE EFFECTS -------------- //
@@ -38,7 +38,7 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
                     if (user !== undefined) {
                          if (message == 'Plays updated') {
                               const updateData = await readGameById(data['info'], tokens?.access_token)
-                              setGamesData(updateData)
+                              setPlaysData(updateData)
                          }
                     } else { // If user not authenticated, only update game cards
                          if (message == 'Plays updated') {
@@ -55,7 +55,7 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
 
                {Array.isArray(cardGame.plays)
                     ? cardGame.plays.map((player) => (
-                         <CollapsedStudentItem key={player.id} player={player} cardGame={cardGame}/>
+                         <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id}/>
                     ))
                     : null
                }

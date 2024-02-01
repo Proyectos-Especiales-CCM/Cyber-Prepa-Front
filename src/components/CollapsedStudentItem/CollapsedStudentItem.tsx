@@ -4,14 +4,14 @@ import { game } from '../../pages/Home/types';
 interface CollapsedStudentItemProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   player: any,
-  cardGame: game;
+  cardGameId: number;
 }
 
-const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, cardGame }) => {
+const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, cardGameId }) => {
   return (
-     <div id={`${player.id}`} data-gameid={`${cardGame.id}`} className="student draggable" draggable="true">
+     <div id={`${player.id}`} data-gameid={`${cardGameId}`} className="student draggable" draggable="true">
           <li>{player.name}</li>
-          <EndPlayButton player={player} cardGame={cardGame}/>
+          <EndPlayButton player={player} cardGameId={cardGameId}/>
           <SanctionButton player={player}/>
      </div>
   )
