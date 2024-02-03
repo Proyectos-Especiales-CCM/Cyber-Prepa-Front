@@ -1,8 +1,9 @@
 import httpInstance from "../httpInstance";
+import { ApiResponse, Game } from "../types";
 
 export const readGameById = async (gameId: number, 
                                    token?: string | undefined
-                                   ) => {
+                                   ): Promise<ApiResponse<Game>> => {
     let res;
     const endpoint = `rental/games/?id=${gameId}/`;
 
@@ -21,5 +22,5 @@ export const readGameById = async (gameId: number,
         .catch((error) => {
             res = error.response;
         });
-    return res;
+    return res || {} as ApiResponse<Game>;
 };

@@ -1,9 +1,9 @@
 import { AddStudentButton, CollapsedStudents } from ".."
-import { game } from "../../pages/Home/types";
+import { Game } from "../../services/types";
 import './CardExpander.css';
 
 interface CardExpanderProps {
-  cardGame: game;
+  cardGame: Game;
 }
 
 const CardExpander: React.FC<CardExpanderProps> = ({ cardGame }) => {
@@ -13,8 +13,9 @@ const CardExpander: React.FC<CardExpanderProps> = ({ cardGame }) => {
           <i className="fa fa-close [ js-collapser ]"></i>
           
           <AddStudentButton cardGame={cardGame}/>
-
-          <CollapsedStudents cardGame={cardGame}/>
+          
+          <CollapsedStudents cardGame={cardGame} />
+          
      </div>
   )
 }

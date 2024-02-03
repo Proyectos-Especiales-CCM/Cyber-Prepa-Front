@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,17 +19,11 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { CyberPrepaLogo } from "..";
 import "./Header.css"
 
-const pages = ['Admin', 'Reglamento'];
-const settings = ['Logout'];
-
 const theme = createTheme({
   components: {
-    // Name of the component
     MuiAppBar: {
       styleOverrides: {
-        // Name of the slot
         root: {
-          // Some CSS
           backgroundColor: "#101216",
         },
       },
@@ -38,14 +31,16 @@ const theme = createTheme({
   },
 });
 
-const Header = () => {
 
-  const { logOut, user } = useAppContext();
+const Header = () => {
+  
+  const pages = ['caqui', 'popi']
+
+  const { logOut, user, admin } = useAppContext();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -130,6 +125,7 @@ const Header = () => {
               size="35"
               display="none"
             />
+
             <Typography
               variant="h5"
               noWrap
@@ -148,23 +144,40 @@ const Header = () => {
             >
               Cyberprepa
             </Typography>
+
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
                 <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
+                  onClick={() => {
+                    handleCloseNavMenu()
+                    navigate("/reglamento")
+                  }}
                 >
-                  {page}
+                  REGLAMENTO
                 </Button>
-              ))}
+
+                {user && admin ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleCloseNavMenu();
+                        navigate("/admin");
+                      }}
+                    >
+                      ADMIN
+                    </button>
+                  </>
+                ) : null}
+
             </Box>
+
+            
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
+                <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {user ? user.email : 'Login'}
+                </Button>
               </Tooltip>
               <Menu
                 sx={{ mt: '45px' }}
@@ -182,11 +195,20 @@ const Header = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                {user ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        logOut();
+                        handleCloseUserMenu()
+                        navigate("/");
+                      }}
+                    >
+                      Log out
+                    </button>
+                  </>
+                ): (<Button onClick={() => navigate("/login")}>Login</Button>)}
+                    
               </Menu>
             </Box>
           </Toolbar>
@@ -196,3 +218,46 @@ const Header = () => {
   );
 }
 export default Header;
+
+
+// return (
+//   <header style={{ zIndex: 100 }} className="position-sticky top-0">
+//     <nav className="navbar navbar-expand-lg navbar-light bg-light">
+//       <div className="container-fluid">
+//         <span className="navbar-brand mb-0 h1">CyberTec</span>
+//         <div className="d-flex">
+//           <span className="navbar-text me-2">{user?.email}</span>
+//           <div className="d-flex align-items-center">
+//             <button
+//               className="btn btn-outline-primary me-2"
+//               onClick={() => navigate("/")}
+//             >
+//               Home
+//             </button>
+//             <button
+//               className="btn btn-outline-primary me-2"
+//               onClick={() => navigate("/admin")}
+//             >
+//               Admin
+//             </button>
+//             <button
+//               className="btn btn-outline-primary me-2"
+//               onClick={() => navigate("/login")}
+//             >
+//               Login
+//             </button>
+//             <button
+//               className="btn btn-outline-danger"
+//               onClick={() => {
+//                 logOut();
+//                 navigate("/");
+//               }}
+//             >
+//               Log Out
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </nav>
+//   </header>
+// );

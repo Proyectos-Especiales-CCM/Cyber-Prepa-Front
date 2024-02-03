@@ -1,7 +1,8 @@
-import { game } from "../../pages/Home/types";
+import { Game } from "../../services/types";
+
 
 export const initCountdown = (
-     cardGame: game,
+     cardGame: Game,
      countdownRef: React.RefObject<HTMLDivElement>,
 ) => {
      

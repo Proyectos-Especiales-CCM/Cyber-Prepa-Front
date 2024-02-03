@@ -2,16 +2,17 @@ import { initCardsFunctionality } from './initCardsFunctionality';
 import { UserObject } from '../../store/appContext/types';
 import React, { useEffect, useRef, useState } from 'react'
 import { initCountdown } from './initCountdown';
-import { game } from '../../pages/Home/types'
 import { CardExpander } from '..';
 import './Card.css';
+import { ImageCell } from '../Tables/CustomBodyCells';
+import { Game } from '../../services/types';
 
 interface CardProps {
-     cardGame: game;
+     cardGame: Game;
      user: UserObject | undefined;
 }
 
-const Card: React.FC<CardProps> = ({ cardGame, user }) => {
+const Card: React.FC<CardProps> = ({ cardGame, user}) => {
 
      const cardsRef = useRef<HTMLDivElement>(null);
      const countdownRef = useRef<HTMLDivElement>(null);
@@ -43,7 +44,10 @@ const Card: React.FC<CardProps> = ({ cardGame, user }) => {
                               }
                          </span><br />
                          
-                         <img className="cyber__image" src={`/static/${cardGame.file_route}`} alt={`${cardGame.name}`} />
+                         <ImageCell
+                              value={cardGame.image ? `${cardGame.image}` : "/media/images/game.png"}
+                              style={{ width: '150px', height: 'auto' }}
+                         />
                          
                          <div className="remaining__time">
                               <p ref={countdownRef} id={`cyber__countdown__${cardGame.id}`}></p>
