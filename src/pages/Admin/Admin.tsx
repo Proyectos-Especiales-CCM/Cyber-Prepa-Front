@@ -15,7 +15,8 @@ import {
   patchUserById,
   deletePlayById,
   deleteGameById,
-  changeIdToName
+  deleteSanctionById,
+  changeIdToName,
 } from "../../services";
 import {
   playColumns,
@@ -40,7 +41,7 @@ const Admin = () => {
   // Variables de datos de las tablas
   const [gamesData, setGamesData] = useState<Game[]>([]);
   const [playsData, setPlaysData] = useState<Play[]>([]);
-  const [sanctionsData, setSanctionsData] = useState<Sanction>([]);
+  const [sanctionsData, setSanctionsData] = useState<Sanction[]>([]);
   const [studentsData, setStudentsData] = useState<Student[]>([]);
   const [usersData, setUsersData] = useState<User[]>([]);
   const [logsData, setLogsData] = useState<Log[]>([]);
@@ -88,6 +89,7 @@ const Admin = () => {
       message: message,
     });
   }
+
   // Métodos de actualización de datos de las tablas
   /* Plays */
   const updatePlaysData = async () => {
@@ -109,6 +111,7 @@ const Admin = () => {
       console.error(error);
     }
   }
+
   /* Games */
   const updateGamesData = async () => {
     const response = await readGames();
@@ -179,6 +182,27 @@ const Admin = () => {
     });
   }
 
+  /* Sanctions */
+  const updateSanctionsData = async () => {
+    const response = await readSanctions(tokens?.access_token ?? "");
+    response?.status === 200 ? setSanctionsData(response?.data) : console.error(response?.data);
+  }
+  const handleDeleteSanction = async (selectedRows: any) => {
+    try {
+      for (const row of selectedRows.data) {
+        const index = row.dataIndex;
+
+        await deleteSanctionById(sanctionsData[index].id, tokens?.access_token ?? "");
+      }
+      await updateSanctionsData();
+      openModalMessage("success", "Sanción/es eliminada/s correctamente.");
+    }
+    catch (error) {
+      openModalMessage("error", "Ha ocurrido un error al eliminar la/s sanción/es.");
+      console.error(error);
+    }
+  }
+
   /* Users */
   const updateUsersData = async () => {
     const response: ApiResponse<User> = await readUsers(tokens?.access_token ?? "");
@@ -240,8 +264,8 @@ const Admin = () => {
       gameResponse?.status === 200 ? setGamesData(resGamesData) : console.error(resGamesData);
       const playResponse = await readPlays(tokens?.access_token ?? "");
       playResponse?.status === 200 ? setPlaysData(changeIdToName(playResponse?.data, resGamesData)) : console.error(playResponse?.data);
-      //const response = await readSanctions(tokens?.access_token ?? "");
-      //response?.status === 200 ? setSanctionsData(response?.data) : console.log(response?.data);
+      const sanctionResponse = await readSanctions(tokens?.access_token ?? "");
+      sanctionResponse?.status === 200 ? setSanctionsData(sanctionResponse?.data) : console.log(sanctionResponse?.data);
       if (admin === true) {
         const studentResponse = await readStudents(tokens?.access_token ?? "");
         studentResponse?.status === 200 ? setStudentsData(studentResponse?.data) : console.error(studentResponse?.data);
