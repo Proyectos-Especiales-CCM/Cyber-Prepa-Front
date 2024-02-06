@@ -3,7 +3,7 @@ import { CollapsedStudentItem, ScrollButtons } from "..";
 import { readGameById } from "../../services";
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { Game, Play } from "../../services/types";
+import { Game, Play, Player } from "../../services/types";
 
 interface CollapsedStudentProps {
   cardGame: Game;
@@ -12,7 +12,7 @@ interface CollapsedStudentProps {
 const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
   const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
   const { user, tokens } = useAppContext();
-  const [playsData, setPlaysData] = useState<Play[] | number>([]);
+  const [playsData, setPlaysData] = useState<Play[] | number>(cardGame.plays);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
   useEffect(() => {
@@ -49,8 +49,8 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
     <div className="collapsed__students">
       <ul id={`cyber__student__list__${cardGame.id}`} className="container__dropzone">
         {Array.isArray(playsData)
-          ? playsData.map((player) => (
-              <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id} />
+          ? playsData.map((_player) => (
+              <CollapsedStudentItem key={_player.id} player={_player} cardGameId={cardGame.id} />
             ))
           : null}
       </ul>
