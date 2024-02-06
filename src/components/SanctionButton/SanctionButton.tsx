@@ -5,13 +5,26 @@ import Alert from "@mui/material/Alert";
 import { createSanction } from "../../services";
 import { Player } from "../../services/types";
 import { DateTimePicker } from "@mui/lab";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, createTheme } from "@mui/material";
 import CustomModal from "../Modal/Modal";
+import { blue } from "@mui/material/colors";
+import { ThemeProvider } from "@emotion/react";
 
 interface SanctionButtonProps {
   player: Player;
   cardGameId: number;
 }
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#FF5733',
+    },
+    secondary: {
+      main: blue[300],
+    },
+  },
+});
 
 const SanctionButton: React.FC<SanctionButtonProps> = ({ player, cardGameId }) => {
   const [open, setOpen] = useState(false);
@@ -67,10 +80,14 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player, cardGameId }) =
   };
 
   return (
+    <ThemeProvider theme={theme}>
     <div className="sanction-form" id={`sanction-form-${player.id}`}>
       <input type="hidden" name="student_id" value={`${player.id}`} />
 
-      <Button variant="contained" onClick={handleSanction} sx={{ width: 120 }}>
+      <Button variant="contained" 
+              color="primary"
+              onClick={handleSanction} 
+              sx={{ width: 120 }}>
         Sancionar jugador
       </Button>
 
@@ -86,7 +103,7 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player, cardGameId }) =
             placeholder="Causa"
             value={cause}
             onChange={(e) => setCause(e.target.value)}
-            style={{ width: "100%", padding: "8px", boxSizing: "border-box", mt: 1 }}
+            style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
           />
         </Box>
 
@@ -121,6 +138,7 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player, cardGameId }) =
         </Alert>
       </Snackbar>
     </div>
+    </ThemeProvider>
   );
 };
 
