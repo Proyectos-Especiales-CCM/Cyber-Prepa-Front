@@ -1,6 +1,6 @@
 import { initCardsFunctionality } from './initCardsFunctionality';
 import { UserObject } from '../../store/appContext/types';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { initCountdown } from './initCountdown';
 import { CardExpander } from '..';
 import './Card.css';

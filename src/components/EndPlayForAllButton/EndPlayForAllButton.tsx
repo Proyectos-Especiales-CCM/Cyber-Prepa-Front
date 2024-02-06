@@ -3,6 +3,7 @@ import { ApiResponse, EndPlayResponse, Game } from '../../services/types';
 import { Loading } from '..';
 import { endPlaysById } from '../../services';
 import { SnackbarComponent } from '../SnackbarComponent';
+import { Button } from '@mui/material';
 
 interface EndPlayForAllProps {
   cardGame: Game;
@@ -66,13 +67,14 @@ const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame }) => {
         message={alertMessage}
       />
 
-      <button
+      <Button
+        size="large"
+        variant="contained"
         onClick={endPlayForAllHandle}
-        className={isLoading ? 'submit gray' : 'no'}
         disabled={isLoading}
       >
         {isLoading ? <Loading /> : 'Finalizar juego para todos'}
-      </button>
+      </Button>
     </div>
   );
 };

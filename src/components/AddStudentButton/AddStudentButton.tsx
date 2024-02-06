@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Game, PlayResponse } from '../../services/types';
 import { createPlay } from '../../services';
 import { Loading } from '..';
-import { Box, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import { SnackbarComponent } from '../SnackbarComponent';
 
 interface AddStudentProps {
@@ -111,12 +111,14 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
           />
         )}
 
-        <button
+        <Button
+          size="large"
+          variant="contained"
           onClick={addStudent}
           disabled={isLoading}
         >
           {isLoading ? <Loading /> : 'Agregar estudiante'}
-        </button>
+        </Button>
         </Box>
       </div>
   );

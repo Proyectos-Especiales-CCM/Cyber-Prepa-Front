@@ -1,46 +1,47 @@
 import { Game } from "../../services/types";
 
-
 export const initCountdown = (
-     cardGame: Game,
-     countdownRef: React.RefObject<HTMLDivElement>,
+  cardGame: Game,
+  countdownRef: React.RefObject<HTMLDivElement>,
 ) => {
+  if (countdownRef.current) {
      
-     if (countdownRef.current) {
-          // Update the count down every 1 second
-          setInterval(function () {
-               
-               // Get current's date & time
-               const now = new Date().getTime();
+    countdownRef.current.innerHTML = "Cargando...";
 
-               // Set the date we're counting down to
-               const countDownDate = new Date(cardGame.start_time).getTime();
+    const intervalId = setInterval(function () {
 
-               // Find the distance between now and the count down date
-               const distance = countDownDate - now;
+     const now = new Date().getTime();
 
-               // Time calculations for minutes and seconds
-               const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-               const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-               const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const countDownDate = new Date(cardGame.start_time).getTime();
 
-               let timeTextDisplay = minutes + "m " + seconds + "s ";
+      const distance = countDownDate - now;
 
-               if (hours > 0) {
-                    timeTextDisplay = hours + "h " + timeTextDisplay;
-               }
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-               // If the count down is finished, write some text
-               if (distance < 0 && (Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) > 0) {
-                    countdownRef.current.innerHTML = "AGOTADO";
-               } 
-               else if ((Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) === 0) {
-                    countdownRef.current.innerHTML = "LIBRE";
-                }                
-               else {
-                    countdownRef.current.innerHTML = timeTextDisplay;
-               }
+      let timeTextDisplay = minutes + "m " + seconds + "s ";
 
-          }, 1000)
-     }
-}
+      if (hours > 0) {
+        timeTextDisplay = hours + "h " + timeTextDisplay;
+      }
+
+      if (distance < 0 && (Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) > 0) {
+        countdownRef.current!.innerHTML = "AGOTADO";
+      } else if ((Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) === 0) {
+        countdownRef.current!.innerHTML = "LIBRE";
+      } else {
+        countdownRef.current!.innerHTML = timeTextDisplay;
+      }
+
+      if (distance >= 0) {
+        countdownRef.current!.innerHTML = timeTextDisplay;
+      }
+
+    }, 1000);
+
+    return intervalId;
+  }
+
+  return null;
+};

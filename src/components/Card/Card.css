@@ -14,19 +14,23 @@ ul {
   margin: 15px;
   width: calc(20% - 30px);
   transition: all 0.2s ease-in-out;
-  /* Add a property here */
 }
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 1251px) {
   .cyber__card {
     width: calc(25% - 30px);
   }
 }
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 990px) {
   .cyber__card {
     width: calc(33.3333333333% - 30px);
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
+  .cyber__card {
+    width: calc(50% - 30px);
+  }
+}
+@media screen and (max-width: 681px) {
   .cyber__card {
     width: 100%;
   }
