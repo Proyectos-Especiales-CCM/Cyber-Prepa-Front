@@ -7,7 +7,7 @@ interface Payload {
     game: number,
 }
 
-export const createPlay = async ( ended: boolean, student: string, game: number, token?: string | undefined ): Promise<PlayResponse> => {
+export const createPlay = async ( ended: boolean, student: string, game: number, token: string ): Promise<PlayResponse> => {
 
     let res;
     const endpoint = `rental/plays/`;

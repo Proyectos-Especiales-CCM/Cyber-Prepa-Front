@@ -59,10 +59,19 @@ export interface PlayResponse {
     status: number
 }
 
+export interface EndPlayResponse {
+    id: number,
+    plays: Play[],
+    name: string,
+    show: boolean,
+    start_time: string,
+    image: string,
+}
+
 export interface Player {
     id: number;
     ended: boolean;
     time: string;
     student: string;
     game: number;
-  }
+}
