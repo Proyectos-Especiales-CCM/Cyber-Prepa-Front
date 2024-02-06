@@ -51,8 +51,8 @@ ul {
 }
 
 .cyber__card.is-expanded .cyber__card__expander {
-  max-height: 300px;
-  min-height: 200px;
+  max-height: 335px;
+  min-height: 100px;
   overflow: visible;
   margin-top: 30px;
   opacity: 1;
@@ -159,7 +159,7 @@ ul {
     width: calc(400% + 90px);
   }
 }
-@media screen and (min-width: 762px) and (max-width: 990px) {
+@media screen and (min-width: 876px) and (max-width: 990px) {
   .cyber__card:nth-of-type(3n+2) .cyber__card__expander {
     margin-left: calc(-100% - 30px);
   }
@@ -173,18 +173,17 @@ ul {
     width: calc(300% + 60px);
   }
 }
-
-@media screen and (min-width: 681px) and (max-width: 761px) {
-  .cyber__card:nth-of-type(2n+1) .cyber__card__expander {
+@media screen and (min-width: 651px) and (max-width: 875px) {
+  .cyber__card:nth-of-type(2n+2) .cyber__card__expander {
     margin-left: calc(-100% - 30px);
   }
   .cyber__card:nth-of-type(2n+2) .cyber__card__expander {
-    margin-left: calc(-200% - 60px);
+    margin-left: 0;
   }
   .cyber__card:nth-of-type(2n+3) .cyber__card__expander {
     clear: left;
   }
   .cyber__card__expander {
-    width: calc(200%);
+    width: calc(200% + 30px);
   }
 }/*# sourceMappingURL=CardExpander.css.map */
