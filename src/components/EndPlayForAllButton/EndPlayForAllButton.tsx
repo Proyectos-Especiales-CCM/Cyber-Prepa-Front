@@ -4,6 +4,7 @@ import { Loading } from '..';
 import { endPlaysById } from '../../services';
 import { SnackbarComponent } from '../SnackbarComponent';
 import { Button } from '@mui/material';
+import "./EndPlayForAllButton.css"
 
 interface EndPlayForAllProps {
   cardGame: Game;
@@ -68,6 +69,7 @@ const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame }) => {
       />
 
       <Button
+        className='button'
         size="large"
         variant="contained"
         onClick={endPlayForAllHandle}
