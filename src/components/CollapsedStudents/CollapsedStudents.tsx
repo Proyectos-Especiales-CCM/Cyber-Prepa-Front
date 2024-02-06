@@ -1,70 +1,62 @@
 import { useAppContext } from "../../store/appContext/appContext";
-import { CollapsedStudentItem, ScrollButtons } from ".."
-import { game } from "../../pages/Home/types";
-import { readGameById, readPlays } from "../../services";
+import { CollapsedStudentItem, ScrollButtons } from "..";
+import { readGameById } from "../../services";
 import { useEffect, useState } from "react";
-import Config from "../../config";
-
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { Game, Play } from "../../services/types";
 
 interface CollapsedStudentProps {
-     cardGame: game;
+  cardGame: Game;
 }
 
 const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
+  const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
+  const { user, tokens } = useAppContext();
+  const [playsData, setPlaysData] = useState<Play[] | number>([]);
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
-     // -------------- APP CONTEXT -------------- //
-     const { user, tokens } = useAppContext();
-     
-     // --------------- USE STATES -------------- //
-     const [gamesData, setGamesData] = useState<game[]>([]);
+  useEffect(() => {
+    if (readyState === ReadyState.OPEN) {
+      sendMessage('Hello, server!');
+    }
+  }, [readyState, sendMessage]);
 
+  useEffect(() => {
+    const fetchData = async() => {    
+      if (lastMessage !== null) {
+        const data = JSON.parse(lastMessage.data);
+        const message = data.message;
+        const sender = data.sender;
 
-     // -------------- USE EFFECTS -------------- //
-     useEffect(() => {
-
-          // Initialize WebSocket Connection
-          const updatesSocket = new WebSocket(`ws://172.174.255.29/ws/updates/`)
-      
-          // Handle messages received from the server
-          updatesSocket.onmessage = async function (e) {
-               const data = JSON.parse(e.data);
-               const message = data['message'];
-               const sender = data['sender'];
-      
-               // Only update the UI if the message was sent by another user
-               if (sender !== user) {
-                    
-                    // If user is authenticated, refresh / update the student list
-                    if (user !== undefined) {
-                         if (message == 'Plays updated') {
-                              const updateData = await readGameById(data['info'], tokens?.access_token)
-                              setGamesData(updateData)
-                         }
-                    } else { // If user not authenticated, only update game cards
-                         if (message == 'Plays updated') {
-                              const data = readPlays(tokens?.access_token);
-                         }
-                    }
-               }
+        if (sender !== user) {
+          if (user !== undefined) {
+            if (message === 'Plays updated') {
+              const updateData = await readGameById(data['info'], tokens?.access_token);
+              setPlaysData(updateData.data[0].plays);
             }
-     }, [])
-     
-     return (
-          <div className="collapsed__students">
-               <ul id={`cyber__student__list__${cardGame.id}`} className="container__dropzone">
+          }
+        }
+      }
+    }
+    fetchData()
+  }, [lastMessage, user, tokens]);
 
-               {Array.isArray(cardGame.plays)
-                    ? cardGame.plays.map((player) => (
-                         <CollapsedStudentItem key={player.id} player={player} cardGame={cardGame}/>
-                    ))
-                    : null
-               }
+  useEffect(() => {
+    setPlaysData(cardGame.plays);
+  }, [cardGame.plays]);
 
-               </ul>
+  return (
+    <div className="collapsed__students">
+      <ul id={`cyber__student__list__${cardGame.id}`} className="container__dropzone">
+        {Array.isArray(playsData)
+          ? playsData.map((player) => (
+              <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id} />
+            ))
+          : null}
+      </ul>
+      <ScrollButtons />
+    </div>
+  );
+};
 
-               <ScrollButtons />
-          </div>
-     )
-}
-
-export default CollapsedStudents
+export default CollapsedStudents;

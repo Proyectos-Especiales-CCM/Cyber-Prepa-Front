@@ -12,8 +12,9 @@ export interface Game {
     name: string,
     show: boolean,
     start_time: string,
-    file_route: string,
+    image: string,
 }
+
 
 export interface Student {
     id: string,
@@ -52,3 +53,16 @@ export interface ApiResponse<T> {
     data: T[]
     status: number
 }
+
+export interface PlayResponse {
+    detail: string
+    status: number
+}
+
+export interface Player {
+    id: number;
+    ended: boolean;
+    time: string;
+    student: string;
+    game: number;
+  }

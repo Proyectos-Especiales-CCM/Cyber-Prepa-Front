@@ -2,13 +2,13 @@ import httpInstance from "../httpInstance";
 import { ApiResponse, Sanction } from "../types";
 
 export const createSanction = async (
-    token: string,
     id: number,
     cause: string,
     start_time: Date,
     end_time: Date,
     student: string,
     play?: number,
+    token?: string,
 ): Promise<ApiResponse<Sanction>> => {
     let res;
     const endpoint = `rental/sanctions/${id}/`;

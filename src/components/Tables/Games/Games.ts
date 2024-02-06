@@ -42,9 +42,9 @@ const gameColumns = [
         name: 'image',
         label: 'Imagen',
         options: {
-            customBodyRender: (value: string) => ImageCell({ value }),
-            filter: false,
-        }
-    }
+          customBodyRender: (value: string) => ImageCell({ value, style: { width: '50px', height: 'auto' } }),
+          filter: false,
+        },
+    },
 ];
 export default gameColumns;
