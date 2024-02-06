@@ -34,7 +34,7 @@ const theme = createTheme({
 
 const Header = () => {
   
-  const pages = ['caqui', 'popi']
+  const pages = ['Reglamento', 'Admin']
 
   const { logOut, user, admin } = useAppContext();
   const navigate = useNavigate();
