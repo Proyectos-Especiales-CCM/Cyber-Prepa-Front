@@ -5,14 +5,12 @@ export const initCountdown = (
   countdownRef: React.RefObject<HTMLDivElement>,
 ) => {
   if (countdownRef.current) {
-     
     countdownRef.current.innerHTML = "Cargando...";
 
+    const countDownDate = new Date(cardGame.start_time).getTime() + (60 * 60 * 1000);
+    
     const intervalId = setInterval(function () {
-
-     const now = new Date().getTime();
-
-      const countDownDate = new Date(cardGame.start_time).getTime();
+      const now = new Date().getTime();
 
       const distance = countDownDate - now;
 
@@ -31,10 +29,6 @@ export const initCountdown = (
       } else if ((Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) === 0) {
         countdownRef.current!.innerHTML = "LIBRE";
       } else {
-        countdownRef.current!.innerHTML = timeTextDisplay;
-      }
-
-      if (distance >= 0) {
         countdownRef.current!.innerHTML = timeTextDisplay;
       }
 

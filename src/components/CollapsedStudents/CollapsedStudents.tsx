@@ -13,24 +13,27 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
   const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
   const { user, tokens } = useAppContext();
   const [playsData, setPlaysData] = useState<Play[] | number>(cardGame.plays);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const { lastMessage, readyState } = useWebSocket(socketUrl);
 
   useEffect(() => {
     if (readyState === ReadyState.OPEN) {
-      sendMessage('Hello, server!');
+      console.log('hello')
     }
-  }, [readyState, sendMessage]);
+  }, [readyState]);
 
   useEffect(() => {
     const fetchData = async() => {    
       if (lastMessage !== null) {
         const data = JSON.parse(lastMessage.data);
-        const message = data.message;
-        const sender = data.sender;
+        const message = data['message'];
+        const sender = data['sender'];
 
         if (sender !== user) {
+          console.log('a')
           if (user !== undefined) {
+            console.log('b')
             if (message === 'Plays updated') {
+              console.log('c')
               const updateData = await readGameById(data['info'], tokens?.access_token);
               setPlaysData(updateData.data[0].plays);
             }

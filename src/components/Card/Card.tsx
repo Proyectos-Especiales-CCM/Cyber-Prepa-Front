@@ -39,8 +39,8 @@ const Card: React.FC<CardProps> = ({ cardGame, user}) => {
 
                          <span>
                               {Array.isArray(cardGame.plays) ? 
-                                   (cardGame.plays.length == 1 ? `1 jugador` : `${cardGame.plays.length} jugadorxs`)  :
-                                   (cardGame.plays == 1 ? `1 jugador` : `${cardGame.plays} jugadorxs`)
+                                   (cardGame.plays.length == 1 ? `1 jugador` : `${cardGame.plays.length} jugadores`)  :
+                                   (cardGame.plays == 1 ? `1 jugador` : `${cardGame.plays} jugadores`)
                               }
                          </span><br />
                          
