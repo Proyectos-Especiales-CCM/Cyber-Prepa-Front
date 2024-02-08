@@ -53,10 +53,22 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
         setAlertMessage('Matricula inválida, vuelve a intentarlo');
         setOpen(true);
       } else if (response.detail === 'Student is already playing') {
-        setAlertMessage(`El estudiante ${{studentId}} ya se encuentra jugando`);
+        setAlertMessage(`El estudiante ${studentId} ya se encuentra jugando`);
         setOpen(true);
       } else if (response.detail === 'Game time has expired') {
         setAlertMessage('El tiempo de juego ha expirado');
+        setOpen(true);
+      } else if (response.detail === 'Student has sanctions') {
+        setAlertMessage('El estudiante tiene sanción activa');
+        setOpen(true);
+      } else if (response.detail === 'Student has already played 3 times this week') {
+        setAlertMessage('El estudiante ya ha jugado 3 veces esta semana');
+        setOpen(true);
+      } else if (response.detail === 'Student has already played today') {
+        setAlertMessage('El estudiante ya ha jugado el día de hoy');
+        setOpen(true);
+      } else {
+        setAlertMessage(`Estudiante ${studentId} agregado exitosamente`);
         setOpen(true);
       }
 

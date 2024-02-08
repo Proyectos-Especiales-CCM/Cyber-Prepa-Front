@@ -41,7 +41,6 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
     } catch (error) {
       setAlertMessage(`Error terminando el juego.`);
       setOpen(true);
-
     }
   };
 
