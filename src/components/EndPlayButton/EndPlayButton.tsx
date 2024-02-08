@@ -41,7 +41,6 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
     } catch (error) {
       setAlertMessage(`Error terminando el juego.`);
       setOpen(true);
-
     }
   };
 
@@ -60,7 +59,7 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
       <input type="hidden" name="game_id" value={`${cardGameId}`} />
 
 
-      <Button variant="contained" onClick={handleEndPlay}>
+      <Button variant="contained" onClick={handleEndPlay} sx={{width:120}}>
         Finalizar juego
       </Button>
 

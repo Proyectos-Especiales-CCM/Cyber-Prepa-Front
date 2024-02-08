@@ -1,9 +1,10 @@
 import httpInstance from "../httpInstance";
+import { ApiResponse, EndPlayResponse } from "../types";
 
 export const endPlaysById = async (
     gameId: number,
     token: string,
-     ) => {
+    ): Promise<ApiResponse<EndPlayResponse>> => {
     let res;
     const endpoint = `rental/games/${gameId}/end-all-plays/`;
 
@@ -20,5 +21,5 @@ export const endPlaysById = async (
         .catch((error) => {
             res = error.response;
         });
-    return res;
+    return res || {} as ApiResponse<EndPlayResponse>;
 };
