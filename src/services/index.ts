@@ -11,6 +11,7 @@ export { readStudentById } from "./rental/readStudentById";
 export { readLogs } from "./rental/readLogs";
 export { readSanctions } from "./rental/readSanctions";
 export { readSanctionById } from "./rental/readSanctionById";
+export { readImages } from "./rental/readImages";
 
 
 // ------------------------------------------------------------------- POST
@@ -23,6 +24,7 @@ export { createPlay } from "./rental/createPlay";
 export { createStudent } from "./rental/createStudent";
 export { logInAccess } from "./logInAccess/logInAccess";
 export { createSanction } from "./rental/createSanction";
+export { createImage } from "./rental/createImage";
 
 
 // ------------------------------------------------------------------- PUT
@@ -46,3 +48,5 @@ export { deleteSanctionById } from "./rental/deleteSanctionById";
 
 // ------------------------------------------------------------------- UTILS
 export { changeIdToName } from "./rental/changeIdToName";
+export { completeImageUrl } from "./rental/completeImageUrl";
+export { findImageIdWithUrl } from "./rental/findImageIdWithUrl";

@@ -1,6 +1,6 @@
 import './admin.css'
 import MUIDataTable from "mui-datatables";
-import { Box, Button, Stack, IconButton } from "@mui/material";
+import { Box, Button, Stack, IconButton, Tooltip } from "@mui/material";
 import { Delete, Visibility, VisibilityOff, Cancel, CheckCircle, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown, Edit } from '@mui/icons-material';
 import { useAppContext } from "../../store/appContext/appContext";
 import { useState, useEffect } from "react";
@@ -17,6 +17,9 @@ import {
   deleteGameById,
   deleteSanctionById,
   changeIdToName,
+  readImages,
+  findImageIdWithUrl,
+  completeImageUrl,
 } from "../../services";
 import {
   playColumns,
@@ -33,7 +36,7 @@ import {
   CreateGamePanel,
   ModifyGamePanel,
 } from "../../components";
-import { ApiResponse, Game, Play, Student, User, Sanction, Log } from '../../services/types';
+import { ApiResponse, Game, Play, Student, User, Sanction, Log, Image } from '../../services/types';
 
 const Admin = () => {
   const { tokens, admin } = useAppContext();
@@ -45,6 +48,7 @@ const Admin = () => {
   const [studentsData, setStudentsData] = useState<Student[]>([]);
   const [usersData, setUsersData] = useState<User[]>([]);
   const [logsData, setLogsData] = useState<Log[]>([]);
+  const [images, setImages] = useState<Image[]>([]);
   // Variables para tracking de filas seleccionadas en las tablas
   const [playsSelected] = useState([]);
   const [gamesSelected] = useState([]);
@@ -163,7 +167,11 @@ const Admin = () => {
       ...modalAttr,
       openModal: true,
       title: "Añadir Juego",
-      children: (<><CreateGamePanel openModalMessage={openModalMessage} closeModal={closeModal} updateGamesData={updateGamesData} /></>),
+      children: (<><CreateGamePanel
+        openModalMessage={openModalMessage}
+        closeModal={closeModal}
+        updateGamesData={updateGamesData}
+      /></>),
     });
   }
   const setModifyGameModal = (selectedRows: any) => {
@@ -174,11 +182,21 @@ const Admin = () => {
     const index = selectedRows.data[0].dataIndex;
     const game = gamesData[index];
 
+    const gameImage = findImageIdWithUrl(images, completeImageUrl(game.image ?? '') ?? '');
+
     setModalAttr({
       ...modalAttr,
       openModal: true,
       title: "Modificar Juego " + game.name,
-      children: (<><ModifyGamePanel openModalMessage={openModalMessage} closeModal={closeModal} updateGamesData={updateGamesData} gameId={game.id} prevName={game.name} prevShow={game.show} prevFileRoute={game.file_route} /></>),
+      children: (<><ModifyGamePanel
+        openModalMessage={openModalMessage}
+        closeModal={closeModal}
+        updateGamesData={updateGamesData}
+        gameId={game.id}
+        prevName={game.name}
+        prevShow={game.show}
+        prevImageId={gameImage}
+      /></>),
     });
   }
 
@@ -238,7 +256,11 @@ const Admin = () => {
       ...modalAttr,
       openModal: true,
       title: "Añadir Usuario",
-      children: (<><CreateUserPanel openModalMessage={openModalMessage} closeModal={closeModal} updateUsersData={updateUsersData} /></>),
+      children: (<><CreateUserPanel
+        openModalMessage={openModalMessage}
+        closeModal={closeModal}
+        updateUsersData={updateUsersData}
+      /></>),
     });
   }
   const setModifyUserModal = (selectedRows: any) => {
@@ -253,26 +275,40 @@ const Admin = () => {
       ...modalAttr,
       openModal: true,
       title: "Modificar Usuario " + user.email,
-      children: (<><ModifyUserPanel openModalMessage={openModalMessage} closeModal={closeModal} updateUsersData={updateUsersData} userId={user.id} prevEmail={user.email} prevIsAdmin={user.is_admin} prevIsActive={user.is_active} /></>),
+      children: (<><ModifyUserPanel
+        openModalMessage={openModalMessage}
+        closeModal={closeModal}
+        updateUsersData={updateUsersData}
+        userId={user.id}
+        prevEmail={user.email}
+        prevIsAdmin={user.is_admin}
+        prevIsActive={user.is_active}
+      /></>),
     });
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      const gameResponse = await readGames();
-      const resGamesData = gameResponse?.data;
-      gameResponse?.status === 200 ? setGamesData(resGamesData) : console.error(resGamesData);
-      const playResponse = await readPlays(tokens?.access_token ?? "");
-      playResponse?.status === 200 ? setPlaysData(changeIdToName(playResponse?.data, resGamesData)) : console.error(playResponse?.data);
-      const sanctionResponse = await readSanctions(tokens?.access_token ?? "");
-      sanctionResponse?.status === 200 ? setSanctionsData(sanctionResponse?.data) : console.log(sanctionResponse?.data);
-      if (admin === true) {
-        const studentResponse = await readStudents(tokens?.access_token ?? "");
-        studentResponse?.status === 200 ? setStudentsData(studentResponse?.data) : console.error(studentResponse?.data);
-        const logResponse = await readLogs(tokens?.access_token ?? "");
-        logResponse?.status === 200 ? setLogsData(logResponse?.data) : console.log(logResponse?.data);
-        const userResponse = await readUsers(tokens?.access_token ?? "");
-        userResponse?.status === 200 ? setUsersData(userResponse?.data) : console.error(userResponse?.data);
+      try {
+        const gameResponse = await readGames();
+        const resGamesData = gameResponse?.data;
+        gameResponse?.status === 200 ? setGamesData(resGamesData) : console.error(resGamesData);
+        const playResponse = await readPlays(tokens?.access_token ?? "");
+        playResponse?.status === 200 ? setPlaysData(changeIdToName(playResponse?.data, resGamesData)) : console.error(playResponse?.data);
+        const sanctionResponse = await readSanctions(tokens?.access_token ?? "");
+        sanctionResponse?.status === 200 ? setSanctionsData(sanctionResponse?.data) : console.log(sanctionResponse?.data);
+        if (admin === true) {
+          const studentResponse = await readStudents(tokens?.access_token ?? "");
+          studentResponse?.status === 200 ? setStudentsData(studentResponse?.data) : console.error(studentResponse?.data);
+          const logResponse = await readLogs(tokens?.access_token ?? "");
+          logResponse?.status === 200 ? setLogsData(logResponse?.data) : console.log(logResponse?.data);
+          const userResponse = await readUsers(tokens?.access_token ?? "");
+          userResponse?.status === 200 ? setUsersData(userResponse?.data) : console.error(userResponse?.data);
+          const imageResponse = await readImages(tokens?.access_token ?? "");
+          imageResponse?.status === 200 ? setImages(imageResponse?.data) : console.error(imageResponse?.data);
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
 
@@ -313,46 +349,54 @@ const Admin = () => {
                 customToolbarSelect: (selectedRows: object) =>
                   <>
                     <Stack id='game-options' direction="row">
-                      <IconButton
-                        aria-label="edit"
-                        color="info"
-                        size="large"
-                        onClick={() => {
-                          setModifyGameModal(selectedRows);
-                        }}
-                      >
-                        <Edit fontSize='inherit' />
-                      </IconButton>
-                      <IconButton
-                        aria-label="show"
-                        color="inherit"
-                        size="large"
-                        onClick={() => {
-                          handleUpdateGame(selectedRows, "show", true);
-                        }}
-                      >
-                        <Visibility fontSize='inherit' />
-                      </IconButton>
-                      <IconButton
-                        aria-label="not-show"
-                        color="inherit"
-                        size="large"
-                        onClick={() => {
-                          handleUpdateGame(selectedRows, "show", false);
-                        }}
-                      >
-                        <VisibilityOff fontSize='inherit' />
-                      </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        color="error"
-                        size="large"
-                        onClick={() => {
-                          handleDeleteGame(selectedRows);
-                        }}
-                      >
-                        <Delete fontSize='inherit' />
-                      </IconButton>
+                      <Tooltip title="Editar">
+                        <IconButton
+                          aria-label="edit"
+                          color="info"
+                          size="large"
+                          onClick={() => {
+                            setModifyGameModal(selectedRows);
+                          }}
+                        >
+                          <Edit fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Mostrar">
+                        <IconButton
+                          aria-label="show"
+                          color="inherit"
+                          size="large"
+                          onClick={() => {
+                            handleUpdateGame(selectedRows, "show", true);
+                          }}
+                        >
+                          <Visibility fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Ocultar">
+                        <IconButton
+                          aria-label="not-show"
+                          color="inherit"
+                          size="large"
+                          onClick={() => {
+                            handleUpdateGame(selectedRows, "show", false);
+                          }}
+                        >
+                          <VisibilityOff fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Borrar">
+                        <IconButton
+                          aria-label="delete"
+                          color="error"
+                          size="large"
+                          onClick={() => {
+                            handleDeleteGame(selectedRows);
+                          }}
+                        >
+                          <Delete fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
                     </Stack>
                   </>,
               }}
@@ -386,56 +430,66 @@ const Admin = () => {
                 customToolbarSelect: (selectedRows: object) =>
                   <>
                     <Stack id='user-options' direction="row">
-                      <IconButton
-                        aria-label="edit"
-                        color="info"
-                        size="large"
-                        onClick={() => {
-                          setModifyUserModal(selectedRows);
-                        }}
-                      >
-                        <Edit fontSize='inherit' />
-                      </IconButton>
-                      <IconButton
-                        aria-label="make-admin"
-                        color="warning"
-                        size="large"
-                        onClick={() => {
-                          handleUpdateUser(selectedRows, "is_admin", true);
-                        }}
-                      >
-                        <KeyboardDoubleArrowUp fontSize='inherit' />
-                      </IconButton>
-                      <IconButton
-                        aria-label="make-non-admin"
-                        color="info"
-                        size="large"
-                        onClick={() => {
-                          handleUpdateUser(selectedRows, "is_admin", false);
-                        }}
-                      >
-                        <KeyboardDoubleArrowDown fontSize='inherit' />
-                      </IconButton>
-                      <IconButton
-                        aria-label="activate"
-                        color="success"
-                        size="large"
-                        onClick={() => {
-                          handleUpdateUser(selectedRows, "is_active", true);
-                        }}
-                      >
-                        <CheckCircle fontSize='inherit' />
-                      </IconButton>
-                      <IconButton
-                        aria-label="deactivate"
-                        color="error"
-                        size="large"
-                        onClick={() => {
-                          handleUpdateUser(selectedRows, "is_active", false);
-                        }}
-                      >
-                        <Cancel fontSize='inherit' />
-                      </IconButton>
+                      <Tooltip title="Editar">
+                        <IconButton
+                          aria-label="edit"
+                          color="info"
+                          size="large"
+                          onClick={() => {
+                            setModifyUserModal(selectedRows);
+                          }}
+                        >
+                          <Edit fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Hacer administrador">
+                        <IconButton
+                          aria-label="make-admin"
+                          color="warning"
+                          size="large"
+                          onClick={() => {
+                            handleUpdateUser(selectedRows, "is_admin", true);
+                          }}
+                        >
+                          <KeyboardDoubleArrowUp fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Hacer becario">
+                        <IconButton
+                          aria-label="make-non-admin"
+                          color="info"
+                          size="large"
+                          onClick={() => {
+                            handleUpdateUser(selectedRows, "is_admin", false);
+                          }}
+                        >
+                          <KeyboardDoubleArrowDown fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Activar">
+                        <IconButton
+                          aria-label="activate"
+                          color="success"
+                          size="large"
+                          onClick={() => {
+                            handleUpdateUser(selectedRows, "is_active", true);
+                          }}
+                        >
+                          <CheckCircle fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Desactivar">
+                        <IconButton
+                          aria-label="deactivate"
+                          color="error"
+                          size="large"
+                          onClick={() => {
+                            handleUpdateUser(selectedRows, "is_active", false);
+                          }}
+                        >
+                          <Cancel fontSize='inherit' />
+                        </IconButton>
+                      </Tooltip>
                     </Stack>
                   </>,
               }}

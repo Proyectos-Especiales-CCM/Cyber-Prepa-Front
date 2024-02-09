@@ -1,8 +1,21 @@
-import { useState } from 'react';
-import { Button, Grid, FormControl, InputLabel, Input, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { useState, useEffect } from 'react';
+import {
+    Button,
+    Grid,
+    FormControl,
+    InputLabel,
+    Input,
+    Checkbox,
+    FormGroup,
+    FormControlLabel,
+    Typography,
+    SelectChangeEvent,
+} from '@mui/material';
 import { useAppContext } from "../../store/appContext/appContext";
-import { createGame } from '../../services';
+import { createGame, readImages, createImage } from '../../services';
+import { Image } from '../../services/types';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { SelectOrUploadImage } from '..';
 
 const darkTheme = createTheme({
     palette: {
@@ -19,11 +32,25 @@ interface CreateGamePanelProps {
 
 const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, closeModal, updateGamesData }) => {
     const { tokens, admin } = useAppContext();
-    const [name, setName] = useState('');
-    const [show, setShow] = useState(false);
+    const [name, setName] = useState<string>('');
+    const [show, setShow] = useState<boolean>(false);
+    const [uploadImage, setUploadImage] = useState<boolean>(false);
+    const [imageId, setImageId] = useState<string>('');
+    const [images, setImages] = useState<Image[]>([]);
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle changes
+    const handleShowChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setShow(event.target.checked);
+    };
+    const handleSelectOrUploadImageChange = () => {
+        setUploadImage(!uploadImage);
+    }
+    const handleImageIdChange = (event: SelectChangeEvent) => {
+        setImageId(event.target.value);
+    };
+    const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setImageFile(event.target.files?.item(0) || null);
     };
 
     // Handle submit
@@ -36,18 +63,39 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
         }
 
         try {
-            // Mandar request para crear el usuario
-            await createGame(name, show, tokens?.access_token || '');
+            // Si se seleccionó subir una imagen, mandar request para subir la imagen
+            let imageIdToSend = imageId !== '' ? parseInt(imageId) : undefined;
+            if (uploadImage) {
+                if (imageFile === null) return;
+                const response = await createImage(tokens?.access_token || '', imageFile);
+                imageIdToSend = response.data.id;
+            }
+
+            // Mandar request para crear el juego
+            const res = await createGame(name, show, tokens?.access_token || '', imageIdToSend || undefined);
+            console.log(res);
             // Cerrar modal y mostrar mensaje de éxito
             await updateGamesData();
             closeModal();
-            openModalMessage('success', 'Usuario creado exitosamente.');
+            openModalMessage('success', 'Juego creado exitosamente.');
         } catch (error) {
             // Handle errors
-            openModalMessage('error', 'Lo sentimos, ha ocurrido un error al crear el usuario.');
+            openModalMessage('error', 'Lo sentimos, ha ocurrido un error al crear el juego.');
             console.error('Error:', error);
         }
     };
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const response = await readImages(tokens?.access_token || '');
+                setImages(response.data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        fetchImages();
+    }, [tokens]);
 
     return (
         <>
@@ -74,12 +122,25 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                                 <FormGroup>
                                     <FormControlLabel
                                         control={
-                                            <Checkbox checked={show} onChange={handleChange} name="show" />
+                                            <Checkbox checked={show} onChange={handleShowChange} name="show" />
                                         }
                                         label="Mostrar"
                                     />
                                 </FormGroup>
                             </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography>
+                                {uploadImage ? 'Suba una imagen para el juego' : 'Seleccione una imagen para el juego'}
+                            </Typography>
+                            <SelectOrUploadImage
+                                uploadImage={uploadImage}
+                                imageId={imageId}
+                                handleImageIdChange={handleImageIdChange}
+                                handleImageFileChange={handleImageFileChange}
+                                handleSelectOrUploadImageChange={handleSelectOrUploadImageChange}
+                                images={images}>
+                            </SelectOrUploadImage>
                         </Grid>
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button variant="contained" color="success" type="submit">Añadir</Button>

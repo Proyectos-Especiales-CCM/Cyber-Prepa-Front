@@ -4,7 +4,7 @@ export const createGame = async (
     name: string,
     show: boolean,
     token: string,
-    file_route?: string,
+    image?: number,
 ) => {
     let res;
     const endpoint = `rental/games/`;
@@ -12,7 +12,7 @@ export const createGame = async (
     const requestBody = {
         name: name,
         show: show,
-        ...(file_route && { file_route: file_route }),
+        ...(image && { image: image }),
     }
 
     await httpInstance

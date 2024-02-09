@@ -16,6 +16,8 @@ export { CreateUserPanel } from './CreateUserPanel'
 export { ModifyUserPanel } from './ModifyUserPanel'
 export { CreateGamePanel } from './CreateGamePanel'
 export { ModifyGamePanel } from './ModifyGamePanel'
+export { CreateSanctionPanel } from './CreateSanctionPanel'
+export { SelectOrUploadImage } from './SelectOrUploadImage'
 
 export { playColumns } from './Tables'
 export { gameColumns } from './Tables'

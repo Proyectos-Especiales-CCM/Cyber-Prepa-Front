@@ -49,8 +49,18 @@ export interface Log {
     action: string,
 }
 
+export interface Image {
+    id: number,
+    image: string,
+}
+
 export interface ApiResponse<T> {
     data: T[]
+    status: number
+}
+
+export interface ApiResponseSingle<T> {
+    data: T
     status: number
 }
 
