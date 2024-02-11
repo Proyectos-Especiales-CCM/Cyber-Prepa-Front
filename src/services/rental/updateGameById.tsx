@@ -5,7 +5,8 @@ export const updateGameById = async (
     name: string,
     show: boolean,
     start_time: Date,
-    file_route: string
+    image: number,
+    token: string
      ) => {
     let res;
     const endpoint = `rental/games/?id=${gameId}/`;
@@ -14,12 +15,15 @@ export const updateGameById = async (
         name: name,
         show: show,
         start_time: start_time,
-        file_route: file_route
+        image: image
     }
 
     await httpInstance
         .put(endpoint, JSON.stringify(requestBody), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
         })
         .then((response) => {
             res = response;

@@ -7,12 +7,12 @@ export const patchGameById = async (
         name,
         show,
         start_time,
-        file_route,
+        image,
     }: {
         name?: string;
         show?: boolean;
         start_time?: Date;
-        file_route?: string;
+        image?: number;
     } = {}
      ) => {
     let res;
@@ -22,7 +22,7 @@ export const patchGameById = async (
         name: name,
         show: show,
         start_time: start_time,
-        file_route: file_route
+        image: image
     }
 
     await httpInstance
