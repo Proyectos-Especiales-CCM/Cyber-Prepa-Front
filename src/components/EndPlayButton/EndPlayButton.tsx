@@ -14,6 +14,7 @@ interface EndPlayButtonProps {
 const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => {
 
   const [open, setOpen] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
@@ -37,7 +38,7 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
     try {
       await deletePlayById(player.id, accessToken);
       setAlertMessage(`Juego del estudiante ${player.student} terminado exitosamente.`);
-      setOpen(true);
+      setOpenSuccess(true);
     } catch (error) {
       setAlertMessage(`Error terminando el juego.`);
       setOpen(true);
@@ -49,6 +50,13 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
       return;
     }
     setOpen(false);
+  };
+  
+  const handleCloseSuccess = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSuccess(false);
   };
 
 
@@ -67,6 +75,17 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
         <Alert
           onClose={handleClose}
           severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      
+      <Snackbar open={openSuccess} autoHideDuration={4000} onClose={handleCloseSuccess}>
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
           variant="filled"
           sx={{ width: '100%' }}
         >

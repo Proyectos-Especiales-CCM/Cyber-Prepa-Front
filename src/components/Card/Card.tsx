@@ -12,7 +12,7 @@ interface CardProps {
      user: UserObject | undefined;
 }
 
-const Card: React.FC<CardProps> = ({ cardGame, user}) => {
+const Card: React.FC<CardProps> = ({ cardGame, user }) => {
 
      const cardsRef = useRef<HTMLDivElement>(null);
      const countdownRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user}) => {
 
      useEffect(() => {
           initCountdown(cardGame, countdownRef);
-     }, [])
+     }, [cardGame])
      
      return (
      

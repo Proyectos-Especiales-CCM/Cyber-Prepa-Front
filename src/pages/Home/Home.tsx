@@ -1,38 +1,51 @@
 import { useAppContext } from "../../store/appContext/appContext";
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getGamesData } from "./getGames";
 import { Card } from "../../components";
 import { Game } from "../../services/types";
 import './Home.css';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 
 const Home = () => {
   const { user, tokens } = useAppContext();
-  const [gamesData, setGamesData] = useState<Game[] | undefined>([]);
+  const [gamesData, setGamesData] = useState<Game[]>([]);
   const [forceRender, setForceRender] = useState(false);
-  const [socketUrl, setSocketUrl] = useState('ws://172.174.255.29/ws/updates/');
-  const [messageHistory, setMessageHistory] = useState([]);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
+  const { lastMessage } = useWebSocket(socketUrl);
 
-  useEffect(() => {
-    if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
-
-      const data = JSON.parse(lastMessage.data);
-      const message = data.message;
-      const sender = data.sender;
-
-      if (sender !== user && message === 'Games updated') {
-        setForceRender((prev) => !prev);
-      }
+  const updatedGamesData = useMemo(() => {
+    if (!lastMessage) return gamesData;
+    const data = JSON.parse(lastMessage.data);
+    const message = data.message;
+  
+    if (message === 'Games updated') {
+      setForceRender((prev) => !prev);
+      return gamesData;
     }
-  }, [lastMessage, setMessageHistory, user]);
+  
+    if (message === 'Plays updated') {
+      console.log('changed: ', data['info'])
+      const gameId = data['info'];
+      return gamesData.map((game) => {
+        if (game.id === gameId) {
+          return {
+            ...game,
+          };
+        }
+        return game;
+      });
+    }
+  
+    return gamesData;
+  }, [lastMessage]);
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getGamesData(user, tokens);
-        setGamesData(data);
+        if (data) {
+          setGamesData(data);
+        }
       } catch (error) {
         console.error("Error fetching games: ", error);
       }
@@ -41,8 +54,11 @@ const Home = () => {
     fetchData();
   }, [user, tokens, forceRender]);
 
+  useEffect(() => {
+    setGamesData(updatedGamesData);
+  }, [updatedGamesData]);
 
-  // ------------- MAIN RENDER ------------- //
+
   return (
     <div className="cyber__wrapper">
       <div className="cyber__cards" id="cyberCards">
@@ -51,7 +67,7 @@ const Home = () => {
           ? gamesData.map((game) => (
             <Card key={game.id} cardGame={game} user={user} />
           ))
-          : null
+          : "No hay juegos registrados."
         }
 
       </div>

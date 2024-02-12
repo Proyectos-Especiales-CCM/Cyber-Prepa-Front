@@ -41,7 +41,7 @@ const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame }) => {
         setAlertMessage('Juego terminado para todos');
         setOpenSuccess(true);
       } else {
-        setAlertMessage('Error terminando juego');
+        setAlertMessage('Error terminando juego, vuelve a intentarlo');
         setOpenError(true);
       }
 
@@ -74,6 +74,10 @@ const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame }) => {
         variant="contained"
         onClick={endPlayForAllHandle}
         disabled={isLoading}
+        sx={{
+          height: 55,
+          backgroundColor: '#133a71'
+        }}
       >
         {isLoading ? <Loading /> : 'Finalizar juego para todos'}
       </Button>
