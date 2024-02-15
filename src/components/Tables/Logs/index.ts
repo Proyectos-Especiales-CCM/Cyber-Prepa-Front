@@ -1,1 +1,1 @@
-export { default as logColumns } from './Logs';
+export { default as LogsDataTable } from './Logs';

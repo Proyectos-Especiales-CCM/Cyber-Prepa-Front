@@ -19,7 +19,7 @@ export const readStudents = async (access_token: string): Promise<ApiResponse<St
             }
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
     return res || {} as ApiResponse<Student>;
 };
