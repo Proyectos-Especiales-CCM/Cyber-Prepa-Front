@@ -1,5 +1,17 @@
 import axios from "axios";
 import Config from "../config";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../store/appContext/appContext";
+
+interface AxiosError {
+  response?: {
+    status: number;
+    data?: {
+      detail: string;
+      code?: string;
+    };
+  };
+}
 
 const httpInstance = axios.create({
   baseURL: Config.API_URL,
@@ -29,6 +41,13 @@ httpInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return axios(originalRequest);
       } catch (error) {
+        const { logOut } = useAppContext();
+        const axiosRefreshError = error as AxiosError;
+        if (axiosRefreshError.response?.status === 401 && axiosRefreshError.response?.data?.code === 'token_not_valid') {
+          // If the refresh token has expired, we need to log in again
+          logOut();
+          useNavigate()('/login');
+        }
         return Promise.reject(error);
       }
     }

@@ -12,8 +12,8 @@ export const patchSanctionById = async (
         student,
     }: {
         cause?: string;
-        start_time?: Date;
-        end_time?: Date;
+        start_time?: string;
+        end_time?: string;
         play?: number;
         student?: string;
     } = {}

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DateCell } from "../CustomBodyCells";
-import { Box, IconButton, Stack, Tooltip } from '@mui/material';
+import { Box, Button, IconButton, Stack, Tooltip } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumnDef, MUIDataTableIsRowCheck } from 'mui-datatables';
-import { Delete } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 import { useAppContext } from '../../../store/appContext/appContext';
+import { CreateSanctionPanel, ModifySanctionPanel } from '../..';
 import { deleteSanctionById, readSanctions } from '../../../services';
 import { Sanction } from '../../../services/types';
 
@@ -55,6 +56,8 @@ const sanctionColumns = [
 ];
 
 interface SanctionsDataTableProps {
+    modalAttr: { openModal: boolean; handleCloseModal: () => void; title: string; children: JSX.Element; };
+    setModalAttr: (value: React.SetStateAction<{ openModal: boolean; handleCloseModal: () => void; title: string; children: JSX.Element; }>) => void
     openModalMessage: (severity: string, message: string) => void;
 }
 
@@ -90,6 +93,45 @@ const SanctionsDataTable = React.forwardRef((props: SanctionsDataTableProps, ref
         }
     }
 
+    // Métodos extra para cambiar el contenido del modal por el
+    // componente de creación de juego
+    const setAddSanctionModal = () => {
+        props.setModalAttr({
+            ...props.modalAttr,
+            openModal: true,
+            title: "Crear Sanción",
+            children: (<><CreateSanctionPanel
+                openModalMessage={props.openModalMessage}
+                closeModal={props.modalAttr.handleCloseModal}
+                updateSanctionsData={fetchData}
+            /></>),
+        });
+    };
+
+    const setModifySanctionModal = (selectedRows: MUIDataTableIsRowCheck) => {
+        if (selectedRows.data.length !== 1) {
+            props.openModalMessage("error", "Solo debes seleccionar un juego para modificarlo.");
+            return;
+        }
+        const index = selectedRows.data[0].dataIndex;
+        const sanction = sanctionsData[index];
+
+        props.setModalAttr({
+            ...props.modalAttr,
+            openModal: true,
+            title: "Modificar Sanción de: " + sanction.student,
+            children: (<><ModifySanctionPanel
+                sanctionId={sanction.id}
+                prevStudent={sanction.student}
+                prevCause={sanction.cause}
+                prevDate={sanction.end_time}
+                openModalMessage={props.openModalMessage}
+                closeModal={props.modalAttr.handleCloseModal}
+                updateSanctionsData={fetchData}
+            /></>),
+        });
+    };
+
     useEffect(() => {
         fetchData();
     }, [fetchData]);
@@ -104,9 +146,22 @@ const SanctionsDataTable = React.forwardRef((props: SanctionsDataTableProps, ref
                     selectableRowsOnClick: true,
                     responsive: "simple",
                     rowsSelected: sanctionsSelected,
+                    customToolbar: () => <Button variant='contained' color='success' onClick={setAddSanctionModal}>Crear Sanción</Button>,
                     customToolbarSelect: (selectedRows: object) =>
                         <>
                             <Stack id='game-options' direction="row">
+                                <Tooltip title="Modificar">
+                                    <IconButton
+                                        aria-label="edit"
+                                        color="info"
+                                        size="large"
+                                        onClick={() => {
+                                            setModifySanctionModal(selectedRows as MUIDataTableIsRowCheck);
+                                        }}
+                                    >
+                                        <Edit fontSize='inherit' />
+                                    </IconButton>
+                                </Tooltip>
                                 <Tooltip title="Borrar">
                                     <IconButton
                                         aria-label="delete"
@@ -121,6 +176,10 @@ const SanctionsDataTable = React.forwardRef((props: SanctionsDataTableProps, ref
                                 </Tooltip>
                             </Stack>
                         </>,
+                    sortOrder: {
+                        name: 'id',
+                        direction: 'desc'
+                    }
                 }}
             />
         </Box >

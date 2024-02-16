@@ -1,9 +1,8 @@
 import './admin.css';
 import { useAppContext } from "../../store/appContext/appContext";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
-import { Explore, SportsEsports, Rule, Warning, People, FindInPage, Key, } from '@mui/icons-material';
-import { readImages, } from "../../services";
+import { Explore, SportsEsports, Rule, Warning, Image, People, FindInPage, Key, } from '@mui/icons-material';
 import {
   PlaysDataTable,
   GamesDataTable,
@@ -11,21 +10,19 @@ import {
   UsersDataTable,
   SanctionsDataTable,
   LogsDataTable,
+  ImagesDataTable,
   ModalMessage,
   Modal,
 } from "../../components";
-import { Image } from '../../services/types';
 
 const Admin = () => {
-  const { tokens, admin } = useAppContext();
-
-  // Variables de datos de las tablas
-  const [images, setImages] = useState<Image[]>([]);
+  const { admin } = useAppContext();
 
   // Refs para el quick navigation
   const playsTableRef = useRef(null);
   const sanctionsTableRef = useRef(null);
   const gamesTableRef = useRef(null);
+  const imagesTableRef = useRef(null);
   const studentsTableRef = useRef(null);
   const logsTableRef = useRef(null);
   const usersTableRef = useRef(null);
@@ -42,6 +39,7 @@ const Admin = () => {
     { icon: <Key />, name: 'Usuarios', action: () => usersTableRef.current && (usersTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <FindInPage />, name: 'Historial', action: () => logsTableRef.current && (logsTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <People />, name: 'Estudiantes', action: () => studentsTableRef.current && (studentsTableRef.current as HTMLElement).scrollIntoView() },
+    { icon: <Image />, name: 'Imágenes', action: () => imagesTableRef.current && (imagesTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <SportsEsports />, name: 'Juegos', action: () => gamesTableRef.current && (gamesTableRef.current as HTMLElement).scrollIntoView() },
     ...routes,
   ]
@@ -79,29 +77,15 @@ const Admin = () => {
     });
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (admin === true) {
-          const imageResponse = await readImages(tokens?.access_token ?? "");
-          setImages(imageResponse?.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, [tokens, admin]);
-
   return (
     <>
       <Box sx={{ width: '100%' }}>
         <PlaysDataTable openModalMessage={openModalMessage} ref={playsTableRef} />
-        <SanctionsDataTable openModalMessage={openModalMessage} ref={sanctionsTableRef} />
+        <SanctionsDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={sanctionsTableRef} />
         {admin ? (
           <>
-            <GamesDataTable openModalMessage={openModalMessage} images={images} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={gamesTableRef} />
+            <GamesDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={gamesTableRef} />
+            <ImagesDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={imagesTableRef} />
             <StudentsDataTable openModalMessage={openModalMessage} ref={studentsTableRef} />
             <LogsDataTable openModalMessage={openModalMessage} ref={logsTableRef} />
             <UsersDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={usersTableRef} />

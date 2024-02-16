@@ -1,8 +1,13 @@
 import { useState } from 'react';
-import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
+import "dayjs/locale/es";
+import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, TextField } from '@mui/material';
 import { useAppContext } from "../../store/appContext/appContext";
-import { createUser } from '../../services';
+import { createSanction } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const darkTheme = createTheme({
   palette: {
@@ -13,87 +18,62 @@ const darkTheme = createTheme({
 interface CreateSanctionPanelProps {
   openModalMessage: (severity: string, message: string) => void;
   closeModal: () => void;
-  updateUsersData: () => Promise<void>;
+  updateSanctionsData: () => Promise<void>;
 }
 
-const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMessage, closeModal, updateUsersData }) => {
-  const { tokens, admin } = useAppContext();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMessage, closeModal, updateSanctionsData }) => {
+  const { tokens } = useAppContext();
+  const [cause, setCause] = useState<string>('');
+  const [endTime, setEndTime] = useState<Dayjs | null>(null);
+  const [student, setStudent] = useState<string>('');
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsAdmin(event.target.checked);
-  };
-
-  // Checa si el correo electrónico es válido
-  const isEmailValid = () => {
-    // Regular expression for email validation
-    const emailRegex = /^[A-Z0-9._%+-]+@tec.mx/i;
-    return emailRegex.test(email);
-  };
-
-  // Checa si la contraseña es válida
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
-  const isPasswordValid = () => {
-    return passwordRegex.test(password);
-  };
-
-  // Checa si las contraseñas coinciden
-  const arePasswordsMatching = () => {
-    return password === passwordConfirm;
+  // Checa si la matrícula es válida
+  const studentRegex = /^[Aa]\d{8}$/;
+  const isStudentValid = () => {
+    return studentRegex.test(student);
   };
 
   // funcion para mostrar feedback sobre el correo electrónico
-  const displayHelperTextEmail = () => {
-    if (email && !isEmailValid()) {
-      return 'Dirección de correo electrónico inválida';
+  const displayHelperTextStudent = () => {
+    if (student && !isStudentValid()) {
+      return 'Matrícula inválida';
     }
     return '';
   };
 
-  // Checa si la contraseña es válida
-  const displayHelperTextPassword = () => {
-    // Validar que la contraseña tenga al menos 8 caracteres
-    if (password && password.length < 8) {
-      return 'La contraseña debe tener al menos 8 caracteres';
-    }
-    // Informar si la contraseña no tiene al menos una mayúscula, una minúscula, un número y un caracter especial
-    if (password && !passwordRegex.test(password)) {
-      return 'La contraseña debe tener al menos una mayúscula, una minúscula, un número y un caracter especial';
-    }
-    if (password && passwordConfirm && !arePasswordsMatching()) {
-      return 'Las contraseñas no coinciden';
+  // Checa si la fecha de fin de sanción es válida
+  const isEndTimeValid = () => {
+    return endTime && endTime.isAfter(dayjs());
+  };
+
+  // funcion para mostrar feedback sobre la fecha de fin de sanción
+  const displayHelperTextEndTime = () => {
+    if (endTime && !isEndTimeValid()) {
+      return 'Fecha de fin de sanción inválida';
     }
     return '';
   };
 
   // Handle submit
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    if (!admin) {
-      openModalMessage('error', 'No tienes permiso para realizar esta acción.');
+    if (!isStudentValid()) {
+      openModalMessage('error', 'Matrícula inválida.');
       return;
-    }
-
-    // Validate email and password
-    if (!isEmailValid() || !arePasswordsMatching() || !isPasswordValid()) {
+    } else if (!endTime || endTime.isBefore(dayjs())) {
+      openModalMessage('error', 'Fecha de fin de sanción inválida.');
       return;
     }
 
     try {
-      // Mandar request para crear el usuario
-      await createUser(email, password, tokens?.access_token || '', isAdmin);
-      // Cerrar modal y mostrar mensaje de éxito
-      await updateUsersData();
+      await createSanction(tokens?.access_token ?? "", cause, endTime?.toJSON(), student.toUpperCase(),);
+      updateSanctionsData();
+      openModalMessage('success', 'Sanción creada exitosamente.');
       closeModal();
-      openModalMessage('success', 'Usuario creado exitosamente.');
     } catch (error) {
-      // Handle errors
-      openModalMessage('error', 'Lo sentimos, ha ocurrido un error al crear el usuario.');
-      console.error('Error:', error);
+      openModalMessage('error', 'No se pudo crear la sanción.');
+      console.error(error);
     }
   };
 
@@ -104,60 +84,45 @@ const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMess
           <Grid container direction='column' spacing={2} padding={'1rem'}>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="email">Correo</InputLabel>
+                <InputLabel htmlFor="student">Matrícula</InputLabel>
                 <Input
-                  id="email"
-                  aria-describedby="email-helper-text"
+                  id="student"
+                  aria-describedby="student-helper-text"
                   type='text'
                   autoComplete="off"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={student}
+                  onChange={(e) => setStudent(e.target.value)}
                 />
-                <FormHelperText error id="email-helper-text">{displayHelperTextEmail()}</FormHelperText>
+                <FormHelperText error id="student-helper-text">{displayHelperTextStudent()}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="pass">Contraseña</InputLabel>
-                <Input
-                  id="pass"
-                  aria-describedby="pass-helper-text"
-                  type='password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                <TextField
+                  id="cause-outlined-multiline-static"
+                  label="Causa de la sanción"
+                  multiline
+                  rows={4}
+                  value={cause}
+                  onChange={(e) => setCause(e.target.value)}
                 />
-                <FormHelperText error id="pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="c-pass">Confirmar Contraseña</InputLabel>
-                <Input
-                  id="c-pass"
-                  aria-describedby="c-pass-helper-text"
-                  type='password'
-                  value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value)}
-                />
-                <FormHelperText id="c-pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl
-                sx={{ m: 3 }}
-              >
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox checked={isAdmin} onChange={handleChange} name="is_admin" />
-                    }
-                    label="Administrador"
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+                  <DatePicker
+                    label="Fecha de fin de la sanción (Este día termina la sanción)"
+                    value={endTime}
+                    format='DD/MM/YYYY'
+                    onChange={(newValue) => setEndTime(newValue)}
                   />
-                </FormGroup>
+                </LocalizationProvider>
+                <FormHelperText error id="end-time-helper-text">{displayHelperTextEndTime()}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant="contained" color="success" type="submit">Añadir</Button>
+              <Button variant="contained" color="error" type="submit">Sancionar</Button>
             </Grid>
           </Grid>
         </ThemeProvider>

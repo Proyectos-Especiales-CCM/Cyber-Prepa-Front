@@ -6,7 +6,7 @@ import { Edit, Visibility, VisibilityOff, Delete } from '@mui/icons-material';
 import { BooleanCell, DateCell, ImageCell } from "../CustomBodyCells";
 import { CreateGamePanel, ModifyGamePanel } from '../..';
 import { Game, Image } from '../../../services/types'
-import { readGames, deleteGameById, patchGameById, findImageIdWithUrl, completeImageUrl } from '../../../services/';
+import { readGames, readImages, deleteGameById, patchGameById, findImageIdWithUrl, completeImageUrl } from '../../../services/';
 
 const gameColumns = [
     {
@@ -57,7 +57,6 @@ const gameColumns = [
 ];
 
 interface GamesDataTableProps {
-    images: Image[];
     modalAttr: { openModal: boolean; handleCloseModal: () => void; title: string; children: JSX.Element; };
     setModalAttr: (value: React.SetStateAction<{ openModal: boolean; handleCloseModal: () => void; title: string; children: JSX.Element; }>) => void
     openModalMessage: (severity: string, message: string) => void;
@@ -66,18 +65,21 @@ interface GamesDataTableProps {
 const GamesDataTable = React.forwardRef((props: GamesDataTableProps, ref) => {
 
     const { tokens } = useAppContext();
+    const [images, setImages] = useState<Image[]>([]);
     const [gamesData, setGamesData] = useState<Game[]>([]);
     const [gamesSelected] = useState([]);
 
     const fetchData = useCallback(async () => {
         try {
-            const response = await readGames();
-            setGamesData(response.data);
+            const gameResponse = await readGames();
+            setGamesData(gameResponse.data);
+            const imageResponse = await readImages(tokens?.access_token ?? "");
+            setImages(imageResponse?.data);
         } catch (error) {
             props.openModalMessage("error", "Ha ocurrido un error al cargar los juegos.");
             console.error(error);
         }
-    }, [props]);
+    }, [tokens, props]);
 
     const handleUpdateGame = async (selectedRows: MUIDataTableIsRowCheck, field: string, value: boolean | string) => {
         try {
@@ -141,7 +143,7 @@ const GamesDataTable = React.forwardRef((props: GamesDataTableProps, ref) => {
         const index = selectedRows.data[0].dataIndex;
         const game = gamesData[index];
 
-        const gameImage = findImageIdWithUrl(props.images, completeImageUrl(game.image ?? '') ?? '');
+        const gameImage = findImageIdWithUrl(images, completeImageUrl(game.image ?? '') ?? '');
 
         props.setModalAttr({
             ...props.modalAttr,
