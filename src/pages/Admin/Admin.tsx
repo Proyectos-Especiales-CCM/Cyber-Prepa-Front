@@ -2,7 +2,7 @@ import './admin.css'
 import MUIDataTable from "mui-datatables";
 import { Box, Button, Stack, IconButton, Tooltip } from "@mui/material";
 import { Delete, Visibility, VisibilityOff, Cancel, CheckCircle, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown, Edit } from '@mui/icons-material';
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 import { useState, useEffect } from "react";
 import {
   readPlays,
