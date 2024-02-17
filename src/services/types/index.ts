@@ -13,6 +13,7 @@ export interface Game {
     show: boolean,
     start_time: string,
     image: string,
+    needsUpdate: boolean,
 }
 
 
