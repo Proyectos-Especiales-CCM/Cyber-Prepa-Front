@@ -1,6 +1,6 @@
 // Hooks & Context imports
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 
 // Header imports
 import * as React from 'react';
