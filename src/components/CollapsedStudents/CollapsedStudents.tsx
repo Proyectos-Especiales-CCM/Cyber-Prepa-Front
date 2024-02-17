@@ -7,7 +7,7 @@ interface CollapsedStudentProps {
 }
 
 const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
-  const [playsData, setPlaysData] = useState<Play[] | number>(cardGame.plays);
+  const [playsData] = useState<Play[] | number>(cardGame.plays);
 
   return (
     <div className="collapsed__students">
