@@ -1,7 +1,8 @@
-export { playColumns } from './Plays';
-export { gameColumns } from './Games';
-export { studentColumns } from './Students';
-export { userColumns } from './Users';
-export { sanctionColumns } from './Sanctions';
-export { logColumns } from './Logs';
+export { PlaysDataTable } from './Plays';
+export { GamesDataTable } from './Games';
+export { StudentsDataTable } from './Students';
+export { UsersDataTable } from './Users';
+export { SanctionsDataTable } from './Sanctions';
+export { LogsDataTable } from './Logs';
+export { ImagesDataTable } from './Images';
 export { options as tableOptions } from './config';

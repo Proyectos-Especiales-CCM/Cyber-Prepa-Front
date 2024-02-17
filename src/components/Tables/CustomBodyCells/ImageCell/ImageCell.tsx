@@ -1,6 +1,6 @@
 import { completeImageUrl } from "../../../../services";
 interface ImageCellProps {
-    value: string;
+    value: string | undefined;
     style?: React.CSSProperties;
 }
   

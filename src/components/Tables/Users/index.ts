@@ -1,1 +1,1 @@
-export { default as userColumns } from './Users';
+export { default as UsersDataTable } from './Users';

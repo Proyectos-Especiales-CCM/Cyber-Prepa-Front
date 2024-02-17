@@ -30,6 +30,7 @@ export { createImage } from "./rental/createImage";
 // ------------------------------------------------------------------- PUT
 export { updateUserById } from "./users/updateUserById";
 export { updateGameById } from "./rental/updateGameById";
+export { updateImageById } from "./rental/updateImageById";
 
 
 // ------------------------------------------------------------------- PATCH
@@ -44,6 +45,7 @@ export { deleteGameById } from "./rental/deleteGameById";
 export { deletePlayById } from "./rental/deletePlayById";
 export { deleteStudentById } from "./rental/deleteStudentById";
 export { deleteSanctionById } from "./rental/deleteSanctionById";
+export { deleteImageById } from "./rental/deleteImageById";
 
 
 // ------------------------------------------------------------------- UTILS

@@ -124,9 +124,7 @@ const ModifyGamePanel: React.FC<ModifyGamePanelProps> = ({ openModalMessage, clo
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl
-                                sx={{ m: 3 }}
-                            >
+                            <FormControl sx={{ m: 1 }}>
                                 <FormGroup>
                                     <FormControlLabel
                                         control={
