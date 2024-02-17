@@ -20,11 +20,14 @@ import { CyberPrepaLogo } from "..";
 import "./Header.css"
 
 const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#101216",
+          backgroundColor: "black",
         },
       },
     },
@@ -116,7 +119,9 @@ const Header = () => {
               >
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                    <Button onClick={() => navigate(`/${page.toLowerCase()}`)}>
+                      <Typography sx={{ color: "white" }} textAlign="center">{page}</Typography>
+                    </Button>
                   </MenuItem>
                 ))}
               </Menu>
@@ -147,7 +152,16 @@ const Header = () => {
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                 <Button
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    paddingBottom:'0',
+                    borderBottom: '2px solid transparent',
+                        transition: 'border-bottom 0.3s ease',
+                          '&:hover': {
+                        borderBottom: '2px solid white',
+                  }}}
                   onClick={() => {
                     handleCloseNavMenu()
                     navigate("/reglamento")
@@ -158,14 +172,24 @@ const Header = () => {
 
                 {user && admin ? (
                   <>
-                    <button
+                    <Button
+                      sx={{ 
+                        my: 2,
+                        color: 'white',
+                        display: 'block',
+                        paddingBottom:'0',
+                        borderBottom: '2px solid transparent',
+                        transition: 'border-bottom 0.3s ease',
+                          '&:hover': {
+                        borderBottom: '2px solid white',
+                      }}}
                       onClick={() => {
-                        handleCloseNavMenu();
-                        navigate("/admin");
+                        handleCloseNavMenu()
+                        navigate("/admin")
                       }}
                     >
                       ADMIN
-                    </button>
+                    </Button>
                   </>
                 ) : null}
 
