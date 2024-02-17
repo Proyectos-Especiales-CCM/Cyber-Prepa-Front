@@ -11,7 +11,7 @@ import {
     Typography,
     SelectChangeEvent
 } from '@mui/material';
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 import { patchGameById, readImages, createImage } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Image } from '../../services/types';
