@@ -57,7 +57,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
         setAlertMessage(`El estudiante ${studentId} ya se encuentra jugando`);
         setOpen(true);
       } else if (response.detail === 'Game time has expired') {
-        setAlertMessage('El tiempo de juego ha expirado');
+        setAlertMessage('El tiempo de juego ha expirado, porfavor finaliza el juego para todos');
         setOpen(true);
       } else if (response.detail === 'Student has sanctions') {
         setAlertMessage('El estudiante tiene sanción activa');
