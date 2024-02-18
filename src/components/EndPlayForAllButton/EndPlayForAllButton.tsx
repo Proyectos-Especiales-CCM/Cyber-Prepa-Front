@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import { ApiResponse, EndPlayResponse, Game } from '../../services/types';
 import { Loading } from '..';
 import { endPlaysById } from '../../services';
@@ -8,9 +8,10 @@ import "./EndPlayForAllButton.css"
 
 interface EndPlayForAllProps {
   cardGame: Game;
+  style?: CSSProperties
 }
 
-const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame }) => {
+const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame, style }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [accessToken, setAccessToken] = useState<string>('');
@@ -76,7 +77,8 @@ const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame }) => {
         disabled={isLoading}
         sx={{
           height: 55,
-          backgroundColor: '#133a71'
+          backgroundColor: '#133a71',
+          ...(style || {}),
         }}
       >
         {isLoading ? <Loading /> : 'Finalizar juego para todos'}

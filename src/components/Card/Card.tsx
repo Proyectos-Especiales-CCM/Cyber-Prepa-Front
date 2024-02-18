@@ -27,6 +27,8 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
      const [alertMessage, setAlertMessage] = useState('');
      // eslint-disable-next-line @typescript-eslint/no-unused-vars
      const [isDragOver, setIsDragOver] = useState(false);
+     const [countdownStatus, setCountdownStatus] = useState('');
+
 
      useEffect(() => {
        const tokensString = localStorage.getItem('tokens');
@@ -43,7 +45,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
      }, [user]);
 
      useEffect(() => {
-          const intervalId = initCountdown(gameData, countdownRef);
+          const intervalId = initCountdown(gameData, countdownRef, setCountdownStatus);
       
           return () => {
                if (intervalId !== null) {
@@ -122,8 +124,11 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
                onDrop = {handleDrop}
           >
                
-               <div ref={cardsRef} id={gameData.name} className="cyber__card__inner [ js-expander ]">
-
+               <div 
+                    ref={cardsRef} 
+                    id={gameData.name}
+                    className={`cyber__card__inner [ js-expander ] ${countdownStatus}`} 
+                    style={{ backgroundColor: countdownStatus === 'AGOTADO' ? '#bc8080' : countdownStatus === 'LIBRE' ? '#4d9478' : '#3f547b' }}>
                     <span>{gameData.name}</span><br />
 
                     <div id={`cyber__game__players__count__${gameData.id}`}>
@@ -151,6 +156,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
                          cardGame={gameData}
                          shouldUpdate={shouldUpdate}
                          onUpdated={() => onUpdated}
+                         countdownStatus={countdownStatus}
                     />
                ) : null}
 

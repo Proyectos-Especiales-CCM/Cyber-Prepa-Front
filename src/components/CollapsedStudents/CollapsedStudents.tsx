@@ -1,5 +1,5 @@
 import { CollapsedStudentItem } from "..";
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { Game, Play } from "../../services/types";
 import { readGameById } from "../../services";
 import { SnackbarComponent } from "../SnackbarComponent";
@@ -7,10 +7,11 @@ import { SnackbarComponent } from "../SnackbarComponent";
 interface CollapsedStudentProps {
   cardGame: Game;
   shouldUpdate: boolean;
-  onUpdated(): void,
+  onUpdated(): void;
+  style: CSSProperties;
 }
 
-const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUpdate, onUpdated }) => {
+const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUpdate, onUpdated, style }) => {
 
   const [studentsData, setStudentsData] = useState<Play[] | number>(cardGame.plays);
   const [open, setOpen] = useState(false);
@@ -53,7 +54,7 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUp
   };
 
   return (
-    <div className="collapsed__students">
+    <div className="collapsed__students" style={style}>
       
       <ul id={`cyber__student__list__${cardGame.id}`} className="container__dropzone">
         {typeof studentsData === 'number' ? (
