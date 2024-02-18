@@ -78,11 +78,3 @@ export interface EndPlayResponse {
     start_time: string,
     image: string,
 }
-
-export interface Player {
-    id: number;
-    ended: boolean;
-    time: string;
-    student: string;
-    game: number;
-}
