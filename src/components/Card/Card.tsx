@@ -5,7 +5,7 @@ import { initCountdown } from './initCountdown';
 import { CardExpander } from '..';
 import { ImageCell } from '../Tables/CustomBodyCells';
 import { Game } from '../../services/types';
-import { readGameById } from '../../services';
+import { createPlay, deletePlayById, readGameById } from '../../services';
 import { SnackbarComponent } from '../SnackbarComponent';
 import './Card.css';
 
@@ -14,9 +14,10 @@ interface CardProps {
      user: UserObject | undefined;
      shouldUpdate: boolean,
      onUpdated(): void,
+     sendMessage(cardGameId: number): void,
 }
 
-const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) => {
+const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, sendMessage }) => {
      
      const [gameData, setGameData] = useState<Game>(cardGame);
      const [accessToken, setAccessToken] = useState<string>('');
@@ -24,6 +25,8 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
      const countdownRef = useRef<HTMLDivElement>(null);
      const [open, setOpen] = useState(false);
      const [alertMessage, setAlertMessage] = useState('');
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     const [isDragOver, setIsDragOver] = useState(false);
 
      useEffect(() => {
        const tokensString = localStorage.getItem('tokens');
@@ -65,6 +68,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
                     }
                }
           }
+          
           if (shouldUpdate) {
                fetchUpdatedGame()
           }
@@ -77,10 +81,46 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
           setOpen(false);
      };
 
-     
+     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+          e.preventDefault();
+          setIsDragOver(true)
+     }
+
+     const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+          e.preventDefault()
+          setIsDragOver(false)
+     }
+
+     const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+          e.preventDefault();
+          setIsDragOver(false)
+          const cardGameId = e.currentTarget.getAttribute('data-cardgameid')
+          const dragDataString = e.dataTransfer.getData("application/json");
+          const dragData = JSON.parse(dragDataString)
+          try {
+               if (cardGameId) {
+                    await deletePlayById(parseInt(dragData.playerId), accessToken);
+                    // Check if not the same cardGameId as the origin drag student
+                    // Check if new cardGame has expired students, else, end-game-for-all for that cardGame, then createPlay
+                    await createPlay(false, String(dragData.playerName), parseInt(cardGameId), accessToken);
+                    sendMessage(parseInt(cardGameId))
+               }
+          } catch (error) {
+               setAlertMessage('Error moviendo jugador, porfavor intenta de nuevo');
+               setOpen(true);
+          }
+     }
+
      return (
      
-          <div key={gameData.id} className="cyber__card [ is-collapsed ]">
+          <div 
+               key = {gameData.id} 
+               data-cardgameid={gameData.id}
+               className={`cyber__card [ is-collapsed ] ${isDragOver ? 'card-highlight' : ''}`}
+               onDragOver = {handleDragOver}
+               onDragLeave = {handleDragLeave}
+               onDrop = {handleDrop}
+          >
                
                <div ref={cardsRef} id={gameData.name} className="cyber__card__inner [ js-expander ]">
 
