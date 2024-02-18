@@ -12,13 +12,15 @@ export const getGamesData = async (
     const accessToken = user ? tokens?.access_token : undefined
     
     const res = await readGames(accessToken);
-    const games = res.data;
-
-    const availableGames = games.filter((game) => game.show == true);
-    
-    return availableGames;
+    if (res.status == 200) {
+      const games = res.data;
+      const availableGames = games.filter((game) => game.show == true);
+      return availableGames;
+    }
+    return []
 
   } catch (error) {
     console.error("Error fetching API `rental/games/`:", error)
+    return []
   }
 };
