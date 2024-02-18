@@ -1,9 +1,9 @@
 import { EndPlayButton, SanctionButton } from '..';
 import { useState } from 'react';
-import { Player } from '../../services/types';
+import { Play } from '../../services/types';
 
 interface CollapsedStudentItemProps {
-  player: Player;
+  player: Play;
   cardGameId: number;
 }
 
