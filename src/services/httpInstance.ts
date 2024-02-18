@@ -1,7 +1,7 @@
 import axios from "axios";
 import Config from "../config";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../store/appContext/appContext";
+import { useAppContext } from "../store/appContext/useAppContext";
 
 interface AxiosError {
   response?: {
