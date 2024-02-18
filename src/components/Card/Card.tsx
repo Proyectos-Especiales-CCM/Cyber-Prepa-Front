@@ -38,10 +38,16 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
                initCardsFunctionality(cardsRef)
           }
      }, [user]);
-     
+
      useEffect(() => {
-          initCountdown(cardGame, countdownRef);
-     }, [cardGame])
+          const intervalId = initCountdown(gameData, countdownRef);
+      
+          return () => {
+               if (intervalId !== null) {
+                    clearInterval(intervalId);
+               }
+          };
+      }, [gameData]);
 
      useEffect(() => {
           const fetchUpdatedGame = async () => {
@@ -50,10 +56,10 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
                          const res = await readGameById(gameData.id, accessToken)
                          if (res && res.data) { 
                               setGameData(res.data);
+                         } else {
+                              throw 401
                          }
-                         onUpdated()
-                    } catch (error) {
-                         // console.error("Error: ", error)
+                    } catch (err) {
                          setAlertMessage('Error actualizando la data del juego, porfavor refresca la página');
                          setOpen(true);
                     }
@@ -62,7 +68,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
           if (shouldUpdate) {
                fetchUpdatedGame()
           }
-     }, [shouldUpdate, cardGame.id, accessToken, onUpdated, gameData.id])
+     }, [shouldUpdate, cardGame.id, accessToken, gameData.id, user, onUpdated])
 
      const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
           if (reason === 'clickaway') {
@@ -70,6 +76,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
           }
           setOpen(false);
      };
+
      
      return (
      
@@ -82,7 +89,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
                     <div id={`cyber__game__players__count__${gameData.id}`}>
 
                          <span>
-                              {Array.isArray(gameData.plays) ? 
+                              {Array.isArray(gameData.plays) ?
                                    (gameData.plays.length == 1 ? `1 jugador` : `${gameData.plays.length} jugadores`)  :
                                    (gameData.plays == 1 ? `1 jugador` : `${gameData.plays} jugadores`)
                               }
@@ -100,7 +107,11 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated }) 
                </div>
 
                {user !== undefined ? (
-                    <CardExpander cardGame={gameData}/>
+                    <CardExpander
+                         cardGame={gameData}
+                         shouldUpdate={shouldUpdate}
+                         onUpdated={() => onUpdated}
+                    />
                ) : null}
 
                <SnackbarComponent
