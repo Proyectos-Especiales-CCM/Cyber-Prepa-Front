@@ -101,6 +101,11 @@ ul {
 }
 
 .dragging {
-  opacity: 0.5;
-  background-color: yellow;
+  opacity: 0.1;
+  background-color: black;
 }/*# sourceMappingURL=Card.css.map */
+
+.card-highlight {
+  border: 2px dashed #4CAF50; /* Highlight color */
+  background-color: rgba(76, 175, 80, 0.2); /* Slightly tinted background */
+}
