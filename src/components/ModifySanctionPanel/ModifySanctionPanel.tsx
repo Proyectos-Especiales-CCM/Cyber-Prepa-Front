@@ -2,7 +2,7 @@ import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import "dayjs/locale/es";
 import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, TextField } from '@mui/material';
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 import { patchSanctionById } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

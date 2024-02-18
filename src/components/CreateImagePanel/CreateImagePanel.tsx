@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Grid, Tooltip, Typography } from "@mui/material";
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 import { createImage } from "../../services";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Upload } from "@mui/icons-material";

@@ -3,7 +3,7 @@ import { DateCell } from "../CustomBodyCells";
 import { Box, Button, IconButton, Stack, Tooltip } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumnDef, MUIDataTableIsRowCheck } from 'mui-datatables';
 import { Delete, Edit } from '@mui/icons-material';
-import { useAppContext } from '../../../store/appContext/appContext';
+import { useAppContext } from '../../../store/appContext/useAppContext';
 import { CreateSanctionPanel, ModifySanctionPanel } from '../..';
 import { deleteSanctionById, readSanctions } from '../../../services';
 import { Sanction } from '../../../services/types';
