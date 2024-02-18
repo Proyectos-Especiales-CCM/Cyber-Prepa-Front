@@ -13,6 +13,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
   const [studentId, setStudentId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
+  const [openSuccess, setOpenSuccess] = React.useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [accessToken, setAccessToken] = useState<string>('');
   const [inputState, setInputState] = useState<'error' | 'success' | 'standard'>('standard');
@@ -56,7 +57,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
         setAlertMessage(`El estudiante ${studentId} ya se encuentra jugando`);
         setOpen(true);
       } else if (response.detail === 'Game time has expired') {
-        setAlertMessage('El tiempo de juego ha expirado');
+        setAlertMessage('El tiempo de juego ha expirado, porfavor finaliza el juego para todos');
         setOpen(true);
       } else if (response.detail === 'Student has sanctions') {
         setAlertMessage('El estudiante tiene sanción activa');
@@ -69,7 +70,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
         setOpen(true);
       } else {
         setAlertMessage(`Estudiante ${studentId} agregado exitosamente`);
-        setOpen(true);
+        setOpenSuccess(true);
       }
 
     } catch (error) {
@@ -86,8 +87,15 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
     setOpen(false);
   };
 
+  const handleCloseSuccess = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   return (
-      <div className="" id={`add-student-game-${cardGame.id}`}>
+      <div id={`add-student-game-${cardGame.id}`}>
         <Box
       display="flex"
       flexDirection="row"
@@ -100,13 +108,17 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
 
           <TextField
             type="text"
-            className=""
             name="student_id"
             placeholder="ID estudiante"
             aria-label="ID estudiante"
             aria-describedby="basic-addon2"
             onChange={handleInputChange}
             variant="filled"
+            sx={{
+              backgroundColor: 'rgba(160, 180, 226, 0.4)',
+              height: 55,
+              borderRadius: 0.7,
+            }}
             color={inputState === 'success' ? 'success' : 'error'}
             focused={inputState !== 'standard'}
           />
@@ -122,10 +134,24 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
             message={alertMessage}
           />
         )}
+        
+        {openSuccess && (
+
+          <SnackbarComponent
+            open={openSuccess}
+            onClose={handleCloseSuccess}
+            severity="success"
+            message={alertMessage}
+          />
+        )}
 
         <Button
           size="large"
           variant="contained"
+          sx={{
+            backgroundColor: 'rgba(70, 90, 126, 0.4)',
+            height: 55,
+          }}
           onClick={addStudent}
           disabled={isLoading}
         >

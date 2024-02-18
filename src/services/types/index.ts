@@ -13,6 +13,7 @@ export interface Game {
     show: boolean,
     start_time: string,
     image: string,
+    needsUpdate: boolean,
 }
 
 
@@ -76,12 +77,4 @@ export interface EndPlayResponse {
     show: boolean,
     start_time: string,
     image: string,
-}
-
-export interface Player {
-    id: number;
-    ended: boolean;
-    time: string;
-    student: string;
-    game: number;
 }

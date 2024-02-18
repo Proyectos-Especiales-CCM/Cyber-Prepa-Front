@@ -5,10 +5,13 @@ import { EndPlayForAllButton } from "../EndPlayForAllButton";
 import './CardExpander.css';
 interface CardExpanderProps {
   cardGame: Game;
+  shouldUpdate: boolean;
+  onUpdated(): void,
 }
 
-const CardExpander: React.FC<CardExpanderProps> = ({ cardGame }) => {
-  const showEndPlayForAllButton = Array.isArray(cardGame.plays) && cardGame.plays.length > 1;
+const CardExpander: React.FC<CardExpanderProps> = ({ cardGame, shouldUpdate, onUpdated }) => {
+  
+  const showEndPlayForAllButton = Array.isArray(cardGame.plays) && cardGame.plays.length >= 1;
 
   return (
      <div className="cyber__card__expander">
@@ -27,7 +30,11 @@ const CardExpander: React.FC<CardExpanderProps> = ({ cardGame }) => {
             
           </ButtonGroupRow>
           
-          <CollapsedStudents cardGame={cardGame} />
+          <CollapsedStudents
+            cardGame={cardGame}
+            shouldUpdate={shouldUpdate}
+            onUpdated={() => onUpdated}
+          />
      </div>
   )
 }

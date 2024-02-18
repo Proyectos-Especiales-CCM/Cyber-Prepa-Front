@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 import { createUser } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 

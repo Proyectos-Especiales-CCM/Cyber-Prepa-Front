@@ -4,6 +4,7 @@ ul
 
 
 .cyber__card__expander
+    border-radius: 5px
     transition: all 0.2s ease-in-out
     background-color: #333a45
     width: 100%
@@ -73,38 +74,8 @@ ul
     display: flex
     width: 100%
 
-.scroll-button
-    position: absolute
-    top: 50%
-    transform: translateY(-50%)
-    padding: 10px
-    border: none
-    cursor: pointer
-
-.scroll-button.left
-    left: 0
-
-.scroll-button.right
-    right: 0
-
-.student
-    background-color: rgba(40,46,55,.6196078431)
-    border-radius: 5px
-    display: flex
-    flex-flow: column
-    justify-content: space-between
-    align-items: center
-    padding: 15px
-    height: 100%
-    margin: 5px
-
 .input-group
     width: 50%
-
-.dragging
-    opacity: 0.5
-    background-color: yellow
-
 
 @media screen and (min-width: 1252px)
     .cyber__card:nth-of-type(5n+2) .cyber__card__expander
@@ -159,11 +130,12 @@ ul
     .cyber__card:nth-of-type(2n+2) .cyber__card__expander
         margin-left: calc(-100% - 30px)
 
-    .cyber__card:nth-of-type(2n+2) .cyber__card__expander 
-        margin-left: 0
-
     .cyber__card:nth-of-type(2n+3) .cyber__card__expander
         clear: left
 
     .cyber__card__expander
         width: calc(200% + 30px)
+
+@media screen and (max-width: 650px)
+    .cyber__card__expander
+        width: 100%

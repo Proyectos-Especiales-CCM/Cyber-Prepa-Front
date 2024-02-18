@@ -1,11 +1,9 @@
 import httpInstance from "../httpInstance";
-import { ApiResponse, Game } from "../types";
+import { ApiResponseSingle, Game } from "../types";
 
-export const readGameById = async (gameId: number, 
-                                   token?: string | undefined
-                                   ): Promise<ApiResponse<Game>> => {
+export const readGameById = async (gameId: number, token?: string | undefined): Promise<ApiResponseSingle<Game>> => {
     let res;
-    const endpoint = `rental/games/?id=${gameId}/`;
+    const endpoint = `rental/games/${gameId}/`;
 
     const headers = {
         'Content-Type': 'application/json',
@@ -13,14 +11,12 @@ export const readGameById = async (gameId: number,
     };
 
     await httpInstance
-        .get(endpoint, {
-            headers
-        })
+        .get(endpoint, { headers })
         .then((response) => {
-            res = response;
+            res = { data: response.data, status: response.status };
         })
         .catch((error) => {
-            res = error.response;
+            res = { data: error.response?.data, status: error.response?.status };
         });
-    return res || {} as ApiResponse<Game>;
+    return res || {} as ApiResponseSingle<Game>;
 };

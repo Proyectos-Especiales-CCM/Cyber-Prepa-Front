@@ -1,58 +1,91 @@
-import { useAppContext } from "../../store/appContext/appContext";
-import React, { useState, useCallback, useEffect } from 'react';
+import { useAppContext } from "../../store/appContext/useAppContext";
+import { useState, useEffect } from 'react';
 import { getGamesData } from "./getGames";
 import { Card } from "../../components";
 import { Game } from "../../services/types";
 import './Home.css';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
+import { SnackbarComponent } from "../../components/SnackbarComponent";
 
 const Home = () => {
   const { user, tokens } = useAppContext();
-  const [gamesData, setGamesData] = useState<Game[] | undefined>([]);
-  const [forceRender, setForceRender] = useState(false);
-  const [socketUrl, setSocketUrl] = useState('ws://172.174.255.29/ws/updates/');
-  const [messageHistory, setMessageHistory] = useState([]);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-
+  const [gamesData, setGamesData] = useState<Game[]>([]);
+  const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
+  const { lastMessage } = useWebSocket(socketUrl);
+  const [open, setOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  
   useEffect(() => {
-    if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
-
+    if (lastMessage) {
       const data = JSON.parse(lastMessage.data);
-      const message = data.message;
-      const sender = data.sender;
-
-      if (sender !== user && message === 'Games updated') {
-        setForceRender((prev) => !prev);
+      if (data.message === 'Plays updated') {
+        const gameId = data['info'];
+        setGamesData((gamesData) =>
+          gamesData.map((game) =>
+            game.id === gameId ? { ...game, needsUpdate: true } : game
+          )
+        );
       }
     }
-  }, [lastMessage, setMessageHistory, user]);
-  
+  }, [lastMessage]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getGamesData(user, tokens);
-        setGamesData(data);
+        if (data) {
+          console.log("Initial data fetch", data)
+          setGamesData(data);
+        }
       } catch (error) {
-        console.error("Error fetching games: ", error);
+        setAlertMessage('Hubo un error en el servidor, refresca la página');
+        setOpen(true);
       }
     };
 
     fetchData();
-  }, [user, tokens, forceRender]);
+  }, [user, tokens]);
 
+  const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
-  // ------------- MAIN RENDER ------------- //
+  const resetUpdateFlagForGame = (gameId: number) => {
+    setGamesData((gamesData) =>
+    gamesData.map((game) =>
+        game.id === gameId ? { ...game, needsUpdate: false } : game
+      )
+    );
+  };
+
   return (
     <div className="cyber__wrapper">
       <div className="cyber__cards" id="cyberCards">
         
         {Array.isArray(gamesData)
           ? gamesData.map((game) => (
-            <Card key={game.id} cardGame={game} user={user} />
+            <Card 
+              key={game.id}
+              cardGame={game}
+              user={user}
+              shouldUpdate={game.needsUpdate || false} 
+              onUpdated={() => resetUpdateFlagForGame(game.id)} />
           ))
-          : null
+          : "No hay juegos registrados."
         }
+
+        {open && (
+
+        <SnackbarComponent
+          open={open}
+          onClose={handleClose}
+          severity="warning"
+          message={alertMessage}
+        />
+        )}
 
       </div>
     </div>
