@@ -1,17 +1,18 @@
 import { useAppContext } from "../../store/appContext/useAppContext";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getGamesData } from "./getGames";
 import { Card } from "../../components";
 import { Game } from "../../services/types";
 import './Home.css';
 import useWebSocket from 'react-use-websocket';
 import { SnackbarComponent } from "../../components/SnackbarComponent";
+import { UserObject } from "../../store/appContext/types";
 
 const Home = () => {
   const { user, tokens } = useAppContext();
   const [gamesData, setGamesData] = useState<Game[]>([]);
   const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
-  const { lastMessage } = useWebSocket(socketUrl);
+  const { sendMessage, lastMessage } = useWebSocket(socketUrl);
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   
@@ -34,7 +35,6 @@ const Home = () => {
       try {
         const data = await getGamesData(user, tokens);
         if (data) {
-          console.log("Initial data fetch", data)
           setGamesData(data);
         }
       } catch (error) {
@@ -61,6 +61,21 @@ const Home = () => {
     );
   };
 
+  const sendUpdateMessage = useCallback((message: string, sender: UserObject | undefined, info: number) => {
+    const data = message === "Plays updated" ? {
+      type: "plays_updated",
+      message,
+      info,
+      sender,
+    } : {
+      type: "update_message",
+      message,
+      sender,
+    };
+  
+    sendMessage(JSON.stringify(data));
+  }, [sendMessage]);
+
   return (
     <div className="cyber__wrapper">
       <div className="cyber__cards" id="cyberCards">
@@ -72,7 +87,9 @@ const Home = () => {
               cardGame={game}
               user={user}
               shouldUpdate={game.needsUpdate || false} 
-              onUpdated={() => resetUpdateFlagForGame(game.id)} />
+              onUpdated={() => resetUpdateFlagForGame(game.id)}
+              sendMessage={(cardGameId: number) => sendUpdateMessage("Plays updated", user, cardGameId)}
+            />
           ))
           : "No hay juegos registrados."
         }
