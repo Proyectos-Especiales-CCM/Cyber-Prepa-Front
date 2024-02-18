@@ -12,9 +12,19 @@ const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, car
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     setIsDragging(true);
+    
+    const dragData = {
+      playerId: player.id,
+      playerName: player.student,
+    };
+
+    const dragDataString = JSON.stringify(dragData)
+
+    e.dataTransfer.setData("application/json", dragDataString);
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
     setIsDragging(false);
   };
 
@@ -35,4 +45,3 @@ const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, car
 };
 
 export default CollapsedStudentItem;
-
