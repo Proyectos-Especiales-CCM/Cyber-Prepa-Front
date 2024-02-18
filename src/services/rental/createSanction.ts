@@ -2,27 +2,24 @@ import httpInstance from "../httpInstance";
 import { ApiResponse, Sanction } from "../types";
 
 export const createSanction = async (
-    id: number,
+    token: string,
     cause: string,
-    start_time: Date,
-    end_time: Date,
+    end_time: string,
     student: string,
     play?: number,
-    token?: string,
 ): Promise<ApiResponse<Sanction>> => {
     let res;
-    const endpoint = `rental/sanctions/${id}/`;
+    const endpoint = `rental/sanctions/`;
 
     const requestBody = {
         cause: cause,
         end_time: end_time,
-        start_time: start_time,
         student: student,
         play: play,
     };
 
     await httpInstance
-        .patch(endpoint, JSON.stringify(requestBody), {
+        .post(endpoint, JSON.stringify(requestBody), {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,

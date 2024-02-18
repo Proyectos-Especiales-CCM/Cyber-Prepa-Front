@@ -1,1 +1,1 @@
-export { default as sanctionColumns } from './Sanctions';
+export { default as SanctionsDataTable } from './Sanctions';
