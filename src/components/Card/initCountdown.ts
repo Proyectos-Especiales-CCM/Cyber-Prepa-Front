@@ -3,6 +3,7 @@ import { Game } from "../../services/types";
 export const initCountdown = (
   cardGame: Game,
   countdownRef: React.RefObject<HTMLDivElement>,
+  setStatusCallback: (status: string) => void,
 ) => {
   if (countdownRef.current) {
     countdownRef.current.innerHTML = "Cargando...";
@@ -26,10 +27,13 @@ export const initCountdown = (
 
       if (distance < 0 && (Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) > 0) {
         countdownRef.current!.innerHTML = "AGOTADO";
+        setStatusCallback("AGOTADO"); 
       } else if ((Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) === 0) {
         countdownRef.current!.innerHTML = "LIBRE";
+        setStatusCallback("LIBRE");
       } else {
         countdownRef.current!.innerHTML = timeTextDisplay;
+        setStatusCallback("COUNTING");
       }
 
     }, 1000);

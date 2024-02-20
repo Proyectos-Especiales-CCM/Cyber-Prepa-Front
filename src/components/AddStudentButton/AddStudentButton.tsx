@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import { Game, PlayResponse } from '../../services/types';
 import { createPlay } from '../../services';
 import { Loading } from '..';
@@ -7,9 +7,10 @@ import { SnackbarComponent } from '../SnackbarComponent';
 
 interface AddStudentProps {
   cardGame: Game;
+  style: CSSProperties;
 }
 
-const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
+const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
   const [studentId, setStudentId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
@@ -77,6 +78,8 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
       console.error('Error:', error);
     } finally {
       setIsLoading(false);
+      setStudentId("");
+      setInputState('standard')
     }
   };
 
@@ -95,32 +98,52 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
   };
 
   return (
-      <div id={`add-student-game-${cardGame.id}`}>
-        <Box
-      display="flex"
-      flexDirection="row"
-      gap={2}
-    >
+    <div id={`add-student-game-${cardGame.id}`} style={style}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        gap={2}
+      >
         <input type="hidden" name="game_id" value={`${cardGame.id}`} />
-
-
         <div>
 
           <TextField
+            value={studentId}
             type="text"
             name="student_id"
-            placeholder="ID estudiante"
-            aria-label="ID estudiante"
+            placeholder="Matricula de estudiante"
+            aria-label="Matricula de estudiante"
             aria-describedby="basic-addon2"
             onChange={handleInputChange}
             variant="filled"
             sx={{
-              backgroundColor: 'rgba(160, 180, 226, 0.4)',
+              backgroundColor: '#1a1a1a',
               height: 55,
-              borderRadius: 0.7,
+              width: 350,
+              color: '#ffffff',
+              borderRadius: 2,
+              borderWidth: 0.5,
+              borderStyle: 'solid',
+              borderColor: '#5f5f5f',
+              '& .MuiInputBase-input': {
+                color: '#dfdfdf', // Changes input text color
+                fontSize: '1rem',
+                '&::placeholder': {
+                  color: 'white', // Changes placeholder text color
+                  opacity: 1, // [optional] Override the default opacity; Material-UI reduces the placeholder's opacity
+                }
+              },
+              '& .MuiFilledInput-root': {
+                'before': {
+                  borderBottomColor: 'white',
+                },
+                'after': {
+                  borderBottomColor: 'white',
+                },
+              },
             }}
-            color={inputState === 'success' ? 'success' : 'error'}
             focused={inputState !== 'standard'}
+            color={inputState === 'success' ? 'success' : 'error'}
           />
 
         </div>
@@ -134,7 +157,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
             message={alertMessage}
           />
         )}
-        
+
         {openSuccess && (
 
           <SnackbarComponent
@@ -157,8 +180,8 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame }) => {
         >
           {isLoading ? <Loading /> : 'Agregar estudiante'}
         </Button>
-        </Box>
-      </div>
+      </Box>
+    </div>
   );
 };
 

@@ -1,11 +1,3 @@
-.agotado {
-  background-color: red;
-}
-
-.libre {
-  background-color: green;
-}
-
 ul {
   list-style: none;
   padding: 0;
@@ -45,7 +37,7 @@ ul {
   }
 }
 .cyber__card:hover .cyber__card__inner {
-  background-color: #1abc9c;
+  background-color: #1d987f;
   transform: scale(1.05);
 }
 
@@ -101,6 +93,11 @@ ul {
 }
 
 .dragging {
-  opacity: 0.5;
-  background-color: yellow;
+  opacity: 0.1;
+  background-color: black;
+}
+
+.card-highlight {
+  border: 10px dashed #4CAF50;
+  background-color: rgba(76, 175, 80, 0.2);
 }/*# sourceMappingURL=Card.css.map */

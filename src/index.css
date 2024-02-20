@@ -13,11 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 
   --color-bg-default: #101216; /* Color fondo negro default */
-  --color-fg-default: #fff; /* Color letras blancas(foreground) default */
+  --color-fg-default: #fbfbfb; /* Color letras blancas(foreground) default */
   --color-bg-toggle: #efefef; /*  Color fondo blanco toggled */
-  --color-fg-toggle: #101216; /*  Color letras negras (foreground) toggled */
+  --color-fg-toggle: #0d0e11; /*  Color letras negras (foreground) toggled */
   --color-header-bg-default: #0D1116;
   --color-border-default: #2B2F35; /* Color de border negro default */
+  --color-border-default-search: #1c1e23; /* Color de buscador reglamento */
   --color-border-mode: #b9b9b9; /* Color de border blanco toggled */
   
   --global-font: 'Roboto', sans-serif;
