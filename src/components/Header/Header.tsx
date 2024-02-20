@@ -198,38 +198,39 @@ const Header = () => {
             
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {user ? user.email : 'Login'}
-                </Button>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {user ? (
-                  <MenuItem key="logout" onClick={() => {
-                    logOut();
-                    handleCloseUserMenu();
-                    navigate("/");
-                  }}>
-                    <Typography>Log out</Typography>
-                  </MenuItem>
-                ) : (<Button onClick={() => navigate("/login")}>Login</Button>)}
-                    
-              </Menu>
+              {user ? (
+                <>
+                  <Tooltip title="Open settings">
+                    <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      {user?.email}
+                    </Button>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <MenuItem key="logout" onClick={() => {
+                      logOut();
+                      handleCloseUserMenu();
+                      navigate("/");
+                    }}>
+                      <Typography>Log out</Typography>
+                    </MenuItem>
+                  </Menu>
+                </>
+              ) : (<Button onClick={() => navigate("/login")}>Login</Button>)}
             </Box>
           </Toolbar>
         </Container>
