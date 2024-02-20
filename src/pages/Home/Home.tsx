@@ -3,18 +3,40 @@ import { useState, useEffect, useCallback } from 'react';
 import { getGamesData } from "./getGames";
 import { Card } from "../../components";
 import { Game } from "../../services/types";
-import './Home.css';
-import useWebSocket from 'react-use-websocket';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { SnackbarComponent } from "../../components/SnackbarComponent";
 import { UserObject } from "../../store/appContext/types";
+import './Home.css';
+import { useLocation } from "react-router-dom";
 
 const Home = () => {
   const { user, tokens } = useAppContext();
   const [gamesData, setGamesData] = useState<Game[]>([]);
   const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
-  const { sendMessage, lastMessage } = useWebSocket(socketUrl);
+  const location = useLocation();
+  const { sendMessage, lastMessage, getWebSocket, readyState } = useWebSocket(
+    socketUrl,
+    {
+      onOpen: () => console.log('WebSocket Connected'),
+      onClose: () => console.log('WebSocket Disconnected'),
+      onError: (event) => console.log('WebSocket Error:', event),
+      shouldReconnect: () => true,
+      reconnectAttempts: 10,
+      reconnectInterval: (attemptNumber) => Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
+    }
+  );
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+
+  // Close WebSocket connection when the location changes
+  useEffect(() => {
+    return () => {
+      const websocket = getWebSocket();
+      if (websocket) {
+        websocket.close();
+      }
+    };
+  }, [getWebSocket, location]);
   
   useEffect(() => {
     if (lastMessage) {
