@@ -1,3 +1,21 @@
+.libre {
+  background: #144717;
+  background-image: radial-gradient(circle at top, #4CAF50 0%, #0c310e 80%);
+  border-radius: 5px;
+}
+
+.counting {
+  background: #282537;
+  background-image: radial-gradient(circle at top, #465573 0%, #112554 40%);
+  border-radius: 5px;
+}
+
+.agotado {
+  background: #EC407A;
+  background-image: radial-gradient(circle at left, #763a4e 0%, #4b1c0e 80%);
+  border-radius: 5px;
+}
+
 ul {
   list-style: none;
   padding: 0;
