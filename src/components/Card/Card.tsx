@@ -113,6 +113,17 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
           }
      }
 
+     const getStatusClassName = (status: string) => {
+          switch (status) {
+            case 'AGOTADO':
+              return 'agotado';
+            case 'LIBRE':
+              return 'libre';
+            default:
+              return 'counting';
+          }
+     };
+
      return (
      
           <div 
@@ -127,8 +138,8 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
                <div 
                     ref={cardsRef} 
                     id={gameData.name}
-                    className={`cyber__card__inner [ js-expander ] ${countdownStatus}`} 
-                    style={{ backgroundColor: countdownStatus === 'AGOTADO' ? '#bc8080' : countdownStatus === 'LIBRE' ? '#4d9478' : '#3f547b' }}>
+                    className={`cyber__card__inner [ js-expander ] ${countdownStatus} ${getStatusClassName(countdownStatus)}`} 
+               >
                     <span>{gameData.name}</span><br />
 
                     <div id={`cyber__game__players__count__${gameData.id}`}>
