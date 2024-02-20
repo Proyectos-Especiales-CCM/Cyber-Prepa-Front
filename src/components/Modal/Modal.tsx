@@ -15,8 +15,46 @@ const styleModal = {
 };
 
 import { ReactNode } from 'react';
+import React from 'react';
 
-export default function CustomModal({ openModal, handleCloseModal, title, children }: { openModal: boolean, handleCloseModal: () => void, title: string, children: ReactNode }) {
+/**
+ * CustomModal component for displaying a modal in the center of the screen with a title and children components inside the modal.
+ * 
+ * @component
+ * @param {boolean} openModal - State to control the modal open/close.
+ * @param {Function} handleCloseModal - Function to close the modal.
+ * @param {string} title - Title of the modal.
+ * @param {ReactNode} children - Child components to render inside the modal.
+ * 
+ * @example
+ * const [openModal, setOpenModal] = useState(false);
+ * 
+ * const handleOpenModal = () => {
+ *   setOpenModal(true);
+ * };
+ * 
+ * const handleCloseModal = () => {
+ *   setOpenModal(false);
+ * };
+ * 
+ * return (
+ *   <div>
+ *     <button onClick={handleOpenModal}>Open Modal</button>
+ *     <CustomModal
+ *       openModal={openModal}
+ *       handleCloseModal={handleCloseModal}
+ *       title="Sample Title"
+ *     >
+ *       <p>Sample Content</p>
+ *     </CustomModal>
+ *   </div>
+ * );
+ * 
+ * @returns {React.JSX.Element} The rendered CustomModal component.
+ * 
+ * @author Diego Jacobo Mtz. [Github](https://github.com/Djmr5)
+*/
+export default function CustomModal({ openModal, handleCloseModal, title, children }: { openModal: boolean, handleCloseModal: () => void, title: string, children: ReactNode }): React.JSX.Element {
     return (
         <Modal
             open={openModal || false}
@@ -25,15 +63,15 @@ export default function CustomModal({ openModal, handleCloseModal, title, childr
             <Box sx={{ ...styleModal }}>
                 <Grid container justifyContent="space-between" alignItems="center">
                     <Grid item xs={10}>
-                        <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
+                        <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', mb: '10px' }}>
                             {title}
                         </Typography>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} container justifyContent="flex-end">
                         <IconButton
                             aria-label="close"
                             color="inherit"
-                            size="small"
+                            size="medium"
                             onClick={() => {
                                 handleCloseModal();
                             }}

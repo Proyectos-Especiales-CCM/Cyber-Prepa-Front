@@ -21,7 +21,7 @@ export const readPlays = async (token: string | undefined): Promise<ApiResponse<
             };
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
     return res || {} as ApiResponse<Play>;
 };

@@ -1,6 +1,6 @@
 import './admin.css';
 import { useAppContext } from "../../store/appContext/useAppContext";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
 import { Explore, SportsEsports, Rule, Warning, Image, People, FindInPage, Key, } from '@mui/icons-material';
 import {
@@ -11,8 +11,6 @@ import {
   SanctionsDataTable,
   LogsDataTable,
   ImagesDataTable,
-  ModalMessage,
-  Modal,
 } from "../../components";
 
 const Admin = () => {
@@ -42,59 +40,24 @@ const Admin = () => {
     { icon: <Image />, name: 'Imágenes', action: () => imagesTableRef.current && (imagesTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <SportsEsports />, name: 'Juegos', action: () => gamesTableRef.current && (gamesTableRef.current as HTMLElement).scrollIntoView() },
     ...routes,
-  ]
-
-  // Variables de atributos de los modales
-  const [modalAttr, setModalAttr] = useState({
-    openModal: false,
-    handleCloseModal: () => {
-      setModalAttr({
-        ...modalAttr,
-        openModal: false,
-      });
-    },
-    title: "Hello, I'm a Modal",
-    children: (<><p>Sample Content</p></>),
-  });
-  const [modalMessageAttr, setModalMessageAttr] = useState({
-    openModal: false,
-    handleCloseModal: () => {
-      setModalMessageAttr({
-        ...modalMessageAttr,
-        openModal: false,
-      });
-    },
-    severity: "info",
-    message: "Sample Message",
-  });
-
-  const openModalMessage = (severity: string, message: string) => {
-    setModalMessageAttr({
-      ...modalMessageAttr,
-      openModal: true,
-      severity: severity,
-      message: message,
-    });
-  }
+  ];
 
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <PlaysDataTable openModalMessage={openModalMessage} ref={playsTableRef} />
-        <SanctionsDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={sanctionsTableRef} />
+        <PlaysDataTable ref={playsTableRef} />
+        <SanctionsDataTable ref={sanctionsTableRef} />
         {admin ? (
           <>
-            <GamesDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={gamesTableRef} />
-            <ImagesDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={imagesTableRef} />
-            <StudentsDataTable openModalMessage={openModalMessage} ref={studentsTableRef} />
-            <LogsDataTable openModalMessage={openModalMessage} ref={logsTableRef} />
-            <UsersDataTable openModalMessage={openModalMessage} modalAttr={modalAttr} setModalAttr={setModalAttr} ref={usersTableRef} />
+            <GamesDataTable ref={gamesTableRef} />
+            <ImagesDataTable ref={imagesTableRef} />
+            <StudentsDataTable ref={studentsTableRef} />
+            <LogsDataTable ref={logsTableRef} />
+            <UsersDataTable ref={usersTableRef} />
           </>
         ) : (
           <></>
         )}
-        <Modal {...modalAttr} />
-        <ModalMessage {...modalMessageAttr} />
         <SpeedDial
           ariaLabel="quick-navigation"
           sx={{ position: 'fixed', bottom: 10, right: 10 }}
