@@ -101,7 +101,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
     <>
       <form onSubmit={handleSubmit} id='createUserPanel'>
         <ThemeProvider theme={darkTheme}>
-          <Grid container direction='column'>
+          <Grid container direction='column' spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="email">Correo</InputLabel>

@@ -4,7 +4,7 @@ import { Box, Button, IconButton, Stack, Tooltip } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumnDef, MUIDataTableIsRowCheck } from 'mui-datatables';
 import { Delete, Edit } from '@mui/icons-material';
 import { useAppContext } from '../../../store/appContext/useAppContext';
-import { CreateSanctionPanel, ModifySanctionPanel } from '../..';
+import { CreateSanctionPanel, Modal, ModalMessage, ModifySanctionPanel } from '../..';
 import { deleteSanctionById, readSanctions } from '../../../services';
 import { Sanction } from '../../../services/types';
 
@@ -55,29 +55,124 @@ const sanctionColumns = [
     },
 ];
 
-interface SanctionsDataTableProps {
-    modalAttr: { openModal: boolean; handleCloseModal: () => void; title: string; children: JSX.Element; };
-    setModalAttr: (value: React.SetStateAction<{ openModal: boolean; handleCloseModal: () => void; title: string; children: JSX.Element; }>) => void
-    openModalMessage: (severity: string, message: string) => void;
-}
-
-const SanctionsDataTable = React.forwardRef((props: SanctionsDataTableProps, ref) => {
+/**
+ * Sanctions MUI DataTable component.
+ * 
+ * Allows to display, modify, delete and create sanctions.
+ * 
+ * Allowed modifications:
+ * - Change the student who received the sanction.
+ * - Change the cause of the sanction.
+ * - Change the end date of the sanction.
+ * 
+ * @component
+ * @param {React.ForwardedRef} ref Ref to allow quick navigation.
+ * 
+ * @example
+ * const ref = useRef();
+ * 
+ * return (
+ *   <SanctionsDataTable ref={ref} />
+ * );
+ * 
+ * @property sanctionsData: <Sanction[]> - List of sanctions fetched from the API.
+ * @property sanctionsSelected: <[]> - Rows selected in the table.
+ * @property modalMessageAttr: <{openModal: boolean, severity: string, message: string}> - Attributes for the modal message.
+ * @property modalAttr: <{openModal: boolean, title: string, children: React.ReactNode}> - Attributes for the modal.
+ * 
+ * @author Diego Jacobo Mtz. [Github](https://github.com/Djmr5)
+ */
+const SanctionsDataTable = React.forwardRef((_props, ref) => {
 
     const { tokens } = useAppContext();
     const [sanctionsData, setSanctionsData] = useState<Sanction[]>([]);
     const [sanctionsSelected] = useState([]);
 
-    const fetchData = useCallback(async () => {
+    // Variable de atributos del modal de mensajes (feedback al usuario)
+    const [modalMessageAttr, setModalMessageAttr] = useState({
+        openModal: false,
+        severity: "info",
+        message: "Sample Message",
+    });
+
+    /**
+     * Closes the modal with a message and resets its attributes.
+     * 
+     * @function
+     * 
+     * @returns {void}
+     */
+    const closeModalMessage = useCallback((): void => {
+        setModalMessageAttr({
+            openModal: false,
+            severity: "info",
+            message: "Sample Message",
+        });
+    }, []);
+
+    /**
+     * Opens a modal with a message.
+     * 
+     * @function
+     * @param {string} severity - Severity of the message.
+     * @param {string} message - Content of the message.
+     * 
+     * @returns {void}
+     */
+    const openModalMessage = useCallback((severity: string, message: string): void => {
+        setModalMessageAttr({
+            openModal: true,
+            severity: severity,
+            message: message,
+        });
+    }, []);
+
+    // Variables de atributos de los modales
+    const [modalAttr, setModalAttr] = useState({
+        openModal: false,
+        title: "Hello, I'm a Modal",
+        children: (<><p>Sample Content</p></>),
+    });
+
+    /**
+     * Closes the modal and resets its attributes.
+     * 
+     * @function
+     * 
+     * @returns {void}
+     */
+    const handleCloseModal = useCallback((): void => {
+        setModalAttr({
+            openModal: false,
+            title: "Hello, I'm a Modal",
+            children: (<><p>Sample Content</p></>),
+        });
+    }, []);
+
+    /**
+     * Fetches sanctions data from the server.
+     * @function
+     * @async
+     * @returns {Promise<void>}
+     */
+    const fetchData = useCallback(async (): Promise<void> => {
         try {
             const response = await readSanctions(tokens?.access_token ?? "");
             setSanctionsData(response?.data);
         } catch (error) {
-            props.openModalMessage("error", "Ha ocurrido un error al cargar las sanciones.");
+            openModalMessage("error", "Ha ocurrido un error al cargar las sanciones.");
             console.error(error);
         }
-    }, [tokens, props]);
+    }, [tokens?.access_token, openModalMessage]);
 
-    const handleDeleteSanction = async (selectedRows: MUIDataTableIsRowCheck) => {
+    /**
+     * Handles the deletion of selected sanctions.
+     * @function
+     * @async
+     * @param {MUIDataTableIsRowCheck} selectedRows - Selected rows in the table.
+     * @returns {Promise<void>}
+     */
+    const handleDeleteSanction = async (selectedRows: MUIDataTableIsRowCheck): Promise<void> => {
         try {
             for (const row of selectedRows.data) {
                 const index = row.dataIndex;
@@ -85,39 +180,46 @@ const SanctionsDataTable = React.forwardRef((props: SanctionsDataTableProps, ref
                 await deleteSanctionById(sanctionsData[index].id, tokens?.access_token ?? "");
             }
             fetchData();
-            props.openModalMessage("success", "Sanción/es eliminada/s correctamente.");
+            openModalMessage("success", "Sanción/es eliminada/s correctamente.");
         }
         catch (error) {
-            props.openModalMessage("error", "Ha ocurrido un error al eliminar la/s sanción/es.");
+            openModalMessage("error", "Ha ocurrido un error al eliminar la/s sanción/es.");
             console.error(error);
         }
     }
 
-    // Métodos extra para cambiar el contenido del modal por el
-    // componente de creación de juego
-    const setAddSanctionModal = () => {
-        props.setModalAttr({
-            ...props.modalAttr,
+    /**
+     * Sets the modal attributes for creating a new sanction.
+     * @function
+     * @returns {void}
+     */
+    const setAddSanctionModal = (): void => {
+        setModalAttr({
             openModal: true,
             title: "Crear Sanción",
             children: (<><CreateSanctionPanel
-                openModalMessage={props.openModalMessage}
-                closeModal={props.modalAttr.handleCloseModal}
+                openModalMessage={openModalMessage}
+                closeModal={handleCloseModal}
                 updateSanctionsData={fetchData}
             /></>),
         });
     };
 
-    const setModifySanctionModal = (selectedRows: MUIDataTableIsRowCheck) => {
+    /**
+     * Sets the modal attributes for modifying an existing sanction.
+     * @function
+     * @param {MUIDataTableIsRowCheck} selectedRows - Selected rows information.
+     * @returns {void}
+     */
+    const setModifySanctionModal = (selectedRows: MUIDataTableIsRowCheck): void => {
         if (selectedRows.data.length !== 1) {
-            props.openModalMessage("error", "Solo debes seleccionar un juego para modificarlo.");
+            openModalMessage("error", "Solo debes seleccionar un juego para modificarlo.");
             return;
         }
         const index = selectedRows.data[0].dataIndex;
         const sanction = sanctionsData[index];
 
-        props.setModalAttr({
-            ...props.modalAttr,
+        setModalAttr({
             openModal: true,
             title: "Modificar Sanción de: " + sanction.student,
             children: (<><ModifySanctionPanel
@@ -125,8 +227,8 @@ const SanctionsDataTable = React.forwardRef((props: SanctionsDataTableProps, ref
                 prevStudent={sanction.student}
                 prevCause={sanction.cause}
                 prevDate={sanction.end_time}
-                openModalMessage={props.openModalMessage}
-                closeModal={props.modalAttr.handleCloseModal}
+                openModalMessage={openModalMessage}
+                closeModal={handleCloseModal}
                 updateSanctionsData={fetchData}
             /></>),
         });
@@ -137,52 +239,63 @@ const SanctionsDataTable = React.forwardRef((props: SanctionsDataTableProps, ref
     }, [fetchData]);
 
     return (
-        <Box ref={ref} sx={{ margin: '1rem' }}>
-            <MUIDataTable
-                title={"Sanciones"}
-                data={sanctionsData}
-                columns={sanctionColumns as MUIDataTableColumnDef[]}
-                options={{
-                    selectableRowsOnClick: true,
-                    responsive: "simple",
-                    rowsSelected: sanctionsSelected,
-                    customToolbar: () => <Button variant='contained' color='success' onClick={setAddSanctionModal}>Crear Sanción</Button>,
-                    customToolbarSelect: (selectedRows: object) =>
-                        <>
-                            <Stack id='game-options' direction="row">
-                                <Tooltip title="Modificar">
-                                    <IconButton
-                                        aria-label="edit"
-                                        color="info"
-                                        size="large"
-                                        onClick={() => {
-                                            setModifySanctionModal(selectedRows as MUIDataTableIsRowCheck);
-                                        }}
-                                    >
-                                        <Edit fontSize='inherit' />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Borrar">
-                                    <IconButton
-                                        aria-label="delete"
-                                        color="error"
-                                        size="large"
-                                        onClick={() => {
-                                            handleDeleteSanction(selectedRows as MUIDataTableIsRowCheck);
-                                        }}
-                                    >
-                                        <Delete fontSize='inherit' />
-                                    </IconButton>
-                                </Tooltip>
-                            </Stack>
-                        </>,
-                    sortOrder: {
-                        name: 'id',
-                        direction: 'desc'
-                    }
-                }}
-            />
-        </Box >
+        <>
+            <Box ref={ref} sx={{ margin: '1rem' }}>
+                <MUIDataTable
+                    title={"Sanciones"}
+                    data={sanctionsData}
+                    columns={sanctionColumns as MUIDataTableColumnDef[]}
+                    options={{
+                        selectableRowsOnClick: true,
+                        responsive: "simple",
+                        rowsSelected: sanctionsSelected,
+                        customToolbar: () =>
+                            <Button
+                                variant='contained'
+                                color='success'
+                                onClick={setAddSanctionModal}
+                            >
+                                Crear Sanción
+                            </Button>,
+                        customToolbarSelect: (selectedRows: object) =>
+                            <>
+                                <Stack id='game-options' direction="row">
+                                    <Tooltip title="Modificar">
+                                        <IconButton
+                                            aria-label="edit"
+                                            color="info"
+                                            size="large"
+                                            onClick={() => {
+                                                setModifySanctionModal(selectedRows as MUIDataTableIsRowCheck);
+                                            }}
+                                        >
+                                            <Edit fontSize='inherit' />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Borrar">
+                                        <IconButton
+                                            aria-label="delete"
+                                            color="error"
+                                            size="large"
+                                            onClick={() => {
+                                                handleDeleteSanction(selectedRows as MUIDataTableIsRowCheck);
+                                            }}
+                                        >
+                                            <Delete fontSize='inherit' />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Stack>
+                            </>,
+                        sortOrder: {
+                            name: 'id',
+                            direction: 'desc'
+                        }
+                    }}
+                />
+            </Box >
+            <ModalMessage handleCloseModal={closeModalMessage} {...modalMessageAttr} />
+            <Modal handleCloseModal={handleCloseModal} {...modalAttr} />
+        </>
     );
 });
 
