@@ -4,7 +4,7 @@ import AdminRouter from "./AdminRouter";
 import {  Home,
           Login,
           ErrorPage,
-          Regulations,
+          Reglamento,
           Admin,
           Reports,
      } from "../pages";
@@ -17,7 +17,7 @@ const routes: RouteObject[] = [
           children: [
                { index: true, element: <Home />},
                { path: ROUTES.LOGIN, element: <Login /> },
-               { path: ROUTES.REGULATIONS, element: <Regulations /> },
+               { path: ROUTES.REGLAMENTO, element: <Reglamento /> },
                { path: "*", element: <ErrorPage /> },
           ]
      },

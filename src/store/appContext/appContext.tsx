@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { AppContextProps, AppState, Tokens, UserObject } from './types';
 
-const AppContext = createContext<AppState | undefined>(undefined);
+export const AppContext = createContext<AppState | undefined>(undefined);
 
 export const AppContextProvider = ({ children }: AppContextProps) => {
   
@@ -63,15 +63,3 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
       </AppContext.Provider>
   );
 }
-
-
-export const useAppContext = () => {
-  
-     const context = useContext(AppContext);
-  
-     if (context === undefined) {
-       throw new Error('useAppContext must be used within an AppContextProvider');
-     }
-  
-     return context;
-};

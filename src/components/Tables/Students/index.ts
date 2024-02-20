@@ -1,1 +1,1 @@
-export { default as studentColumns } from './Students';
+export { default as StudentsDataTable } from './Students';

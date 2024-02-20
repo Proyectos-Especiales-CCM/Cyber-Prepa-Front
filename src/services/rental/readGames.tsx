@@ -21,7 +21,7 @@ export const readGames = async (token?: string): Promise<ApiResponse<Game>> => {
             };
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
 
     return res || {} as ApiResponse<Game>;

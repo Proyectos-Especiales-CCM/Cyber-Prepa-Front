@@ -1,1 +1,1 @@
-export { default as playColumns } from './Plays';
+export { default as PlaysDataTable } from './Plays';

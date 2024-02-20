@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 import { patchUserById } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -98,11 +98,11 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
     // Create request body
     const requestBody = {
       ...(email !== prevEmail && { email: email }),
-      ...(password && { password: password }), 
+      ...(password && { password: password }),
       ...(isAdmin !== prevIsAdmin && { is_admin: isAdmin }),
       ...(isActive !== prevIsActive && { is_active: isActive }),
     };
-    
+
 
     try {
       // Mandar request para crear el usuario
@@ -122,7 +122,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
     <>
       <form onSubmit={handleSubmit} id='createUserPanel'>
         <ThemeProvider theme={darkTheme}>
-          <Grid container direction='column' spacing={2} padding={'1rem'}>
+          <Grid container direction='column' spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="email">Correo</InputLabel>
@@ -164,9 +164,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl
-                sx={{ m: 3 }}
-              >
+              <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
                     control={
@@ -178,9 +176,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl
-                sx={{ m: 3 }}
-              >
+              <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
                     control={

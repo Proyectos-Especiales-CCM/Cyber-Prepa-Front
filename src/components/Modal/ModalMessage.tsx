@@ -10,7 +10,52 @@ const styleModal = {
   borderRadius: '1rem',
 };
 
-export default function ModalMessage({ openModal, handleCloseModal, severity, message }: { openModal: boolean, handleCloseModal: () => void, severity:string, message: string }) {
+interface ModalMessageProps {
+  openModal: boolean;
+  handleCloseModal: () => void;
+  severity: string;
+  message: string;
+}
+
+/**
+ * ModalMessage component for displaying a small modal with an alert message.
+ * 
+ * @component
+ * @param {boolean} openModal - State to control the modal open/close.
+ * @param {Function} handleCloseModal - Set the openModal state to false to close the modal.
+ * @param {string} severity - Changes color based on the severity of the alert (e.g., "success", "error", "warning", "info").
+ * @param {string} message - The message to be displayed in the alert.
+ * 
+ * @example
+ * const [openModal, setOpenModal] = useState(false);
+ * const [severity, setSeverity] = useState("info");
+ * const [message, setMessage] = useState("This is an example message.");
+ * 
+ * const handleOpenModal = () => {
+ *   setOpenModal(true);
+ * };
+ * 
+ * const handleCloseModal = () => {
+ *   setOpenModal(false);
+ * };
+ * 
+ * return (
+ *   <div>
+ *     <button onClick={handleOpenModal}>Show Modal Message</button>
+ *     <ModalMessage
+ *       openModal={openModal}
+ *       handleCloseModal={handleCloseModal}
+ *       severity={severity}
+ *       message={message}
+ *     />
+ *   </div>
+ * );
+ * 
+ * @returns {React.JSX.Element} The rendered ModalMessage component.
+ * 
+ * @author Diego Jacobo Mtz. [Github](https://github.com/Djmr5)
+ */
+export default function ModalMessage({ openModal, handleCloseModal, severity, message }: ModalMessageProps): React.JSX.Element {
   return (
     <Modal
       open={openModal || false}

@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #101216;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,11 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 
   --color-bg-default: #101216; /* Color fondo negro default */
-  --color-fg-default: #fff; /* Color letras blancas(foreground) default */
+  --color-fg-default: #fbfbfb; /* Color letras blancas(foreground) default */
   --color-bg-toggle: #efefef; /*  Color fondo blanco toggled */
-  --color-fg-toggle: #101216; /*  Color letras negras (foreground) toggled */
+  --color-fg-toggle: #0d0e11; /*  Color letras negras (foreground) toggled */
   --color-header-bg-default: #0D1116;
   --color-border-default: #2B2F35; /* Color de border negro default */
+  --color-border-default-search: #1c1e23; /* Color de buscador reglamento */
   --color-border-mode: #b9b9b9; /* Color de border blanco toggled */
   
   --global-font: 'Roboto', sans-serif;
@@ -45,18 +46,15 @@
 }
 
 body {
-  margin: 2;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  background-color: #101216;
+  color: var(--color-fg-default);
+  font-family: var(--global-font);
   height: 100%;
-  background: linear-gradient(#8ab4f8,#ffe8d4);
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  padding: 0rem;
+  box-sizing: border-box;
+  flex-direction: column;
 }
 

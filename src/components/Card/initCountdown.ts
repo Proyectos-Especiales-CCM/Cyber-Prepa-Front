@@ -1,45 +1,45 @@
-import { game } from "../../pages/Home/types";
+import { Game } from "../../services/types";
 
 export const initCountdown = (
-     cardGame: game,
-     countdownRef: React.RefObject<HTMLDivElement>,
+  cardGame: Game,
+  countdownRef: React.RefObject<HTMLDivElement>,
+  setStatusCallback: (status: string) => void,
 ) => {
-     
-     if (countdownRef.current) {
-          // Update the count down every 1 second
-          setInterval(function () {
-               
-               // Get current's date & time
-               const now = new Date().getTime();
+  if (countdownRef.current) {
+    countdownRef.current.innerHTML = "Cargando...";
 
-               // Set the date we're counting down to
-               const countDownDate = new Date(cardGame.start_time).getTime();
+    const countDownDate = new Date(cardGame.start_time).getTime() + (60 * 60 * 1000);
+    
+    const intervalId = setInterval(function () {
+      const now = new Date().getTime();
 
-               // Find the distance between now and the count down date
-               const distance = countDownDate - now;
+      const distance = countDownDate - now;
 
-               // Time calculations for minutes and seconds
-               const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-               const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-               const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-               let timeTextDisplay = minutes + "m " + seconds + "s ";
+      let timeTextDisplay = minutes + "m " + seconds + "s ";
 
-               if (hours > 0) {
-                    timeTextDisplay = hours + "h " + timeTextDisplay;
-               }
+      if (hours > 0) {
+        timeTextDisplay = hours + "h " + timeTextDisplay;
+      }
 
-               // If the count down is finished, write some text
-               if (distance < 0 && (Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) > 0) {
-                    countdownRef.current.innerHTML = "AGOTADO";
-               } 
-               else if ((Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) === 0) {
-                    countdownRef.current.innerHTML = "LIBRE";
-                }                
-               else {
-                    countdownRef.current.innerHTML = timeTextDisplay;
-               }
+      if (distance < 0 && (Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) > 0) {
+        countdownRef.current!.innerHTML = "AGOTADO";
+        setStatusCallback("AGOTADO"); 
+      } else if ((Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) === 0) {
+        countdownRef.current!.innerHTML = "LIBRE";
+        setStatusCallback("LIBRE");
+      } else {
+        countdownRef.current!.innerHTML = timeTextDisplay;
+        setStatusCallback("COUNTING");
+      }
 
-          }, 1000)
-     }
-}
+    }, 1000);
+
+    return intervalId;
+  }
+
+  return null;
+};

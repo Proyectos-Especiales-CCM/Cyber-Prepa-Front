@@ -1,25 +1,19 @@
 import httpInstance from "../httpInstance";
+import { ApiResponse, EndPlayResponse } from "../types";
 
 export const endPlaysById = async (
     gameId: number,
-    name: string,
-    show: boolean,
-    start_time: Date,
-    file_route: string
-     ) => {
+    token: string,
+    ): Promise<ApiResponse<EndPlayResponse>> => {
     let res;
-    const endpoint = `rental/games/?id=${gameId}/end_all_plays/`;
-
-    const requestBody = {
-        name: name,
-        show: show,
-        start_time: start_time,
-        file_route: file_route
-    }
+    const endpoint = `rental/games/${gameId}/end-all-plays/`;
 
     await httpInstance
-        .post(endpoint, JSON.stringify(requestBody), {
-            headers: { 'Content-Type': 'application/json' },
+        .post(endpoint, null, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
         })
         .then((response) => {
             res = response;
@@ -27,5 +21,5 @@ export const endPlaysById = async (
         .catch((error) => {
             res = error.response;
         });
-    return res;
+    return res || {} as ApiResponse<EndPlayResponse>;
 };

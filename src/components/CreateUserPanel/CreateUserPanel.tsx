@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
-import { useAppContext } from "../../store/appContext/appContext";
+import { useAppContext } from "../../store/appContext/useAppContext";
 import { createUser } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -101,7 +101,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
     <>
       <form onSubmit={handleSubmit} id='createUserPanel'>
         <ThemeProvider theme={darkTheme}>
-          <Grid container direction='column' spacing={2} padding={'1rem'}>
+          <Grid container direction='column' spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="email">Correo</InputLabel>
@@ -143,9 +143,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl
-                sx={{ m: 3 }}
-              >
+              <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
                     control={

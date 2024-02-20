@@ -1,6 +1,6 @@
 import httpInstance from "../httpInstance";
 
-export const deletePlayById = async (playId: number, token: string) => {
+export const deletePlayById = async (playId: number, token?: string) => {
     let res;
     const endpoint = `rental/plays/${playId}/`;
 

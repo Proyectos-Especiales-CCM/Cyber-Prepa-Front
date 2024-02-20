@@ -1,14 +1,18 @@
 import httpInstance from "../httpInstance";
+import { PlayResponse } from "../types";
 
-export const createPlay = async (
+interface Payload {
     ended: boolean,
     student: string,
     game: number,
-) => {
+}
+
+export const createPlay = async ( ended: boolean, student: string, game: number, token: string ): Promise<PlayResponse> => {
+
     let res;
     const endpoint = `rental/plays/`;
 
-    const requestBody = {
+    const requestBody: Payload = {
         ended: ended,
         student: student,
         game: game
@@ -16,13 +20,23 @@ export const createPlay = async (
 
     await httpInstance
         .post(endpoint, JSON.stringify(requestBody), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
         })
         .then((response) => {
-            res = response;
+            res = {
+                detail: response.data,
+                status: response.status,
+              };
         })
         .catch((error) => {
-            res = error.response;
+            res = {
+                detail: error.response.data.detail,
+                status: error.response.status
+            }
         });
-    return res;
+        
+    return res || {} as PlayResponse;
 };

@@ -1,70 +1,79 @@
-import { useAppContext } from "../../store/appContext/appContext";
-import { CollapsedStudentItem, ScrollButtons } from ".."
-import { game } from "../../pages/Home/types";
-import { readGameById, readPlays } from "../../services";
-import { useEffect, useState } from "react";
-import Config from "../../config";
-
+import { CollapsedStudentItem } from "..";
+import { CSSProperties, useEffect, useState } from "react";
+import { Game, Play } from "../../services/types";
+import { readGameById } from "../../services";
+import { SnackbarComponent } from "../SnackbarComponent";
 
 interface CollapsedStudentProps {
-     cardGame: game;
+  cardGame: Game;
+  shouldUpdate: boolean;
+  onUpdated(): void;
+  style: CSSProperties;
 }
 
-const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame }) => {
+const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUpdate, onUpdated, style }) => {
 
-     // -------------- APP CONTEXT -------------- //
-     const { user, tokens } = useAppContext();
-     
-     // --------------- USE STATES -------------- //
-     const [gamesData, setGamesData] = useState<game[]>([]);
+  const [studentsData, setStudentsData] = useState<Play[] | number>(cardGame.plays);
+  const [open, setOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [accessToken, setAccessToken] = useState<string>('');
 
+  useEffect(() => {
+    const tokensString = localStorage.getItem('tokens');
+    if (tokensString) {
+      const tokens = JSON.parse(tokensString);
+      setAccessToken(tokens.access_token);
+    }
+  }, []);
 
-     // -------------- USE EFFECTS -------------- //
-     useEffect(() => {
+  useEffect(() => {
+    const fetchUpdatedGame = async () => {
+      if (shouldUpdate) {
+        try {
+          const res = await readGameById(cardGame.id, accessToken)
+          if (res && res.data) {
+            setStudentsData(res.data.plays);
+            onUpdated()
+          }
+        } catch (error) {
+          setAlertMessage('Error actualizando la data del juego, porfavor refresca la página');
+          setOpen(true);
+        }
+      }
+    }
+    if (shouldUpdate) {
+      fetchUpdatedGame()
+    }
+  }, [shouldUpdate, cardGame.id, accessToken, onUpdated])
 
-          // Initialize WebSocket Connection
-          const updatesSocket = new WebSocket(`ws://172.174.255.29/ws/updates/`)
+  const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  return (
+    <div className="collapsed__students" style={style}>
       
-          // Handle messages received from the server
-          updatesSocket.onmessage = async function (e) {
-               const data = JSON.parse(e.data);
-               const message = data['message'];
-               const sender = data['sender'];
-      
-               // Only update the UI if the message was sent by another user
-               if (sender !== user) {
-                    
-                    // If user is authenticated, refresh / update the student list
-                    if (user !== undefined) {
-                         if (message == 'Plays updated') {
-                              const updateData = await readGameById(data['info'], tokens?.access_token)
-                              setGamesData(updateData)
-                         }
-                    } else { // If user not authenticated, only update game cards
-                         if (message == 'Plays updated') {
-                              const data = readPlays(tokens?.access_token);
-                         }
-                    }
-               }
-            }
-     }, [])
-     
-     return (
-          <div className="collapsed__students">
-               <ul id={`cyber__student__list__${cardGame.id}`} className="container__dropzone">
+      <ul id={`cyber__student__list__${cardGame.id}`} className="container__dropzone">
+        {typeof studentsData === 'number' ? (
+          <p>No estás autorizado para ver la data de los {studentsData} jugadores</p>
+        ) : (
+          studentsData.map((player) => (
+            <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id} />
+          ))
+        )}
+      </ul>
 
-               {Array.isArray(cardGame.plays)
-                    ? cardGame.plays.map((player) => (
-                         <CollapsedStudentItem key={player.id} player={player} cardGame={cardGame}/>
-                    ))
-                    : null
-               }
+      <SnackbarComponent
+        open={open}
+        onClose={handleClose}
+        severity="warning"
+        message={alertMessage}
+      />
+    </div>
+  );
+};
 
-               </ul>
-
-               <ScrollButtons />
-          </div>
-     )
-}
-
-export default CollapsedStudents
+export default CollapsedStudents;
