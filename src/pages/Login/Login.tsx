@@ -38,8 +38,6 @@ const Login = () => {
 
         if (res == null) {
           console.log("User not found")
-          setEmail("")
-          setPassword("")
 
         } else {
           console.log("User found")
@@ -56,7 +54,7 @@ const Login = () => {
       </div>
       <div className='form-container'>
         <div className="header">
-          <div className="text">Login</div>
+          <div className="text">Iniciar sesión</div>
           <div className="underline"></div>
         </div>
         <div className="inputs">
@@ -77,13 +75,13 @@ const Login = () => {
             />
           </div>
         </div>
-        <div className="forgot-password">Lost Password? <span>Click Here!</span></div>
+        <div className="forgot-password">¿Perdiste tu constraseña? <span>¡Haz click aqui!</span></div>
         <div className="submit-container">
           <button
           onClick={accessLogin}
           className={isLoading ? "submit gray" : "submit"}
           disabled={isLoading}>
-            {isLoading ? <Loading /> : 'Login'}
+            {isLoading ? <Loading /> : 'Entrar'}
             </button>
             </div>
         </div>
