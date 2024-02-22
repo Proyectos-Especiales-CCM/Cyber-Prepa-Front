@@ -12,7 +12,7 @@ const studentColumns = [
         name: 'id',
         label: 'Matrícula',
         options: {
-            filter: false,
+            filterType: 'textField',
         }
     },
     {
@@ -25,16 +25,10 @@ const studentColumns = [
     {
         name: 'played_today',
         label: 'Jugó hoy',
-        options: {
-            filterType: 'textField',
-        }
     },
     {
         name: 'weekly_plays',
         label: 'Jugadas esta semana',
-        options: {
-            filterType: 'textField',
-        }
     },
     {
         name: 'sanctions_number',

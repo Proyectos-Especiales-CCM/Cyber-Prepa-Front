@@ -2,22 +2,29 @@ import httpInstance from "../httpInstance";
 
 export const patchPlayById = async (
     playId: number,
-    ended: boolean,
-    student: string,
-    game: number,
+    token: string,
+    {
+        ended,
+        game,
+    }: {
+        ended?: boolean,
+        game?: number
+    } = {}
 ) => {
     let res;
-    const endpoint = `rental/plays/id=${playId}/`;
+    const endpoint = `rental/plays/${playId}/`;
 
     const requestBody = {
         ended: ended,
-        student: student,
         game: game
     }
 
     await httpInstance
         .patch(endpoint, JSON.stringify(requestBody), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
         })
         .then((response) => {
             res = response;

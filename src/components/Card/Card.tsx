@@ -5,7 +5,7 @@ import { initCountdown } from './initCountdown';
 import { CardExpander } from '..';
 import { ImageCell } from '../Tables/CustomBodyCells';
 import { Game } from '../../services/types';
-import { createPlay, deletePlayById, readGameById } from '../../services';
+import { patchPlayById, readGameById } from '../../services';
 import { SnackbarComponent } from '../SnackbarComponent';
 import './Card.css';
 
@@ -101,10 +101,11 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
           const dragData = JSON.parse(dragDataString)
           try {
                if (cardGameId) {
-                    await deletePlayById(parseInt(dragData.playerId), accessToken);
+                    await patchPlayById(parseInt(dragData.playerId), accessToken, { game: parseInt(cardGameId) });
+                    //await deletePlayById(parseInt(dragData.playerId), accessToken);
                     // Check if not the same cardGameId as the origin drag student
                     // Check if new cardGame has expired students, else, end-game-for-all for that cardGame, then createPlay
-                    await createPlay(false, String(dragData.playerName), parseInt(cardGameId), accessToken);
+                    //await createPlay(false, String(dragData.playerName), parseInt(cardGameId), accessToken);
                     sendMessage(parseInt(cardGameId))
                }
           } catch (error) {
