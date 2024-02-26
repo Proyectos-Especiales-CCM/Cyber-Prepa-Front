@@ -54,6 +54,14 @@ const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMess
     return '';
   };
 
+  // Checa si la causa de la sanción es válida
+  const isCauseValid = () => {
+    return cause && cause.length > 0;
+  };
+
+  // funcion para mostrar feedback sobre la causa de la sanción
+  const displayHelperTextCause = isCauseValid() ? '' : 'La causa de la sanción no puede estar vacía.';
+
   // Handle submit
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -63,6 +71,9 @@ const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMess
       return;
     } else if (!endTime || endTime.isBefore(dayjs())) {
       openModalMessage('error', 'Fecha de fin de sanción inválida.');
+      return;
+    } else if (!isCauseValid()) {
+      openModalMessage('error', 'La causa de la sanción no puede estar vacía.');
       return;
     }
 
@@ -79,7 +90,7 @@ const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMess
 
   return (
     <>
-      <form onSubmit={handleSubmit} id='createUserPanel'>
+      <form onSubmit={handleSubmit} id='createSanctionAdminPanel'>
         <ThemeProvider theme={darkTheme}>
           <Grid container direction='column' spacing={2} padding={'1rem'}>
             <Grid item xs={12}>
@@ -106,6 +117,7 @@ const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMess
                   value={cause}
                   onChange={(e) => setCause(e.target.value)}
                 />
+                <FormHelperText error id="cause-helper-text">{displayHelperTextCause}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12}>

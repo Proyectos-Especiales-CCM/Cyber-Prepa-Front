@@ -1,12 +1,12 @@
 import Button from "@mui/material/Button";
-import { deletePlayById } from "../../services";
-import { Player } from "../../services/types";
+import { patchPlayById } from "../../services";
+import { Play } from "../../services/types";
 import { useEffect, useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 interface EndPlayButtonProps {
-  player: Player;
+  player: Play;
   cardGameId: number;
 }
 
@@ -36,7 +36,7 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
 
   const handleEndPlay = async () => {
     try {
-      await deletePlayById(player.id, accessToken);
+      await patchPlayById(player.id, accessToken ?? '', { ended: true });
       setAlertMessage(`Juego del estudiante ${player.student} terminado exitosamente.`);
       setOpenSuccess(true);
     } catch (error) {

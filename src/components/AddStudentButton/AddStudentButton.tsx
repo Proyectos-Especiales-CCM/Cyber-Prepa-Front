@@ -27,7 +27,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
     }
   }, []);
 
-  const regexPattern = /^A0\d{7}$/;
+  const regexPattern = /^[Aa]\d{8}$/;
 
   const isValidString = (inputString: string): boolean => {
     return regexPattern.test(inputString);
@@ -49,7 +49,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
   const addStudent = async () => {
     try {
       setIsLoading(true);
-      const response: PlayResponse = await createPlay(false, studentId, cardGame.id, accessToken);
+      const response: PlayResponse = await createPlay(false, studentId.toUpperCase(), cardGame.id, accessToken);
 
       if (response.detail === 'Invalid student id') {
         setAlertMessage('Matricula inválida, vuelve a intentarlo');
@@ -83,6 +83,11 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
     }
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    addStudent();
+  };
+
   const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -107,6 +112,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
         <input type="hidden" name="game_id" value={`${cardGame.id}`} />
         <div>
 
+        <form onSubmit={handleSubmit} id='createUserPanel'>
           <TextField
             value={studentId}
             type="text"
@@ -146,6 +152,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
             color={inputState === 'success' ? 'success' : 'error'}
           />
 
+        </form>
         </div>
 
         {open && (
