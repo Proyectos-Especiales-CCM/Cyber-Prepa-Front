@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import "dayjs/locale/es";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { createSanction } from "../../services";
-import { Player } from "../../services/types";
-import { Box, Typography } from "@mui/material";
+import { createSanction, patchPlayById } from "../../services";
+import { Play } from "../../services/types";
+import { FormControl, FormHelperText, Grid, TextField } from "@mui/material";
 import { createTheme } from '@mui/material/styles'
 import CustomModal from "../Modal/Modal";
 import { blue } from "@mui/material/colors";
@@ -16,12 +17,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 
 interface SanctionButtonProps {
-  player: Player;
+  player: Play;
   cardGameId: number;
 }
 
 const theme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
       main: '#FF5733',
     },
@@ -31,15 +33,29 @@ const theme = createTheme({
   },
 })
 
-const SanctionButton: React.FC<SanctionButtonProps> = ({ player, cardGameId }) => {
+const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
   const [modalOpen, setModalOpen] = useState(false);
-  const [startTime, setStartTime] = useState<Dayjs | null>(dayjs(Date.now()));
-  const [endTime, setEndTime] = useState<Dayjs | null>(dayjs(Date.now()));
-  const [cause, setCause] = useState("");
+  const [endTime, setEndTime] = useState<Dayjs | null>(null);
+  const [cause, setCause] = useState<string>("");
 
+  // Checa si la fecha de fin de sanción es válida
+  const isEndTimeValid = () => {
+    return endTime && endTime.isAfter(dayjs());
+  };
+
+  // funcion para mostrar feedback sobre la fecha de fin de sanción
+  const displayHelperTextEndTime = isEndTimeValid() ? '' : 'Fecha de fin de sanción inválida.';
+
+  // Checa si la causa de la sanción es válida
+  const isCauseValid = () => {
+    return cause && cause.length > 0;
+  };
+
+  // funcion para mostrar feedback sobre la causa de la sanción
+  const displayHelperTextCause = isCauseValid() ? '' : 'La causa de la sanción no puede estar vacía.';
 
   const handleSanction = () => {
     setModalOpen(true);
@@ -57,20 +73,38 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player, cardGameId }) =
     }
   }, []);
 
-  const handlePerformSanction = async () => {
+  const handlePerformSanction = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!cause || cause.length === 0) {
+      setAlertMessage('La causa de la sanción no puede estar vacía.');
+      setOpen(true);
+      return;
+    }
+
+    if (!endTime || endTime.isBefore(dayjs())) {
+      setAlertMessage('Fecha de fin de sanción inválida.');
+      setOpen(true);
+      return;
+    }
+    
     try {
+      if (!accessToken) {
+        throw new Error("No access token found");
+      }
+      
       await createSanction(
-        player.id,
-        cause,
-        startTime,
-        endTime,
+        accessToken,
+        cause ?? "",
+        endTime.toJSON(),
         player.student,
-        cardGameId,
-        accessToken
+        player.id,
       );
+      await patchPlayById(player.id, accessToken, { ended: true });
       setAlertMessage(`Jugador ${player.id} sancionado exitosamente.`);
       setOpen(true);
     } catch (error) {
+      console.log(error);
       setAlertMessage(`Error al sancionar jugador.`);
       setOpen(true);
     } finally {
@@ -101,48 +135,41 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player, cardGameId }) =
           <CustomModal
             openModal={modalOpen}
             handleCloseModal={handleCloseModal}
-            title="Llenar detalles de la sanción"
+            title={`Llenar detalles de la sanción para ${player.student}`}
           >
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="h6">Causa de la sanción:</Typography>
-              <input
-                type="text"
-                placeholder="Causa"
-                value={cause}
-                onChange={(e) => setCause(e.target.value)}
-                style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
-              />
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="h6">Fecha y hora de inicio:</Typography>
-              <DatePicker
-                sx={{
-                  backgroundColor: 'white',
-                  borderRadius: 2,
-                }}
-                value={startTime}
-                onChange={(newValue) => setStartTime(newValue)}
-              />
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="h6">Fecha y hora de fin:</Typography>
-              <DatePicker
-                sx={{
-                  backgroundColor: 'white',
-                  borderRadius: 2,
-                }}
-                defaultValue={startTime}
-                onChange={(newValue) => setStartTime(newValue)}
-              />
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-              <Button variant="contained" onClick={handlePerformSanction}>
-                Confirmar sanción
-              </Button>
-            </Box>
+            <form onSubmit={handlePerformSanction} id='createSanctionPanel'>
+              <Grid container direction='column' spacing={2} padding={'1rem'}>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+                      <DatePicker
+                        label="Fecha de fin de la sanción (Este día termina la sanción)"
+                        value={endTime}
+                        format='DD/MM/YYYY'
+                        onChange={(newValue) => setEndTime(newValue)}
+                      />
+                    </LocalizationProvider>
+                    <FormHelperText error id="end-time-helper-text">{displayHelperTextEndTime}</FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <TextField
+                      id="cause-outlined-multiline-static"
+                      label="Causa de la sanción"
+                      multiline
+                      rows={4}
+                      value={cause}
+                      onChange={(e) => setCause(e.target.value)}
+                    />
+                    <FormHelperText error id="cause-helper-text">{displayHelperTextCause}</FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button variant="contained" color="error" type="submit">Sancionar</Button>
+                </Grid>
+              </Grid>
+            </form>
           </CustomModal>
 
           <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
