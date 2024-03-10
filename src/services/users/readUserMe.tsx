@@ -1,19 +1,26 @@
 import { UserObject } from "../../store/appContext/types";
 import httpInstance from "../httpInstance";
+import { ApiResponseSingle, User } from "../types";
 
-export const readUserMe = async ( token: string,
-                                  setUser: (userObject: UserObject) => void,
-                                  setIsAdmin: (isAdmin: boolean) => void) => {
+export const readUserMe = async (token: string,
+    setUser: (userObject: UserObject) => void,
+    setIsAdmin: (isAdmin: boolean) => void
+): Promise<ApiResponseSingle<User>> => {
     let res;
     const endpoint = `users/me/`;
 
     await httpInstance
         .get(endpoint, {
-            headers: { 'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`}
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
         })
         .then((response) => {
-            res = response;
+            res = {
+                data: response.data,
+                status: response.status,
+            };
 
             localStorage.setItem("user", res.data.id.toString());
 
@@ -35,7 +42,7 @@ export const readUserMe = async ( token: string,
 
         })
         .catch(() => {
-            res = null
+            throw new Error("Could not retrieve user data");
         });
-    return res;
+    return res || {} as ApiResponseSingle<User>;
 };

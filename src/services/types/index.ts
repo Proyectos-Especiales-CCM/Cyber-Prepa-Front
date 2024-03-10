@@ -1,3 +1,8 @@
+export interface APITokens {
+    access: string,
+    refresh: string,
+}
+
 export interface Play {
     id: number;
     ended: boolean;

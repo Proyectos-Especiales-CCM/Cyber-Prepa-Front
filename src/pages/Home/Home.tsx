@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getGamesData } from "./getGames";
 import { Card } from "../../components";
 import { Game } from "../../services/types";
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import { SnackbarComponent } from "../../components/SnackbarComponent";
 import { UserObject } from "../../store/appContext/types";
 import './Home.css';
@@ -14,7 +14,7 @@ const Home = () => {
   const [gamesData, setGamesData] = useState<Game[]>([]);
   const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
   const location = useLocation();
-  const { sendMessage, lastMessage, getWebSocket, readyState } = useWebSocket(
+  const { sendMessage, lastMessage, getWebSocket } = useWebSocket(
     socketUrl,
     {
       onOpen: () => console.log('WebSocket Connected'),

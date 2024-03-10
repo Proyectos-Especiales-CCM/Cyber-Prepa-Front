@@ -169,7 +169,7 @@ const Reglamento = () => {
     regulation.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
