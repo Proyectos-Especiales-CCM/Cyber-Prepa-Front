@@ -1,5 +1,5 @@
 import { obtainToken, readUserMe } from "../../services";
-import { Tokens, UserObject } from "../../store/appContext/types";
+import { UserObject } from "../../store/appContext/types";
 
 export const logInAccess = async (
      email: string,
@@ -9,7 +9,7 @@ export const logInAccess = async (
      setIsAdmin: (isAdmin: boolean) => void,
 ) => {
      try {
-          const response: Tokens | undefined = await obtainToken(email, password)
+          const response = await obtainToken(email, password)
 
           if (response == undefined) {
                console.error("Could not generate/retrieve tokens");

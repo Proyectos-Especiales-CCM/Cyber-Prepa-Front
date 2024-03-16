@@ -1,9 +1,10 @@
 import httpInstance from "../httpInstance";
+import { ApiResponseSingle, APITokens } from "../types";
 
 export const obtainToken = async (
     email: string,
     password: string,
-) => {
+): Promise<ApiResponseSingle<APITokens>> => {
      
     let res;
     const endpoint = `token/`;
@@ -19,11 +20,14 @@ export const obtainToken = async (
         })
         .then(async (response) => {
             
-            res = response;
+            res = {
+                data: response.data,
+                status: response.status,
+            };
             
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
-    return res;
+    return res || {} as ApiResponseSingle<APITokens>;
 };
