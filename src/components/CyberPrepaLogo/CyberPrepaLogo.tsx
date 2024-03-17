@@ -8,7 +8,7 @@ const CyberPrepaLogo: React.FC<CyberPrepaLogoProps> = ({ size, display }) => {
   return (
     <img
       width={`${size}px`}
-      src="../../src/assets/loginLogo.svg"
+      src="loginLogo.svg"
       alt="CyberPrepa Logo"
       style={{ display }}
     />

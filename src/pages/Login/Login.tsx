@@ -4,9 +4,21 @@ import { Loading } from "../../components";
 import { ROUTES } from "../../routes/Constants";
 import { useNavigate } from "react-router-dom";
 import { logInAccess } from "../../services";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Password, Email } from '@mui/icons-material';
 import './login.css';
 
-
+// Theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#000000',
+    },
+    secondary: {
+      main: '#ff0000',
+    },
+  },
+});
 
 const Login = () => {
   const navigate = useNavigate();
@@ -50,7 +62,7 @@ const Login = () => {
   return (
     <div className='main-container'>
       <div className='logo-container'>
-        <img src="../../src/assets/loginLogo.svg" alt="" style={{ width: '200%', height: '200%' }} />
+        <img src="loginLogo.svg" alt="" style={{ width: '200%', height: '200%' }} />
       </div>
       <div className='form-container'>
         <div className="header">
@@ -58,8 +70,9 @@ const Login = () => {
           <div className="underline"></div>
         </div>
         <div className="inputs">
+          <ThemeProvider theme={theme}>
           <div className="input">
-            <img src="../../src/assets/email.png" alt="" style={{ width: '10%', height: 'auto' }} />
+            <Email style={{ width: '10%', height: 'auto', marginLeft: '1rem', marginRight: '1rem' }} color="primary" />
             <input
               onChange={(event) => setEmail(event.target.value)}
               type="email"
@@ -67,13 +80,14 @@ const Login = () => {
             />
           </div>
           <div className="input">
-            <img src="../../src/assets/password.png" alt="" style={{ width: '10%', height: 'auto' }} />
+            <Password style={{ width: '10%', height: 'auto', marginLeft: '1rem', marginRight: '1rem' }} color="primary" />
             <input
               onChange={(event) => setPassword(event.target.value)}
               type="password"
               placeholder="Password"
             />
           </div>
+          </ThemeProvider>
         </div>
         <div className="forgot-password">¿Perdiste tu constraseña? <span>¡Haz click aqui!</span></div>
         <div className="submit-container">
