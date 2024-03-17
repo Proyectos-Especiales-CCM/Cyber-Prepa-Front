@@ -8,11 +8,12 @@ import { SnackbarComponent } from "../../components/SnackbarComponent";
 import { UserObject } from "../../store/appContext/types";
 import './Home.css';
 import { useLocation } from "react-router-dom";
+import Config from "../../config";
 
 const Home = () => {
   const { user, tokens } = useAppContext();
   const [gamesData, setGamesData] = useState<Game[]>([]);
-  const [socketUrl] = useState('ws://172.174.255.29/ws/updates/');
+  const [socketUrl] = useState(`${Config.WS_URL}/ws/updates/`);
   const location = useLocation();
   const { sendMessage, lastMessage, getWebSocket } = useWebSocket(
     socketUrl,
