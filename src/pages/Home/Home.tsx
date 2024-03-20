@@ -13,7 +13,7 @@ import Config from "../../config";
 const Home = () => {
   const { user, tokens } = useAppContext();
   const [gamesData, setGamesData] = useState<Game[]>([]);
-  const [socketUrl] = useState(`${Config.WS_URL}/ws/updates/`);
+  const [socketUrl] = useState(`${Config.WS_URL}ws/updates/`);
   const location = useLocation();
   const { sendMessage, lastMessage, getWebSocket } = useWebSocket(
     socketUrl,

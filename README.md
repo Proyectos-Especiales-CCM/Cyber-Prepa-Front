@@ -2,6 +2,18 @@
 
 ## React + TypeScript + Vite
 
+## Table of Contents
+
+1. [App resume and guide](#app-resume-and-guide)
+2. [Requirements](#requirements)
+3. [Setup for development](#setup-for-development)
+4. [Deployment (Windows)](#deployment-windows)
+5. [To contribute to the project](#to-contribute-to-the-project)
+
+## App resume and guide
+
+This is the frontend for the Cyber-Prepa project, a game rental service at Aulas 2 in campus CCM. It is a web application that will be used by students and teachers to manage the service, rules, and other activities. The project is still in its evolution, and we're open to any suggestions and contributions.
+
 ## Requirements
 
 - Axios
@@ -46,9 +58,12 @@ yarn dev
 Create a `.env` file in the root of the project and add the following environment variables.
 
 ```env
-VITE_API_BASE_URL=http://localhost:8000
-VITE_WS_BASE_URL=ws://localhost:8000
+VITE_API_BASE_URL=http://localhost:8000/
+VITE_WS_BASE_URL=ws://localhost:8000/
+VITE_MEDIA_BASE_URL=http://localhost/
 ```
+
+:bangbang: **Note:** All env URLs should end with a `/` to avoid issues with the API requests.
 
 ## Deployment (Windows)
 

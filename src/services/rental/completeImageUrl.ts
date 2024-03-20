@@ -8,9 +8,9 @@ export function completeImageUrl(value: string | undefined) {
     } else if (value && value.match(regex)) {
         return value;
     } else if (value[0] === '/') {
-        return `${Config.API_URL}${value.slice(1)}`;
+        return `${Config.MEDIA_URL}${value.slice(1)}`;
     } else {
-        const url = `${Config.API_URL}${value}`
+        const url = `${Config.MEDIA_URL}${value}`
         if (url.match(regex)) {
             return url;
         } else {
