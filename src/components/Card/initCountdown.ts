@@ -8,7 +8,7 @@ export const initCountdown = (
   if (countdownRef.current) {
     countdownRef.current.innerHTML = "Cargando...";
 
-    const countDownDate = new Date(cardGame.start_time).getTime() + (60 * 60 * 1000);
+    const countDownDate = new Date(cardGame.start_time).getTime() + (50 * 60 * 1000);
     
     const intervalId = setInterval(function () {
       const now = new Date().getTime();
