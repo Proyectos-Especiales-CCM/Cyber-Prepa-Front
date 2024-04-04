@@ -39,7 +39,7 @@ const Header = () => {
   
   const pages = ['Reglamento', 'Admin']
 
-  const { logOut, user, admin } = useAppContext();
+  const { logOut, user } = useAppContext();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -170,7 +170,7 @@ const Header = () => {
                   REGLAMENTO
                 </Button>
 
-                {user && admin ? (
+                {user ? (
                   <>
                     <Button
                       sx={{ 
