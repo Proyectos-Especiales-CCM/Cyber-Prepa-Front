@@ -5,21 +5,18 @@
 }
 
 .logo-container {
-  margin-right: 10%; 
-  margin-left: 10%;
-  margin-bottom: 20%;
+  width: 50%;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-container{
   display: flex;
   flex-direction:column;
-  margin: auto;
-  margin-top: 1%;
-  margin-right: 7%;
-  margin-bottom: 20%;
-  width:40%;
+  width:50%;
   background: #fff;
-  padding-bottom: .5%;
   
 }
 
@@ -32,11 +29,10 @@
   margin-top: 10%;
 }
 
-.text{
+.header-text{
   color:#0a235c;
   font-size:350%;
   font-weight: 700;
-
 }
 
 .underline{
@@ -87,6 +83,10 @@
   font-size: 18px;
 }
 
+.forgot-password > span{
+  text-decoration: underline;
+}
+
 .forgot-password span{
   color:#0a235c;
   cursor:pointer;
@@ -95,7 +95,7 @@
 .submit-container{
   display: flex;
   gap: 30px;
-  margin: 60px auto;
+  margin: 40px auto;
 }
 
 .submit{
@@ -115,4 +115,116 @@
 .gray{
   background: #eaeaea;
   color: #0a235c;
+}
+
+@media (max-width: 600px) {
+  .main-container {
+    flex-direction: column-reverse;
+  }
+
+  .logo-container {
+    width: 90%;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form-container{
+    display: flex;
+    flex-direction:column;
+    width:100%;
+  }  
+
+  .header-text{
+    font-size:250%;
+    font-weight: 700;
+  }
+
+  
+.input{
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 85%;
+  height: 50px;
+}
+
+.input img{
+  margin: 0px 30px;
+}
+
+.input input{
+  height: 50px;
+  width:400px;
+  font-size: 16px;
+
+}
+
+.forgot-password{
+  padding-left: 62px;
+  margin-top: 27px;
+  font-size: 14px;
+}
+
+.submit{
+  width: 160px;
+  height: 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700px;
+}
+
+.submit-container{
+  display: flex;
+  margin: 20px auto;
+}
+
+}
+
+@media (max-width: 900px) {
+
+  .header-text{
+    font-size:250%;
+    font-weight: 700;
+  }
+
+  
+.input{
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 85%;
+  height: 50px;
+}
+
+.input img{
+  margin: 0px 30px;
+}
+
+.input input{
+  height: 50px;
+  width:400px;
+  font-size: 16px;
+
+}
+
+.forgot-password{
+  padding-left: 10%;
+  margin-top: 27px;
+  font-size: 12px;
+}
+
+.submit{
+  width: 160px;
+  height: 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700px;
+}
+
+.submit-container{
+  display: flex;
+  margin: 20px auto;
+}
 }

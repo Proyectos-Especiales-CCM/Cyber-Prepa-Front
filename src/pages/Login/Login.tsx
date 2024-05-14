@@ -62,11 +62,14 @@ const Login = () => {
   return (
     <div className='main-container'>
       <div className='logo-container'>
-        <img src="loginLogo.svg" alt="" style={{ width: '200%', height: '200%' }} />
+        <img src="loginLogo.svg" alt="" style={{ width: '60%', height: '60%' }} />
       </div>
+
+
+
       <div className='form-container'>
         <div className="header">
-          <div className="text">Iniciar sesión</div>
+          <div className="header-text">Iniciar sesión</div>
           <div className="underline"></div>
         </div>
         <div className="inputs">
