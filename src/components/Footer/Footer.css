@@ -1,0 +1,14 @@
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 35%;
+    /* Ensures the container is circular */
+    background-color: rgba(255, 255, 255, 0.2);
+    /* White background */
+    overflow: hidden;
+    /* Ensure the box-shadow effect doesn't overflow */
+    box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.2);
+    /* Blur and opacity effect */
+}
