@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAppContext } from "../../../store/appContext/useAppContext";
 import MUIDataTable, { MUIDataTableColumnDef, MUIDataTableIsRowCheck } from "mui-datatables";
-import { Box, Stack, Tooltip, IconButton, Button } from "@mui/material";
+import { Box, Stack, Tooltip, IconButton, Button, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 import { Edit, Visibility, VisibilityOff, Delete } from '@mui/icons-material';
 import { BooleanCell, DateCell, ImageCell } from "../CustomBodyCells";
 import { CreateGamePanel, Modal, ModalMessage, ModifyGamePanel } from '../..';
-import { Game, Image } from '../../../services/types'
+import { Game, Image } from '../../../services/types';
 import { readGames, readImages, deleteGameById, patchGameById, findImageIdWithUrl, completeImageUrl } from '../../../services/';
 
 const gameColumns = [
@@ -47,6 +47,13 @@ const gameColumns = [
         }
     },
     {
+        name: 'category',
+        label: 'Categoría',
+        options: {
+            filter: true,
+        }
+    },
+    {
         name: 'image',
         label: 'Imagen',
         options: {
@@ -56,54 +63,19 @@ const gameColumns = [
     },
 ];
 
-/**
- * Games MUI DataTable component.
- * 
- * Allows to display, modify, create and delete games.
- * 
- * Allowed modifications:
- * - Change game's name.
- * - Change if the game is shown or not.
- * - Change game's image.
- * 
- * @example
- * const ref = useRef();
- * 
- * return (
- *   <GamesDataTable ref={ref} />
- * );
- * 
- * @component
- * @param {React.ForwardedRef} ref Ref to allow quick navigation.
- * 
- * @property gamesData: <Game[]> - List of games fetched from the API.
- * @property gamesSelected: <[]> - Rows selected in the table.
- * @property modalMessageAttr: <{openModal: boolean, severity: string, message: string}> - Attributes for the modal message.
- * @property modalAttr: <{openModal: boolean, title: string, children: React.ReactNode}> - Attributes for the modal.
- * 
- * @author Diego Jacobo Mtz. [Github](https://github.com/Djmr5)
- */
 const GamesDataTable = React.forwardRef((_props, ref) => {
-
     const { tokens } = useAppContext();
     const [images, setImages] = useState<Image[]>([]);
     const [gamesData, setGamesData] = useState<Game[]>([]);
     const [gamesSelected] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
 
-    // Variable de atributos del modal de mensajes (feedback al usuario)
     const [modalMessageAttr, setModalMessageAttr] = useState({
         openModal: false,
         severity: "info",
         message: "Sample Message",
     });
 
-    /**
-     * Closes the modal with a message and resets its attributes.
-     * 
-     * @function
-     * 
-     * @returns {void}
-     */
     const closeModalMessage = useCallback((): void => {
         setModalMessageAttr({
             openModal: false,
@@ -112,15 +84,6 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         });
     }, []);
 
-    /**
-     * Opens a modal with a message.
-     * 
-     * @function
-     * @param {string} severity - Severity of the message.
-     * @param {string} message - Content of the message.
-     * 
-     * @returns {void}
-     */
     const openModalMessage = useCallback((severity: string, message: string): void => {
         setModalMessageAttr({
             openModal: true,
@@ -129,20 +92,12 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         });
     }, []);
 
-    // Variables de atributos de los modales
     const [modalAttr, setModalAttr] = useState({
         openModal: false,
         title: "Hello, I'm a Modal",
         children: (<><p>Sample Content</p></>),
     });
 
-    /**
-     * Closes the modal and resets its attributes.
-     * 
-     * @function
-     * 
-     * @returns {void}
-     */
     const handleCloseModal = useCallback((): void => {
         setModalAttr({
             openModal: false,
@@ -151,12 +106,6 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         });
     }, []);
 
-    /**
-     * Fetches images data from the server.
-     * @function
-     * @async
-     * @returns {Promise<void>}
-     */
     const fetchData = useCallback(async (): Promise<void> => {
         try {
             const gameResponse = await readGames();
@@ -169,18 +118,6 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         }
     }, [tokens, openModalMessage]);
 
-    /**
-     * Updates game's data in the server.
-     * 
-     * Can only update one field with the same value for all selected games at a time.
-     * 
-     * @function
-     * @async
-     * @param {MUIDataTableIsRowCheck} selectedRows Selected rows in the table.
-     * @param {string} field Field to update.
-     * @param {boolean | string} value New value for the field.
-     * @returns {Promise<void>}
-     */
     const handleUpdateGame = async (selectedRows: MUIDataTableIsRowCheck, field: string, value: boolean | string): Promise<void> => {
         try {
             for (const row of selectedRows.data) {
@@ -204,13 +141,6 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         }
     };
 
-    /**
-     * Handles the deletion of selected images.
-     * @function
-     * @async
-     * @param {MUIDataTableIsRowCheck} selectedRows - Selected rows in the table.
-     * @returns {Promise<void>}
-     */
     const handleDeleteGame = async (selectedRows: MUIDataTableIsRowCheck) => {
         try {
             for (const row of selectedRows.data) {
@@ -227,13 +157,6 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         }
     };
 
-    // Métodos extra para cambiar el contenido del modal por el
-    // componente de creación de juego
-    /**
-     * Sets the modal attributes for creating a new game.
-     * @function
-     * @returns {void}
-     */
     const setAddGameModal = () => {
         setModalAttr({
             openModal: true,
@@ -246,12 +169,6 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         });
     }
 
-    /**
-     * Sets the modal attributes for modifying a game.
-     * @function
-     * @param {MUIDataTableIsRowCheck} selectedRows Selected rows in the table.
-     * @returns {void}
-     */
     const setModifyGameModal = (selectedRows: MUIDataTableIsRowCheck) => {
         if (selectedRows.data.length !== 1) {
             openModalMessage("error", "Solo debes seleccionar un juego para modificarlo.");
@@ -282,12 +199,33 @@ const GamesDataTable = React.forwardRef((_props, ref) => {
         fetchData();
     }, [fetchData]);
 
+    const filteredGamesData = selectedCategory
+        ? gamesData.filter(game => game.category === selectedCategory)
+        : gamesData;
+
     return (
         <>
             <Box ref={ref} sx={{ margin: '1rem' }}>
+                <FormControl sx={{ marginBottom: '1rem', minWidth: 120 }}>
+                    <InputLabel>Categoría</InputLabel>
+                    <Select
+                        value={selectedCategory}
+                        label="Categoría"
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                        <MenuItem value="">
+                            <em>All</em>
+                        </MenuItem>
+                        {Array.from(new Set(gamesData.map(game => game.category))).map(category => (
+                            <MenuItem key={category} value={category}>
+                                {category}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <MUIDataTable
                     title={"Catálogo de Juegos"}
-                    data={gamesData}
+                    data={filteredGamesData}
                     columns={gameColumns as MUIDataTableColumnDef[]}
                     options={{
                         selectableRowsOnClick: true,
