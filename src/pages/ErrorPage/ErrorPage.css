@@ -1,0 +1,30 @@
+/* src/pages/ErrorPage.css */
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+    font-size: 1.5rem; /* Tamaño de fuente más grande */
+    color: #333; /* Color de texto */
+  }
+  
+  .error-page h1 {
+    margin: 0;
+    font-size: 2rem; /* Tamaño de fuente del título */
+  }
+  
+  .error-page p {
+    margin: 1rem 0;
+  }
+  
+  .error-page a {
+    color: #007bff; /* Color del enlace */
+    text-decoration: none;
+  }
+  
+  .error-page a:hover {
+    text-decoration: underline;
+  }
+  
