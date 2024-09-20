@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { Button, Grid2 as Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import { useAppContext } from "../../store/appContext/useAppContext";
 import { patchUserById } from '../../services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -123,7 +123,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
       <form onSubmit={handleSubmit} id='createUserPanel'>
         <ThemeProvider theme={darkTheme}>
           <Grid container direction='column' spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="email">Correo</InputLabel>
                 <Input
@@ -137,7 +137,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 <FormHelperText error id="email-helper-text">{displayHelperTextEmail()}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="pass">Contraseña</InputLabel>
                 <Input
@@ -150,7 +150,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 <FormHelperText error id="pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="c-pass">Confirmar Contraseña</InputLabel>
                 <Input
@@ -163,7 +163,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 <FormHelperText id="c-pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
@@ -175,7 +175,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 </FormGroup>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
@@ -187,7 +187,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 </FormGroup>
               </FormControl>
             </Grid>
-            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button variant="contained" color="info" type="submit">Actualizar</Button>
             </Grid>
           </Grid>

@@ -1,4 +1,4 @@
-import { Box, Typography, Modal, Grid, IconButton } from '@mui/material';
+import { Box, Typography, Modal, Grid2 as Grid, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const styleModal = {
@@ -62,12 +62,12 @@ export default function CustomModal({ openModal, handleCloseModal, title, childr
         >
             <Box sx={{ ...styleModal }}>
                 <Grid container justifyContent="space-between" alignItems="center">
-                    <Grid item xs={10}>
+                    <Grid size={10}>
                         <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', mb: '10px' }}>
                             {title}
                         </Typography>
                     </Grid>
-                    <Grid item xs={2} container justifyContent="flex-end">
+                    <Grid size={2} container justifyContent="flex-end">
                         <IconButton
                             aria-label="close"
                             color="inherit"

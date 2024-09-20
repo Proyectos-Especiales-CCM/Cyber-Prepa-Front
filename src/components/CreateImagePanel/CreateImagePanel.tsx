@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Grid, Tooltip, Typography } from "@mui/material";
+import { Button, Grid2 as Grid, Tooltip, Typography } from "@mui/material";
 import { useAppContext } from "../../store/appContext/useAppContext";
 import { createImage } from "../../services";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -44,11 +44,11 @@ const CreateImagePanel: React.FC<CreateImagePanelProps> = ({ openModalMessage, c
         <form onSubmit={handleSubmit} id='createUserPanel'>
             <ThemeProvider theme={darkTheme}>
                 <Grid container direction='column' spacing={2} padding={'1rem'}>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Typography>Seleccione una imagen desde su dispositivo</Typography>
                         <input type="file" accept='image/png, image/jpeg, image/jpg' onChange={handleImageFileChange} />
                     </Grid>
-                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Tooltip title={"Subir imagen"}>
                             <Button variant="contained" color="success" type="submit">
                                 <Upload fontSize='inherit' />

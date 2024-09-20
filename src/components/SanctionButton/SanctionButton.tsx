@@ -5,7 +5,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { createSanction, patchPlayById } from "../../services";
 import { Play } from "../../services/types";
-import { FormControl, FormHelperText, Grid, TextField } from "@mui/material";
+import { FormControl, FormHelperText, Grid2 as Grid, TextField } from "@mui/material";
 import { createTheme } from '@mui/material/styles'
 import CustomModal from "../Modal/Modal";
 import { blue } from "@mui/material/colors";
@@ -139,7 +139,7 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
           >
             <form onSubmit={handlePerformSanction} id='createSanctionPanel'>
               <Grid container direction='column' spacing={2} padding={'1rem'}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <FormControl fullWidth>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
                       <DatePicker
@@ -152,7 +152,7 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
                     <FormHelperText error id="end-time-helper-text">{displayHelperTextEndTime}</FormHelperText>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <FormControl fullWidth>
                     <TextField
                       id="cause-outlined-multiline-static"
@@ -165,7 +165,7 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
                     <FormHelperText error id="cause-helper-text">{displayHelperTextCause}</FormHelperText>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button variant="contained" color="error" type="submit">Sancionar</Button>
                 </Grid>
               </Grid>

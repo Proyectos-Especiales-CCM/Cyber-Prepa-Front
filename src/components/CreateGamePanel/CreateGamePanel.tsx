@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
     Button,
-    Grid,
+    Grid2 as Grid,
     FormControl,
     InputLabel,
     Input,
@@ -102,7 +102,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
             <form onSubmit={handleSubmit} id='createUserPanel'>
                 <ThemeProvider theme={darkTheme}>
                     <Grid container direction='column' spacing={2} padding={'1rem'}>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="name">Nombre del nuevo Juego</InputLabel>
                                 <Input
@@ -115,7 +115,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <FormControl sx={{ m: 1 }}>
                                 <FormGroup>
                                     <FormControlLabel
@@ -127,7 +127,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                                 </FormGroup>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <Typography>
                                 {uploadImage ? 'Suba una imagen para el juego' : 'Seleccione una imagen para el juego'}
                             </Typography>
@@ -140,7 +140,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                                 images={images}>
                             </SelectOrUploadImage>
                         </Grid>
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button variant="contained" color="success" type="submit">Añadir</Button>
                         </Grid>
                     </Grid>
