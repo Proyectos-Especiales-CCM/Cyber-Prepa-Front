@@ -1,15 +1,16 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../routes/Constants';
-import './ErrorPage.css';
+import { Typography, Stack, Link as MUILink } from '@mui/material';
 
 const ErrorPage = () => {
   return (
-    <div className="error-page">
-    <h1>404 - Página No Encontrada</h1>
-    <p>La página que estás buscando no existe.</p>
-    <Link to={ROUTES.HOME}>Regresar al inicio</Link>
-  </div>
+    <Stack spacing={2} alignItems='center' height='87vh' justifyContent='center' mx={2}>
+      <Typography variant='h3'>404 - Página No Encontrada</Typography>
+      <Typography variant='h5'>La página que estás buscando no existe.</Typography>
+      <MUILink color="primary" component={Link} to={ROUTES.HOME}>
+        Regresar al inicio
+      </MUILink>
+    </Stack>
   )
 }
 
