@@ -15,7 +15,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { ThemeProvider, createTheme } from "@mui/material";
+import { Stack, ThemeProvider, createTheme } from "@mui/material";
 import { CyberPrepaLogo } from "..";
 import "./Header.css"
 
@@ -36,9 +36,6 @@ const theme = createTheme({
 
 
 const Header = () => {
-  
-  const pages = ['Reglamento', 'Admin']
-
   const { logOut, user } = useAppContext();
   const navigate = useNavigate();
 
@@ -65,11 +62,12 @@ const Header = () => {
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
+            <Stack direction='row' width={1} justifyContent={{xs: 'space-between', sm: 'flex-start'}}>
             <CyberPrepaLogo
               size="35"
               display="flex"
             />
-            
+
             <Typography
               variant="h6"
               noWrap
@@ -77,18 +75,23 @@ const Header = () => {
               href="/"
               sx={{
                 mr: 2,
-                display: { xs: 'none', md: 'flex' },
+                display: 'flex',
                 fontFamily: 'monospace',
                 fontWeight: 700,
-                letterSpacing: '.3rem',
+                letterSpacing: {
+                  xs: '.1rem',
+                  sm: '.3rem',
+                },
                 color: 'inherit',
                 textDecoration: 'none',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               Cyberprepa
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ display: { xs: 'flex', sm: 'none' }, alignItems: 'right' }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -117,87 +120,87 @@ const Header = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Button onClick={() => navigate(`/${page.toLowerCase()}`)}>
-                      <Typography sx={{ color: "white" }} textAlign="center">{page}</Typography>
-                    </Button>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-            <CyberPrepaLogo
-              size="35"
-              display="none"
-            />
-
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: 'flex', md: 'none' },
-                flexGrow: 1,
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              Cyberprepa
-            </Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                <Button
-                  sx={{
-                    my: 2,
-                    color: 'white',
-                    display: 'block',
-                    paddingBottom:'0',
-                    borderBottom: '2px solid transparent',
-                        transition: 'border-bottom 0.3s ease',
-                          '&:hover': {
-                        borderBottom: '2px solid white',
-                  }}}
-                  onClick={() => {
-                    handleCloseNavMenu()
-                    navigate("/reglamento")
-                  }}
-                >
-                  REGLAMENTO
-                </Button>
-
+                <MenuItem key={'/reglamento'} onClick={handleCloseNavMenu}>
+                  <Button onClick={() => navigate('/reglamento')}>
+                    <Typography sx={{ color: "white" }} textAlign="center">REGLAMENTO</Typography>
+                  </Button>
+                </MenuItem>
                 {user ? (
                   <>
-                    <Button
-                      sx={{ 
-                        my: 2,
-                        color: 'white',
-                        display: 'block',
-                        paddingBottom:'0',
-                        borderBottom: '2px solid transparent',
-                        transition: 'border-bottom 0.3s ease',
-                          '&:hover': {
-                        borderBottom: '2px solid white',
-                      }}}
-                      onClick={() => {
-                        handleCloseNavMenu()
-                        navigate("/admin")
-                      }}
-                    >
-                      ADMIN
-                    </Button>
+                    <MenuItem key={'/admin'} onClick={handleCloseNavMenu}>
+                      <Button onClick={() => navigate('/admin')}>
+                        <Typography sx={{ color: "white" }} textAlign="center">ADMIN</Typography>
+                      </Button>
+                    </MenuItem>
+                    <MenuItem key={'/logout'} onClick={handleCloseNavMenu}>
+                      <Button
+                        onClick={() => {
+                          logOut();
+                          handleCloseUserMenu();
+                          navigate("/");
+                        }}
+                      >
+                        <Typography sx={{ color: "white" }} textAlign="center">LOGOUT</Typography>
+                      </Button>
+                    </MenuItem>
                   </>
-                ) : null}
-
+                ) : (
+                  <MenuItem key={'/login'} onClick={handleCloseNavMenu}>
+                    <Button onClick={() => navigate('/login')}>
+                      <Typography sx={{ color: "white" }} textAlign="center">LOGIN</Typography>
+                    </Button>
+                  </MenuItem>
+                )}
+              </Menu>
             </Box>
 
-            
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
+              <Button
+                sx={{
+                  my: 2,
+                  color: 'white',
+                  display: 'block',
+                  paddingBottom: '0',
+                  borderBottom: '2px solid transparent',
+                  transition: 'border-bottom 0.3s ease',
+                  '&:hover': {
+                    borderBottom: '2px solid white',
+                  }
+                }}
+                onClick={() => {
+                  handleCloseNavMenu()
+                  navigate("/reglamento")
+                }}
+              >
+                REGLAMENTO
+              </Button>
 
-            <Box sx={{ flexGrow: 0 }}>
+              {user ? (
+                <>
+                  <Button
+                    sx={{
+                      my: 2,
+                      color: 'white',
+                      display: 'block',
+                      paddingBottom: '0',
+                      borderBottom: '2px solid transparent',
+                      transition: 'border-bottom 0.3s ease',
+                      '&:hover': {
+                        borderBottom: '2px solid white',
+                      }
+                    }}
+                    onClick={() => {
+                      handleCloseNavMenu()
+                      navigate("/admin")
+                    }}
+                  >
+                    ADMIN
+                  </Button>
+                </>
+              ) : null}
+            </Box>
+
+            <Box sx={{ flexGrow: 0, display: { xs: 'none', sm: 'flex' } }}>
               {user ? (
                 <>
                   <Tooltip title="Open settings">
@@ -232,6 +235,7 @@ const Header = () => {
                 </>
               ) : (<Button onClick={() => navigate("/login")}>Login</Button>)}
             </Box>
+            </Stack>
           </Toolbar>
         </Container>
       </AppBar>
