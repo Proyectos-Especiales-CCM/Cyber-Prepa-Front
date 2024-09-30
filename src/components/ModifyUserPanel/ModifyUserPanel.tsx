@@ -97,7 +97,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
 
     // Create request body
     const requestBody = {
-      ...(email !== prevEmail && { email: email }),
+      ...(email !== prevEmail && { email: email.toLowerCase() }),
       ...(password && { password: password }),
       ...(isAdmin !== prevIsAdmin && { is_admin: isAdmin }),
       ...(isActive !== prevIsActive && { is_active: isActive }),

@@ -49,7 +49,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
   const addStudent = async () => {
     try {
       setIsLoading(true);
-      const response: PlayResponse = await createPlay(false, studentId.toUpperCase(), cardGame.id, accessToken);
+      const response: PlayResponse = await createPlay(false, studentId.toLowerCase(), cardGame.id, accessToken);
 
       if (response.detail === 'Invalid student id') {
         setAlertMessage('Matricula inválida, vuelve a intentarlo');

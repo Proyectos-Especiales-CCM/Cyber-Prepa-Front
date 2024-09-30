@@ -85,7 +85,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
 
     try {
       // Mandar request para crear el usuario
-      await createUser(email, password, tokens?.access_token || '', isAdmin);
+      await createUser(email.toLowerCase(), password, tokens?.access_token || '', isAdmin);
       // Cerrar modal y mostrar mensaje de éxito
       await updateUsersData();
       closeModal();

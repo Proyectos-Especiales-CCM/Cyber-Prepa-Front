@@ -72,7 +72,7 @@ const ModifySanctionPanel: React.FC<ModifySanctionPanelProps> = ({ sanctionId, p
 
         // Request body
         const requestBody = {
-            ...(student !== prevStudent && { student: student.toUpperCase() }),
+            ...(student !== prevStudent && { student: student.toLowerCase() }),
             ...(cause !== prevCause && { cause: cause }),
             ...(endTime && { end_time: endTime?.toJSON() }),
         }

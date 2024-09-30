@@ -78,7 +78,7 @@ const CreateSanctionPanel: React.FC<CreateSanctionPanelProps> = ({ openModalMess
     }
 
     try {
-      await createSanction(tokens?.access_token ?? "", cause, endTime?.toJSON(), student.toUpperCase(),);
+      await createSanction(tokens?.access_token ?? "", cause, endTime?.toJSON(), student.toLowerCase(),);
       updateSanctionsData();
       openModalMessage('success', 'Sanción creada exitosamente.');
       closeModal();
