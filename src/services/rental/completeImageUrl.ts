@@ -1,7 +1,7 @@
 import Config from "../../config";
 
 export function completeImageUrl(value: string | undefined) {
-    const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg)/g;
+    const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg|webp)/g;
     // If the string is a valid URL, return it
     if (!value) {
         return undefined
