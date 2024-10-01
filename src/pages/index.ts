@@ -1,6 +1,0 @@
-export { Login } from "./Login"
-export { Home } from "./Home"
-export { ErrorPage } from "./ErrorPage"
-export { Reglamento } from "./Reglamento"
-export { Admin } from "./Admin"
-export { Reports } from "./Reports"
