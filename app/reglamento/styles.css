@@ -1,0 +1,186 @@
+.mdl-layout {
+    --color-bg-default: #101216;
+    --color-fg-default: #fbfbfb;
+    --color-bg-toggle: #efefef;
+    --color-fg-toggle: #0d0e11;
+    --color-header-bg-default: #0D1116;
+    --color-border-default: #2B2F35;
+    --color-border-default-search: #1c1e23;
+    --color-border-mode: #b9b9b9;
+
+    --global-font: 'Roboto', sans-serif;
+    --base-text-weight-light: 300;
+    --base-text-weight-normal: 400;
+    --base-text-weight-medium: 500;
+    --base-text-weight-semibold: 600;
+
+    --toggle-size: 3rem;
+    --bar-size: calc(var(--toggle-size) / 8);
+    --bar-space: calc((var(--toggle-size) - (var(--bar-size) * 5)) / 2);
+    --bar2-top: calc(var(--bar-size) + var(--bar-space));
+    --bar3-top: calc(var(--bar2-top) * 2);
+    --cyber_map: 1000px;
+}
+
+.background1 {
+    background: #282537;
+    background-image: -webkit-radial-gradient(top, circle cover, #3c3b52 0%, #252233 40%);
+    background-image: -moz-radial-gradient(top, circle cover, #3c3b52 0%, #252233 40%);
+    background-image: -o-radial-gradient(top, circle cover, #3c3b52 0%, #252233 40%);
+    background-image: radial-gradient(top, circle cover, #3c3b52 0%, #252233 40%);
+    border-radius: 5px;
+}
+
+.background2 {
+    background: #43A047;
+    background-image: -webkit-radial-gradient(right, circle cover, #00695C 0%, #43A047 80%);
+    background-image: -moz-radial-gradient(right, circle cover, #00695C 0%, #43A047 80%);
+    background-image: -o-radial-gradient(right, circle cover, #00695C 0%, #00695C 80%);
+    background-image: radial-gradient(right, circle cover, #00695C 0%, #00695C 80%);
+    border-radius: 5px;
+}
+
+.background3 {
+    background: #EC407A;
+    background-image: -webkit-radial-gradient(left, circle cover, #EC407A 0%, #FF5722 80%);
+    background-image: -moz-radial-gradient(left, circle cover, #EC407A 0%, #FF5722 80%);
+    background-image: -o-radial-gradient(left, circle cover, #EC407A 0%, #FF5722 80%);
+    background-image: radial-gradient(left, circle cover, #EC407A 0%, #FF5722 80%);
+    border-radius: 5px;
+}
+
+.background4 {
+    background: #03A9F4;
+    background-image: -webkit-radial-gradient(left, circle cover, #EC407A 0%, #03A9F4 80%);
+    background-image: -moz-radial-gradient(left, circle cover, #EC407A 0%, #03A9F4 80%);
+    background-image: -o-radial-gradient(left, circle cover, #EC407A 0%, #03A9F4 80%);
+    background-image: radial-gradient(left, circle cover, #EC407A 0%, #03A9F4 80%);
+    border-radius: 5px;
+}
+
+.background5 {
+    background: #009688;
+    background-image: -webkit-radial-gradient(left, circle cover, #009688 0%, #03A9F4 100%);
+    background-image: -moz-radial-gradient(left, circle cover, #009688 0%, #03A9F4 100%);
+    background-image: -o-radial-gradient(left, circle cover, #009688 0%, #03A9F4 100%);
+    background-image: radial-gradient(left, circle cover, #009688 0%, #03A9F4 100%);
+    border-radius: 5px;
+}
+
+.background6 {
+    background: #03A9F4;
+    background-image: -webkit-radial-gradient(left, circle cover, #03A9F4 0%, #009688 80%);
+    background-image: -moz-radial-gradient(left, circle cover, #03A9F4 0%, #009688 80%);
+    background-image: -o-radial-gradient(left, circle cover, #03A9F4 0%, #009688 80%);
+    background-image: radial-gradient(left, circle cover, #03A9F4 0%, #009688 80%);
+    border-radius: 5px;
+}
+
+.background7 {
+    background: #EF5350;
+    background-image: -webkit-radial-gradient(right, circle cover, #EF5350 0%, #F57C00 100%);
+    background-image: -moz-radial-gradient(right, circle cover, #EF5350 0%, #F57C00 100%);
+    background-image: -o-radial-gradient(right, circle cover, #EF5350 0%, #F57C00 100%);
+    background-image: radial-gradient(right, circle cover, #EF5350 0%, #F57C00 100%);
+    border-radius: 5px;
+}
+
+.background8 {
+    background: #E65100;
+    background-image: -webkit-radial-gradient(left, circle cover, #E65100 0%, #EF5350 55%);
+    background-image: -moz-radial-gradient(left, circle cover, #E65100 0%, #EF5350 55%);
+    background-image: -o-radial-gradient(left, circle cover, #E65100 0%, #EF5350 55%);
+    background-image: radial-gradient(left, circle cover, #E65100 0%, #EF5350 55%);
+    border-radius: 5px;
+}
+
+.background9 {
+    background: #1E88E5;
+    background-image: -webkit-radial-gradient(left, circle cover, #7E57C2 0%, #1E88E5 80%);
+    background-image: -moz-radial-gradient(left, circle cover, #7E57C2 0%, #1E88E5 80%);
+    background-image: -o-radial-gradient(left, circle cover, #7E57C2 0%, #1E88E5 80%);
+    background-image: radial-gradient(left, circle cover, #7E57C2 0%, #1E88E5 80%);
+    border-radius: 5px;
+}
+
+.background10 {
+    background: #43A047;
+    background-image: -webkit-radial-gradient(left, circle cover, #1E88E5 10%, #43A047 90%);
+    background-image: -moz-radial-gradient(left, circle cover, #1E88E5 10%, #43A047 90%);
+    background-image: -o-radial-gradient(left, circle cover, #1E88E5 10%, #43A047 90%);
+    background-image: radial-gradient(left, circle cover, #1E88E5 10%, #43A047 90%);
+    border-radius: 5px;
+}
+
+.background11 {
+    background: #EC407A;
+    background-image: -webkit-radial-gradient(left, circle cover, #43A047 10%, #EC407A 90%);
+    background-image: -moz-radial-gradient(left, circle cover, #43A047 10%, #EC407A 90%);
+    background-image: -o-radial-gradient(left, circle cover, #43A047 10%, #EC407A 90%);
+    background-image: radial-gradient(left, circle cover, #43A047 10%, #EC407A 90%);
+    border-radius: 5px;
+}
+
+.background12 {
+    background: #F4511E;
+    background-image: -webkit-radial-gradient(left, circle cover, #EC407A 0%, #F4511E 80%);
+    background-image: -moz-radial-gradient(left, circle cover, #EC407A 0%, #F4511E 80%);
+    background-image: -o-radial-gradient(left, circle cover, #EC407A 0%, #F4511E 80%);
+    background-image: radial-gradient(left, circle cover, #EC407A 0%, #F4511E 80%);
+    border-radius: 5px;
+}
+
+.background13 {
+    background: #00796B;
+    background-image: -webkit-radial-gradient(right, circle cover, #4DB6AC 0%, #00796B 80%);
+    background-image: -moz-radial-gradient(right, circle cover, #4DB6AC 0%, #00796B 80%);
+    background-image: -o-radial-gradient(right, circle cover, #4DB6AC 0%, #00796B 80%);
+    background-image: radial-gradient(right, circle cover, #4DB6AC 0%, #00796B 80%);
+    border-radius: 5px;
+}
+
+.background14 {
+    background: #1565C0;
+    background-image: -webkit-radial-gradient(top, circle cover, #64B5F6 0%, #1565C0 80%);
+    background-image: -moz-radial-gradient(top, circle cover, #64B5F6 0%, #1565C0 80%);
+    background-image: -o-radial-gradient(top, circle cover, #64B5F6 0%, #1565C0 80%);
+    background-image: radial-gradient(top, circle cover, #64B5F6 0%, #1565C0 80%);
+    border-radius: 5px;
+}
+
+
+.background15 {
+    background: #1B5E20;
+    background-image: -webkit-radial-gradient(top, circle cover, #4CAF50 0%, #1B5E20 80%);
+    background-image: -moz-radial-gradient(top, circle cover, #4CAF50 0%, #1B5E20 80%);
+    background-image: -o-radial-gradient(top, circle cover, #4CAF50 0%, #1B5E20 80%);
+    background-image: radial-gradient(top, circle cover, #4CAF50 0%, #1B5E20 80%);
+    border-radius: 5px;
+}
+
+.background16 {
+    background: #E91E63;
+    background-image: -webkit-radial-gradient(top, circle cover, #F06292 0%, #E91E63 80%);
+    background-image: -moz-radial-gradient(top, circle cover, #F06292 0%, #E91E63 80%);
+    background-image: -o-radial-gradient(top, circle cover, #F06292 0%, #E91E63 80%);
+    background-image: radial-gradient(top, circle cover, #F06292 0%, #E91E63 80%);
+    border-radius: 5px;
+}
+
+.background17 {
+    background: #F4511E;
+    background-image: -webkit-radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    background-image: -moz-radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    background-image: -o-radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    background-image: radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    border-radius: 5px;
+}
+
+.background18 {
+    background: #F4511E;
+    background-image: -webkit-radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    background-image: -moz-radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    background-image: -o-radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    background-image: radial-gradient(top, circle cover, #FF7043 0%, #F4511E 80%);
+    border-radius: 5px;
+}

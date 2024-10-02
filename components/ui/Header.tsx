@@ -6,7 +6,7 @@ import * as React from 'react';
 import { AppBar, Toolbar, IconButton, Menu, Container, Button, Tooltip, MenuItem } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { ThemeProvider, createTheme } from '@mui/material';
-import { useAuthContext } from '@/context/auth/useAuthContext';
+import { useAuthContext } from '@/lib/context/auth/useAuthContext';
 
 const theme = createTheme({
   palette: {
@@ -55,7 +55,7 @@ const Header = () => {
               <img src="/cybertec.svg" alt="Cyberprepa logo" className="size-10 m-2 self-center" />
 
               <a
-                className="mr-2 text-2xl flex font-mono font-bold tracking-[0.1rem] sm:tracking-[0.3rem] text-inherit no-underline justify-center items-center"
+                className="mr-2 text-xl flex font-mono font-bold tracking-[0.1rem] sm:tracking-[0.3rem] text-inherit no-underline justify-center items-center"
                 href="/"
               >
                 Cyberprepa
