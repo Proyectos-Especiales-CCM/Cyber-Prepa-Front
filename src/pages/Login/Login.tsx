@@ -29,11 +29,6 @@ const Login = () => {
 
   const accessLogin = async () => {
     if (email.length > 0 && password.length > 0) {
-      const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if (!emailValidation) {
-        console.log("Invalid email");
-        return;
-      }
       setIsLoading(true);
       await logInAccess(email, password, setTokens, setUser, setIsAdmin).then(
         async (res) => {
@@ -84,8 +79,8 @@ const Login = () => {
               <input
                 onChange={(event) => setEmail(event.target.value)}
                 onKeyPress={handleKeyPress}
-                type="email"
-                placeholder="Email"
+                type="text"
+                placeholder="Email o matrícula"
               />
             </div>
             <div className="input">
