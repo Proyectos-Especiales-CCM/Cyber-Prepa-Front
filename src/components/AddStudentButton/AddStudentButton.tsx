@@ -156,10 +156,10 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
           <Button
             size="large"
             variant="contained"
+            color='success'
             type='submit'
             sx={{
               marginLeft: '1rem',
-              backgroundColor: 'rgba(70, 90, 126, 0.4)',
               height: 55,
             }}
             disabled={isLoading}
