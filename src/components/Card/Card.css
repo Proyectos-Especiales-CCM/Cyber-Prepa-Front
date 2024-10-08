@@ -4,6 +4,12 @@
   border-radius: 5px;
 }
 
+.almost {
+  background: #7c8518;
+  background-image: radial-gradient(circle at top, #9a9717 0%, #545400 80%);
+  border-radius: 5px;
+}
+
 .counting {
   background: #282537;
   background-image: radial-gradient(circle at top, #465573 0%, #112554 40%);

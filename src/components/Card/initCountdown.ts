@@ -31,6 +31,9 @@ export const initCountdown = (
       } else if ((Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) === 0) {
         countdownRef.current!.innerHTML = "LIBRE";
         setStatusCallback("LIBRE");
+      } else if ((distance / 1000 < 300) && (Array.isArray(cardGame.plays) ? cardGame.plays.length : cardGame.plays) > 0) {
+        countdownRef.current!.innerHTML = timeTextDisplay;
+        setStatusCallback("ALMOST");
       } else {
         countdownRef.current!.innerHTML = timeTextDisplay;
         setStatusCallback("COUNTING");

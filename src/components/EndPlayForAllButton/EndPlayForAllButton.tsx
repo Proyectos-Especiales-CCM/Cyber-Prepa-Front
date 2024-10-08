@@ -73,11 +73,11 @@ const EndPlayForAllButton: React.FC<EndPlayForAllProps> = ({ cardGame, style }) 
         className='button'
         size="large"
         variant="contained"
+        color="error"
         onClick={endPlayForAllHandle}
         disabled={isLoading}
         sx={{
           height: 55,
-          backgroundColor: '#133a71',
           ...(style || {}),
         }}
       >

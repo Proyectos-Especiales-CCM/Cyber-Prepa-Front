@@ -33,7 +33,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
     return regexPattern.test(inputString);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setStudentId(inputValue);
 
@@ -41,12 +41,13 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
       setInputState('error');
     } else if (inputValue.length === 9 && isValidString(inputValue)) {
       setInputState('success');
+      await addStudent(inputValue);
     } else {
       setInputState('standard');
     }
   };
 
-  const addStudent = async () => {
+  const addStudent = async (studentId: string) => {
     try {
       setIsLoading(true);
       const response: PlayResponse = await createPlay(false, studentId.toLowerCase(), cardGame.id, accessToken);
@@ -85,7 +86,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    addStudent();
+    addStudent(studentId);
   };
 
   const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -152,6 +153,20 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
             color={inputState === 'success' ? 'success' : 'error'}
           />
 
+          <Button
+            size="large"
+            variant="contained"
+            color='success'
+            type='submit'
+            sx={{
+              marginLeft: '1rem',
+              height: 55,
+            }}
+            disabled={isLoading}
+          >
+            {isLoading ? <Loading /> : 'Agregar estudiante'}
+          </Button>
+
         </form>
         </div>
 
@@ -175,18 +190,6 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
           />
         )}
 
-        <Button
-          size="large"
-          variant="contained"
-          sx={{
-            backgroundColor: 'rgba(70, 90, 126, 0.4)',
-            height: 55,
-          }}
-          onClick={addStudent}
-          disabled={isLoading}
-        >
-          {isLoading ? <Loading /> : 'Agregar estudiante'}
-        </Button>
       </Box>
     </div>
   );

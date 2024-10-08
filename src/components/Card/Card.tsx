@@ -27,6 +27,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
      const [alertMessage, setAlertMessage] = useState('');
      // eslint-disable-next-line @typescript-eslint/no-unused-vars
      const [isDragOver, setIsDragOver] = useState(false);
+     // Countdown status [AGOTADO,LIBRE,COUNTING]
      const [countdownStatus, setCountdownStatus] = useState('');
 
 
@@ -120,6 +121,8 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
               return 'agotado';
             case 'LIBRE':
               return 'libre';
+            case 'ALMOST':
+              return 'almost';
             default:
               return 'counting';
           }
