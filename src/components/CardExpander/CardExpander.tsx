@@ -14,7 +14,7 @@ interface CardExpanderProps {
 
 const CardExpander: React.FC<CardExpanderProps> = ({ cardGame, shouldUpdate, onUpdated, countdownStatus }) => {
 
-  const isGameActive = countdownStatus === "LIBRE" || countdownStatus === "COUNTING";
+  const isGameActive = countdownStatus !== "AGOTADO";
   const showEndPlayForAllButton = Array.isArray(cardGame.plays) && cardGame.plays.length >= 1;
 
   const fadedStyle: CSSProperties = {
