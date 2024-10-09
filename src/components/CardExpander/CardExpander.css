@@ -160,7 +160,7 @@ ul {
 .box-row {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 4rem;
   width: 100%;
   justify-content: center;
 }
