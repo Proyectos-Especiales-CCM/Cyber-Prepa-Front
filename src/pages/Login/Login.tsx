@@ -25,22 +25,38 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const { setUser, setTokens, setIsAdmin } = useAppContext();
 
   const accessLogin = async () => {
-    if (email.length > 0 && password.length > 0) {
-      setIsLoading(true);
-      await logInAccess(email, password, setTokens, setUser, setIsAdmin).then(
-        async (res) => {
-          setIsLoading(false);
-          if (res == null) {
-            console.log("User not found");
-          } else {
-            console.log("User found");
-            navigate(ROUTES.HOME);
-          }
-        },
-      );
+    if (email.length === 0 || password.length === 0) {
+      setFeedbackMessage("Por favor rellena todos los campos");
+      return;
+    }
+
+    const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailValidation) {
+      setFeedbackMessage("Hubo un error, intenta otra vez");
+      return;
+    }
+
+    setIsLoading(true);
+    setFeedbackMessage(null); // Clear previous messages
+
+    const res = await logInAccess(
+      email,
+      password,
+      setTokens,
+      setUser,
+      setIsAdmin,
+    );
+    setIsLoading(false);
+
+    if (res == null) {
+      setFeedbackMessage("User not found. Please check your credentials.");
+    } else {
+      setFeedbackMessage("Login successful! Redirecting...");
+      navigate(ROUTES.HOME);
     }
   };
 
@@ -78,9 +94,9 @@ const Login = () => {
               />
               <input
                 onChange={(event) => setEmail(event.target.value)}
-                onKeyPress={handleKeyPress}
-                type="text"
-                placeholder="Email o matrícula"
+                onKeyDown={handleKeyPress}
+                type="email"
+                placeholder="Email"
               />
             </div>
             <div className="input">
@@ -95,13 +111,18 @@ const Login = () => {
               />
               <input
                 onChange={(event) => setPassword(event.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 type="password"
                 placeholder="Password"
               />
             </div>
           </ThemeProvider>
         </div>
+        {feedbackMessage && (
+          <div color="primary" style={{ color: "red", textAlign: "center" }}>
+            {feedbackMessage}
+          </div>
+        )}
         <div className="forgot-password">
           ¿Perdiste tu constraseña? <span>¡Haz click aqui!</span>
         </div>
