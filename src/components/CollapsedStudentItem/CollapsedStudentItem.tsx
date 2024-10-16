@@ -5,9 +5,10 @@ import { Play } from '../../services/types';
 interface CollapsedStudentItemProps {
   player: Play;
   cardGameId: number;
+  isGameActive: boolean;
 }
 
-const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, cardGameId }) => {
+const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, cardGameId, isGameActive }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
@@ -38,7 +39,7 @@ const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, car
       onDragEnd={handleDragEnd}
     >
       <li>{player.student}</li>
-      <EndPlayButton player={player} cardGameId={cardGameId} />
+      <EndPlayButton player={player} cardGameId={cardGameId} isGameActive={isGameActive} />
       <SanctionButton player={player} cardGameId={cardGameId} />
     </div>
   );

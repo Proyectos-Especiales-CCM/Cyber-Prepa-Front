@@ -8,10 +8,11 @@ import Alert from "@mui/material/Alert";
 interface EndPlayButtonProps {
   player: Play;
   cardGameId: number;
+  isGameActive: boolean;
 }
 
 
-const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => {
+const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId, isGameActive }) => {
 
   const [open, setOpen] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -67,7 +68,12 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
       <input type="hidden" name="game_id" value={`${cardGameId}`} />
 
 
-      <Button variant="contained" onClick={handleEndPlay} sx={{width:120}}>
+      <Button 
+        variant="contained" 
+        onClick={handleEndPlay} 
+        sx={{ width: 120 }} 
+        disabled={!isGameActive}
+      >
         Finalizar juego
       </Button>
 
