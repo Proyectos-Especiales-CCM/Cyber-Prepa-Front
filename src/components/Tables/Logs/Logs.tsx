@@ -114,7 +114,7 @@ const LogsDataTable = React.forwardRef((_props, ref) => {
    */
   const fetchData = useCallback(async () => {
     try {
-      const response = await readLogs(tokens?.access_token ?? "", "100");
+      const response = await readLogs(tokens?.access_token ?? "", 100);
       setLogsData(response.data);
     } catch (error) {
       openModalMessage(

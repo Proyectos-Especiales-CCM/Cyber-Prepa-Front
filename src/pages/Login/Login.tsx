@@ -34,12 +34,6 @@ const Login = () => {
       return;
     }
 
-    const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!emailValidation) {
-      setFeedbackMessage("Hubo un error, intenta otra vez");
-      return;
-    }
-
     setIsLoading(true);
     setFeedbackMessage(null); // Clear previous messages
 
@@ -53,9 +47,8 @@ const Login = () => {
     setIsLoading(false);
 
     if (res == null) {
-      setFeedbackMessage("User not found. Please check your credentials.");
+      setFeedbackMessage("Por favor revisa tus credenciales.");
     } else {
-      setFeedbackMessage("Login successful! Redirecting...");
       navigate(ROUTES.HOME);
     }
   };
