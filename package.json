@@ -19,6 +19,7 @@
     "@mui/x-date-pickers": "^6.19.4",
     "@types/mui-datatables": "^4.3.12",
     "axios": "^1.6.5",
+    "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.10",
     "mui-datatables": "^4.3.0",
     "react": "^18.2.0",
