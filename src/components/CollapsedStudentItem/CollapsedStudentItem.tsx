@@ -1,9 +1,24 @@
-import { EndPlayButton, SanctionButton } from "..";
-import { useState } from "react";
-import { Play } from "../../services/types";
-import { Stack } from "@mui/material";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import { IconButton, Stack, Tooltip } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import copy from "copy-to-clipboard";
+import { useState } from "react";
+import { EndPlayButton, SanctionButton } from "..";
+import { Play } from "../../services/types";
+import ChangeGameButton from "../ChangeGameButton/ChangeGameButton";
+import { blue, purple } from "@mui/material/colors";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: blue[700]
+    },
+    secondary: {
+      main: purple[600]
+    }
+  },
+});
 
 interface CollapsedStudentItemProps {
   player: Play;
@@ -41,14 +56,19 @@ const CollapsedStudentItem: React.FC<CollapsedStudentItemProps> = ({ player, car
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <Stack direction="row" spacing={1}>
-        <li>{player.student}</li>
-        <button onClick={() => copy(player.student)}>
-          <ContentPasteIcon />
-        </button>
-      </Stack>
-      <EndPlayButton player={player} cardGameId={cardGameId} isGameActive={isGameActive} />
-      <SanctionButton player={player} cardGameId={cardGameId} />
+      <ThemeProvider theme={darkTheme}>
+        <Stack paddingLeft={1} direction="row" alignItems="center">
+          <li style={{ textTransform: "capitalize" }}>{player.student}</li>
+          <Tooltip title="Copiar">
+            <IconButton onClick={() => copy(player.student)} size="small">
+              <ContentPasteIcon />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+        <EndPlayButton player={player} cardGameId={cardGameId} isGameActive={isGameActive} />
+        <SanctionButton player={player} cardGameId={cardGameId} />
+        <ChangeGameButton player={player} />
+      </ThemeProvider>
     </div>
   );
 };

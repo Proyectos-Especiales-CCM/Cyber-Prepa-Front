@@ -1,17 +1,20 @@
-import { useAppContext } from "../../store/appContext/useAppContext";
-import { useState, useEffect, useCallback } from 'react';
-import { getGamesData } from "./getGames";
-import { Card } from "../../components";
-import { Game } from "../../services/types";
-import useWebSocket from 'react-use-websocket';
-import { SnackbarComponent } from "../../components/SnackbarComponent";
-import { UserObject } from "../../store/appContext/types";
-import './Home.css';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
+import useWebSocket from 'react-use-websocket';
+import { Card } from "../../components";
+import { SnackbarComponent } from "../../components/SnackbarComponent";
 import Config from "../../config";
+import { Game } from "../../services/types";
+import { UserObject } from "../../store/appContext/types";
+import { useAppContext } from "../../store/appContext/useAppContext";
+import { useGamesContext } from "../../store/gamesContext/useGamesContext";
+import { getGamesData } from "./getGames";
+import './Home.css';
 
 const Home = () => {
   const { user, tokens } = useAppContext();
+  const { setGames } = useGamesContext();
+
   const [gamesData, setGamesData] = useState<Game[]>([]);
   const [socketUrl] = useState(`${Config.WS_URL}ws/updates/`);
   const location = useLocation();
@@ -20,10 +23,10 @@ const Home = () => {
     {
       onOpen: () => console.log('WebSocket Connected'),
       onClose: () => console.log('WebSocket Disconnected'),
-      onError: (event) => console.log('WebSocket Error:', event),
+      onError: (event: any) => console.log('WebSocket Error:', event),
       shouldReconnect: () => true,
       reconnectAttempts: 10,
-      reconnectInterval: (attemptNumber) => Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
+      reconnectInterval: (attemptNumber: number) => Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
     }
   );
   const [open, setOpen] = useState(false);
@@ -38,7 +41,7 @@ const Home = () => {
       }
     };
   }, [getWebSocket, location]);
-  
+
   useEffect(() => {
     if (lastMessage) {
       const data = JSON.parse(lastMessage.data);
@@ -59,6 +62,7 @@ const Home = () => {
         const data = await getGamesData(user, tokens);
         if (data) {
           setGamesData(data);
+          setGames(data);
         }
       } catch (error) {
         setAlertMessage('Hubo un error en el servidor, refresca la página');
@@ -78,7 +82,7 @@ const Home = () => {
 
   const resetUpdateFlagForGame = (gameId: number) => {
     setGamesData((gamesData) =>
-    gamesData.map((game) =>
+      gamesData.map((game) =>
         game.id === gameId ? { ...game, needsUpdate: false } : game
       )
     );
@@ -95,21 +99,21 @@ const Home = () => {
       message,
       sender,
     };
-  
+
     sendMessage(JSON.stringify(data));
   }, [sendMessage]);
 
   return (
     <div className="cyber__wrapper">
       <div className="cyber__cards" id="cyberCards">
-        
+
         {Array.isArray(gamesData)
           ? gamesData.map((game) => (
-            <Card 
+            <Card
               key={game.id}
               cardGame={game}
               user={user}
-              shouldUpdate={game.needsUpdate || false} 
+              shouldUpdate={game.needsUpdate || false}
               onUpdated={() => resetUpdateFlagForGame(game.id)}
               sendMessage={(cardGameId: number) => sendUpdateMessage("Plays updated", user, cardGameId)}
             />
@@ -119,12 +123,12 @@ const Home = () => {
 
         {open && (
 
-        <SnackbarComponent
-          open={open}
-          onClose={handleClose}
-          severity="warning"
-          message={alertMessage}
-        />
+          <SnackbarComponent
+            open={open}
+            onClose={handleClose}
+            severity="warning"
+            message={alertMessage}
+          />
         )}
 
       </div>

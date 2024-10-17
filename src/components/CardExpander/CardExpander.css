@@ -4,6 +4,7 @@ ul {
 }
 
 .cyber__card__expander {
+  padding: 1rem;
   border-radius: 5px;
   transition: all 0.2s ease-in-out;
   background-color: #191919;
