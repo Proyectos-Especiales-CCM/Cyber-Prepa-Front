@@ -35,7 +35,7 @@ const CardExpander: React.FC<CardExpanderProps> = ({ cardGame, shouldUpdate, onU
         cardGame={cardGame}
         shouldUpdate={shouldUpdate}
         onUpdated={onUpdated}
-        style={contentStyle}
+        isGameActive={isGameActive}
       />
     </div>
   );

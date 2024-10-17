@@ -36,7 +36,7 @@ const theme = createTheme({
 
 
 const Header = () => {
-  const { logOut, user } = useAppContext();
+  const { logOut, user, admin } = useAppContext();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -125,25 +125,25 @@ const Header = () => {
                     <Typography sx={{ color: "white" }} textAlign="center">REGLAMENTO</Typography>
                   </Button>
                 </MenuItem>
+                {admin && (
+                  <MenuItem key={'/admin'} onClick={handleCloseNavMenu}>
+                    <Button onClick={() => navigate('/admin')}>
+                      <Typography sx={{ color: "white" }} textAlign="center">ADMIN</Typography>
+                    </Button>
+                  </MenuItem>
+                )}
                 {user ? (
-                  <>
-                    <MenuItem key={'/admin'} onClick={handleCloseNavMenu}>
-                      <Button onClick={() => navigate('/admin')}>
-                        <Typography sx={{ color: "white" }} textAlign="center">ADMIN</Typography>
-                      </Button>
-                    </MenuItem>
-                    <MenuItem key={'/logout'} onClick={handleCloseNavMenu}>
-                      <Button
-                        onClick={() => {
-                          logOut();
-                          handleCloseUserMenu();
-                          navigate("/");
-                        }}
-                      >
-                        <Typography sx={{ color: "white" }} textAlign="center">LOGOUT</Typography>
-                      </Button>
-                    </MenuItem>
-                  </>
+                  <MenuItem key={'/logout'} onClick={handleCloseNavMenu}>
+                    <Button
+                      onClick={() => {
+                        logOut();
+                        handleCloseUserMenu();
+                        navigate("/");
+                      }}
+                    >
+                      <Typography sx={{ color: "white" }} textAlign="center">LOGOUT</Typography>
+                    </Button>
+                  </MenuItem>
                 ) : (
                   <MenuItem key={'/login'} onClick={handleCloseNavMenu}>
                     <Button onClick={() => navigate('/login')}>
@@ -175,7 +175,7 @@ const Header = () => {
                 REGLAMENTO
               </Button>
 
-              {user ? (
+              {admin ? (
                 <>
                   <Button
                     sx={{

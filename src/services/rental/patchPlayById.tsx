@@ -30,7 +30,7 @@ export const patchPlayById = async (
             res = response;
         })
         .catch((error) => {
-            res = error.response;
+            throw new Error(error.response.data.detail);
         });
     return res;
 };

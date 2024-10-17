@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import "dayjs/locale/es";
-import Button from "@mui/material/Button";
-import Snackbar from "@mui/material/Snackbar";
+import { ThemeProvider } from "@emotion/react";
+import { Block } from "@mui/icons-material";
+import { FormControl, FormHelperText, Grid, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import { blue } from "@mui/material/colors";
+import Snackbar from "@mui/material/Snackbar";
+import { createTheme } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs, { Dayjs } from 'dayjs';
+import "dayjs/locale/es";
+import React, { useEffect, useState } from "react";
 import { createSanction, patchPlayById } from "../../services";
 import { Play } from "../../services/types";
-import { FormControl, FormHelperText, Grid, TextField } from "@mui/material";
-import { createTheme } from '@mui/material/styles'
 import CustomModal from "../Modal/Modal";
-import { blue } from "@mui/material/colors";
-import { ThemeProvider } from "@emotion/react";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 
 interface SanctionButtonProps {
@@ -87,12 +88,12 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
       setOpen(true);
       return;
     }
-    
+
     try {
       if (!accessToken) {
         throw new Error("No access token found");
       }
-      
+
       await createSanction(
         accessToken,
         cause ?? "",
@@ -130,6 +131,7 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
             onClick={handleSanction}
             sx={{ width: 120 }}>
             Sancionar jugador
+            <Block />
           </Button>
 
           <CustomModal

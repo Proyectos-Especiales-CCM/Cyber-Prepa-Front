@@ -1,17 +1,17 @@
+import { useEffect, useState } from "react";
 import { CollapsedStudentItem } from "..";
-import { CSSProperties, useEffect, useState } from "react";
-import { Game, Play } from "../../services/types";
 import { readGameById } from "../../services";
+import { Game, Play } from "../../services/types";
 import { SnackbarComponent } from "../SnackbarComponent";
 
 interface CollapsedStudentProps {
   cardGame: Game;
   shouldUpdate: boolean;
   onUpdated(): void;
-  style: CSSProperties;
+  isGameActive: boolean;
 }
 
-const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUpdate, onUpdated, style }) => {
+const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUpdate, onUpdated, isGameActive }) => {
 
   const [studentsData, setStudentsData] = useState<Play[] | number>(cardGame.plays);
   const [open, setOpen] = useState(false);
@@ -54,14 +54,14 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUp
   };
 
   return (
-    <div className="collapsed__students" style={style}>
+    <div className="collapsed__students">
       
       <ul id={`cyber__student__list__${cardGame.id}`} className="container__dropzone">
         {typeof studentsData === 'number' ? (
           <p>No estás autorizado para ver la data de los {studentsData} jugadores</p>
         ) : (
           studentsData.map((player) => (
-            <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id} />
+            <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id} isGameActive={isGameActive} />
           ))
         )}
       </ul>

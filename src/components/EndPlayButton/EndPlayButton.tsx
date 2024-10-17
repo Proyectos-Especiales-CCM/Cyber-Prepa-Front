@@ -4,14 +4,16 @@ import { Play } from "../../services/types";
 import { useEffect, useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { Rule } from "@mui/icons-material";
 
 interface EndPlayButtonProps {
   player: Play;
   cardGameId: number;
+  isGameActive: boolean;
 }
 
 
-const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => {
+const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId, isGameActive }) => {
 
   const [open, setOpen] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -19,20 +21,20 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-     const tokensString = localStorage.getItem('tokens');
-     if (tokensString) {
-       const tokens = JSON.parse(tokensString);
-       setAccessToken(tokens.access_token);
-     }
-   }, []);
-  
+    const tokensString = localStorage.getItem('tokens');
+    if (tokensString) {
+      const tokens = JSON.parse(tokensString);
+      setAccessToken(tokens.access_token);
+    }
+  }, []);
+
   useEffect(() => {
-     const tokensString = localStorage.getItem('tokens');
-     if (tokensString) {
-       const tokens = JSON.parse(tokensString);
-       setAccessToken(tokens.access_token);
-     }
-   }, []);
+    const tokensString = localStorage.getItem('tokens');
+    if (tokensString) {
+      const tokens = JSON.parse(tokensString);
+      setAccessToken(tokens.access_token);
+    }
+  }, []);
 
   const handleEndPlay = async () => {
     try {
@@ -51,7 +53,7 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
     }
     setOpen(false);
   };
-  
+
   const handleCloseSuccess = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -67,8 +69,14 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
       <input type="hidden" name="game_id" value={`${cardGameId}`} />
 
 
-      <Button variant="contained" onClick={handleEndPlay} sx={{width:120}}>
+      <Button
+        variant="contained"
+        onClick={handleEndPlay}
+        sx={{ width: 120 }}
+        disabled={!isGameActive}
+      >
         Finalizar juego
+        <Rule />
       </Button>
 
       <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
@@ -81,7 +89,7 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId }) => 
           {alertMessage}
         </Alert>
       </Snackbar>
-      
+
       <Snackbar open={openSuccess} autoHideDuration={4000} onClose={handleCloseSuccess}>
         <Alert
           onClose={handleCloseSuccess}
