@@ -6,3 +6,4 @@ export { SanctionsDataTable } from './Sanctions';
 export { LogsDataTable } from './Logs';
 export { ImagesDataTable } from './Images';
 export { options as tableOptions } from './config';
+export { default as MUITable } from './MUITable/MUITable';

@@ -28,3 +28,5 @@ export { SanctionsDataTable } from './Tables'
 export { LogsDataTable } from './Tables'
 export { ImagesDataTable } from './Tables'
 export { tableOptions } from './Tables'
+
+export { MUITable } from './Tables'

@@ -11,6 +11,7 @@ import {
   SanctionsDataTable,
   LogsDataTable,
   ImagesDataTable,
+  MUITable
 } from "../../components";
 
 const Admin = () => {
@@ -45,6 +46,7 @@ const Admin = () => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
+        <MUITable />
         <PlaysDataTable ref={playsTableRef} />
         <SanctionsDataTable ref={sanctionsTableRef} />
         {admin ? (
