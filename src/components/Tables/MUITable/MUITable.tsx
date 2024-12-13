@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,100 +13,119 @@ import { EnhancedTableToolbar } from './Toolbar';
 
 import { getComparator, Order } from './utils';
 
-export interface EnhancedTableProps<T extends { id: number }> {
+export interface EnhancedTableProps<T extends { id: number }> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   info: T[];
   headCells: HeadCell<T>[];
   defaultOrderBy: keyof T;
 }
 
-export default function EnhancedTable<T extends { id: number }>({ info, headCells, defaultOrderBy }: EnhancedTableProps<T>) {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof T>(defaultOrderBy);
-  const [selected, setSelected] = React.useState<readonly number[]>([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [data, setData] = React.useState<T[]>(info);
-  const [visibleRows, setVisibleRows] = React.useState<T[]>([]);
-  const [emptyRows, setEmptyRows] = React.useState(0);
+export default function EnhancedTable<T extends { id: number }>({
+  info,
+  headCells,
+  defaultOrderBy,
+  ...rest
+}: EnhancedTableProps<T>) {
+  const [state, setState] = React.useState({
+    order: 'asc' as Order,
+    orderBy: defaultOrderBy,
+    selected: [] as readonly number[],
+    page: 0,
+    rowsPerPage: 5,
+    searchQuery: '',
+    data: info,
+    visibleRows: info,
+    emptyRows: 0,
+  });
 
   const handleSearch = (query: string) => {
-    setSearchQuery(query.toLowerCase());
+    setState((prevState) => ({ ...prevState, searchQuery: query.toLowerCase() }));
   };
 
-  // Updates data when search query changes
   React.useEffect(() => {
-    const filteredData = info.filter((row: T) =>
+    const filteredData = info.filter((row) =>
       Object.values(row).some((value) =>
-        value.toString().toLowerCase().includes(searchQuery)
+        value.toString().toLowerCase().includes(state.searchQuery)
       )
     );
-    setData(filteredData);
-  }, [info, searchQuery]);
+    setState((prevState) => ({ ...prevState, data: filteredData }));
+  }, [info, state.searchQuery]);
 
-  // Calculate visible rows and empty rows when relevant data changes
   React.useEffect(() => {
-    const sortedData = [...data].sort(getComparator<T, keyof T>(order, orderBy));
-    const paginatedData = sortedData.slice(
-      page * rowsPerPage,
-      page * rowsPerPage + rowsPerPage
+    const sortedData = [...state.data].sort(
+      getComparator<T, keyof T>(state.order, state.orderBy)
     );
-    setVisibleRows(paginatedData);
+    const paginatedData = sortedData.slice(
+      state.page * state.rowsPerPage,
+      state.page * state.rowsPerPage + state.rowsPerPage
+    );
+    const calculatedEmptyRows = Math.max(
+      0,
+      (1 + state.page) * state.rowsPerPage - state.data.length
+    );
+    setState((prevState) => ({
+      ...prevState,
+      visibleRows: paginatedData,
+      emptyRows: calculatedEmptyRows,
+    }));
+  }, [state.data, state.order, state.orderBy, state.page, state.rowsPerPage]);
 
-    const calculatedEmptyRows = Math.max(0, (1 + page) * rowsPerPage - data.length);
-    setEmptyRows(calculatedEmptyRows);
-  }, [data, order, orderBy, page, rowsPerPage]);
-
-  const handleRequestSort = (
-    _event: React.MouseEvent<unknown>,
-    property: keyof T,
-  ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+  const handleRequestSort = (_event: React.MouseEvent<unknown>, property: keyof T) => {
+    const isAsc = state.orderBy === property && state.order === 'asc';
+    setState((prevState) => ({
+      ...prevState,
+      order: isAsc ? 'desc' : 'asc',
+      orderBy: property,
+    }));
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
-      setSelected(newSelected);
-      return;
+      const newSelected = state.data.map((n) => n.id);
+      setState((prevState) => ({ ...prevState, selected: newSelected }));
+    } else {
+      setState((prevState) => ({ ...prevState, selected: [] }));
     }
-    setSelected([]);
   };
 
   const handleClick = (_event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
+    const selectedIndex = state.selected.indexOf(id);
     let newSelected: readonly number[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(state.selected, id);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelected = newSelected.concat(state.selected.slice(1));
+    } else if (selectedIndex === state.selected.length - 1) {
+      newSelected = newSelected.concat(state.selected.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        state.selected.slice(0, selectedIndex),
+        state.selected.slice(selectedIndex + 1)
       );
     }
-    setSelected(newSelected);
+    setState((prevState) => ({ ...prevState, selected: newSelected }));
   };
 
   const handleChangePage = (_event: unknown, newPage: number) => {
-    setPage(newPage);
+    setState((prevState) => ({ ...prevState, page: newPage }));
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setState((prevState) => ({
+      ...prevState,
+      rowsPerPage: parseInt(event.target.value, 10),
+      page: 0,
+    }));
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <div {...rest}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} selected={selected} onSearch={handleSearch} />
+        <EnhancedTableToolbar
+          numSelected={state.selected.length}
+          selected={state.selected}
+          onSearch={handleSearch}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -116,16 +134,16 @@ export default function EnhancedTable<T extends { id: number }>({ info, headCell
           >
             <EnhancedTableHead
               headCells={headCells}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
+              numSelected={state.selected.length}
+              order={state.order}
+              orderBy={state.orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={data.length}
+              rowCount={state.data.length}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = selected.includes(row.id);
+              {state.visibleRows.map((row, index) => {
+                const isItemSelected = state.selected.includes(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -139,7 +157,6 @@ export default function EnhancedTable<T extends { id: number }>({ info, headCell
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    {/* Checkbox Cell */}
                     <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"
@@ -149,8 +166,6 @@ export default function EnhancedTable<T extends { id: number }>({ info, headCell
                         }}
                       />
                     </TableCell>
-
-                    {/* Dynamically Rendered Cells */}
                     {headCells.map((headCell, cellIndex) => (
                       <TableCell
                         key={String(headCell.id)}
@@ -166,10 +181,10 @@ export default function EnhancedTable<T extends { id: number }>({ info, headCell
                   </TableRow>
                 );
               })}
-              {emptyRows > 0 && (
+              {state.emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: 33 * emptyRows,
+                    height: 33 * state.emptyRows,
                   }}
                 >
                   <TableCell colSpan={headCells.length + 1} />
@@ -181,13 +196,13 @@ export default function EnhancedTable<T extends { id: number }>({ info, headCell
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
+          count={state.data.length}
+          rowsPerPage={state.rowsPerPage}
+          page={state.page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </Box>
+    </div>
   );
 }
