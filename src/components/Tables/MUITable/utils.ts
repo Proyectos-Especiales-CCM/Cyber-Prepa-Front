@@ -3,25 +3,15 @@ export type Order = 'asc' | 'desc';
 export function getComparator<T, Key extends keyof T>(
   order: Order,
   orderBy: Key,
-): (
-  a: { [key in Key]: T[key] },
-  b: { [key in Key]: T[key] },
-) => number {
+): (a: T, b: T) => number {
   return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+    ? (a, b) => descendingComparator(a[orderBy], b[orderBy])
+    : (a, b) => -descendingComparator(a[orderBy], b[orderBy]);
 }
 
-export function descendingComparator<T, Key extends keyof T>(
-  a: T,
-  b: T,
-  orderBy: Key
-): number {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
+function descendingComparator<T>(a: T, b: T): number {
+  if (b < a) return -1;
+  if (b > a) return 1;
   return 0;
 }
+

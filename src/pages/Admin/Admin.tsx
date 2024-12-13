@@ -13,6 +13,7 @@ import {
   ImagesDataTable,
   MUITable
 } from "../../components";
+import {rows as info, headCells} from "../../components/Tables/MUITable/test-data";
 
 const Admin = () => {
   const { admin } = useAppContext();
@@ -46,7 +47,7 @@ const Admin = () => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <MUITable />
+        <MUITable info={info} headCells={headCells} defaultOrderBy={'id'} />
         <PlaysDataTable ref={playsTableRef} />
         <SanctionsDataTable ref={sanctionsTableRef} />
         {admin ? (

@@ -15,14 +15,6 @@ export interface HeadCell<T> {
   numeric: boolean;
 }
 
-
-
-
-
-
-
-
-
 interface EnhancedTableProps<T> {
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof T) => void;

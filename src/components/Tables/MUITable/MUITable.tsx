@@ -9,26 +9,26 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 
-import { EnhancedTableHead } from './TableHead';
+import { EnhancedTableHead, HeadCell } from './TableHead';
 import { EnhancedTableToolbar } from './Toolbar';
 
 import { getComparator, Order } from './utils';
 
-import { Data, rows as info, headCells } from './test-data';
-
-export interface EnhancedTableProps {
-  info: Data[];
+export interface EnhancedTableProps<T extends { id: number }> {
+  info: T[];
+  headCells: HeadCell<T>[];
+  defaultOrderBy: keyof T;
 }
 
-export default function EnhancedTable() {
+export default function EnhancedTable<T extends { id: number }>({ info, headCells, defaultOrderBy }: EnhancedTableProps<T>) {
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
+  const [orderBy, setOrderBy] = React.useState<keyof T>(defaultOrderBy);
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [data, setData] = React.useState<Data[]>(info);
-  const [visibleRows, setVisibleRows] = React.useState<Data[]>([]);
+  const [data, setData] = React.useState<T[]>(info);
+  const [visibleRows, setVisibleRows] = React.useState<T[]>([]);
   const [emptyRows, setEmptyRows] = React.useState(0);
 
   const handleSearch = (query: string) => {
@@ -37,17 +37,17 @@ export default function EnhancedTable() {
 
   // Updates data when search query changes
   React.useEffect(() => {
-    const filteredData = info.filter((row: Data) =>
+    const filteredData = info.filter((row: T) =>
       Object.values(row).some((value) =>
         value.toString().toLowerCase().includes(searchQuery)
       )
     );
     setData(filteredData);
-  }, [searchQuery]);
+  }, [info, searchQuery]);
 
   // Calculate visible rows and empty rows when relevant data changes
   React.useEffect(() => {
-    const sortedData = [...data].sort(getComparator(order, orderBy));
+    const sortedData = [...data].sort(getComparator<T, keyof T>(order, orderBy));
     const paginatedData = sortedData.slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage
@@ -60,7 +60,7 @@ export default function EnhancedTable() {
 
   const handleRequestSort = (
     _event: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: keyof T,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -139,6 +139,7 @@ export default function EnhancedTable() {
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
+                    {/* Checkbox Cell */}
                     <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"
@@ -148,18 +149,20 @@ export default function EnhancedTable() {
                         }}
                       />
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+
+                    {/* Dynamically Rendered Cells */}
+                    {headCells.map((headCell, cellIndex) => (
+                      <TableCell
+                        key={String(headCell.id)}
+                        component={cellIndex === 0 ? "th" : undefined}
+                        id={cellIndex === 0 ? labelId : undefined}
+                        scope={cellIndex === 0 ? "row" : undefined}
+                        align={cellIndex === 0 ? "left" : "right"}
+                        padding={cellIndex === 0 ? "none" : "normal"}
+                      >
+                        {String(row[headCell.id])}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 );
               })}
@@ -169,7 +172,7 @@ export default function EnhancedTable() {
                     height: 33 * emptyRows,
                   }}
                 >
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={headCells.length + 1} />
                 </TableRow>
               )}
             </TableBody>
