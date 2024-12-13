@@ -14,7 +14,11 @@ import { EnhancedTableToolbar } from './Toolbar';
 
 import { getComparator, Order } from './utils';
 
-import { Data, rows } from './test-data';
+import { Data, rows as info, headCells } from './test-data';
+
+export interface EnhancedTableProps {
+  info: Data[];
+}
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -23,7 +27,7 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [data, setData] = React.useState<Data[]>(rows);
+  const [data, setData] = React.useState<Data[]>(info);
   const [visibleRows, setVisibleRows] = React.useState<Data[]>([]);
   const [emptyRows, setEmptyRows] = React.useState(0);
 
@@ -33,7 +37,7 @@ export default function EnhancedTable() {
 
   // Updates data when search query changes
   React.useEffect(() => {
-    const filteredData = rows.filter((row: Data) =>
+    const filteredData = info.filter((row: Data) =>
       Object.values(row).some((value) =>
         value.toString().toLowerCase().includes(searchQuery)
       )
@@ -111,6 +115,7 @@ export default function EnhancedTable() {
             size="small"
           >
             <EnhancedTableHead
+              headCells={headCells}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}

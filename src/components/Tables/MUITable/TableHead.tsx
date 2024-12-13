@@ -7,47 +7,14 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 
 import { Order } from './utils';
-import { Data } from './test-data';
 
-interface HeadCell {
+export interface HeadCell<T> {
   disablePadding: boolean;
-  id: keyof Data;
+  id: keyof T;
   label: string;
   numeric: boolean;
 }
 
-const headCells: readonly HeadCell[] = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Dessert (100g serving)',
-  },
-  {
-    id: 'calories',
-    numeric: true,
-    disablePadding: false,
-    label: 'Calories',
-  },
-  {
-    id: 'fat',
-    numeric: true,
-    disablePadding: false,
-    label: 'Fat (g)',
-  },
-  {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: 'Carbs (g)',
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
-  },
-];
 
 
 
@@ -56,21 +23,27 @@ const headCells: readonly HeadCell[] = [
 
 
 
-
-interface EnhancedTableProps {
+interface EnhancedTableProps<T> {
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof T) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
-  orderBy: string;
+  orderBy: keyof T;
   rowCount: number;
+  headCells: HeadCell<T>[];
 }
 
-export function EnhancedTableHead(props: EnhancedTableProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-    props;
+export function EnhancedTableHead<T>({
+  onSelectAllClick,
+  order,
+  orderBy,
+  numSelected,
+  rowCount,
+  onRequestSort,
+  headCells,
+}: EnhancedTableProps<T>) {
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof T) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -84,13 +57,13 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              'aria-label': 'select all desserts',
+              'aria-label': 'select all items',
             }}
           />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
-            key={headCell.id}
+            key={String(headCell.id)} // Ensure compatibility with `key`
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
