@@ -13,11 +13,17 @@ import { EnhancedTableToolbar } from './Toolbar';
 
 import { getComparator, Order } from './utils';
 
+export interface CustomCell<T> { 
+  id: keyof T; 
+  render: (row: T, key: keyof T) => React.ReactNode; 
+}
+
 export interface EnhancedTableProps<T extends { id: number }> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   data: T[];
   headCells?: HeadCell<T>[];
   defaultOrderBy?: keyof T;
   excludedColumns?: (keyof T)[];
+  customCells?: CustomCell<T>[];
 }
 
 export default function EnhancedTable<T extends { id: number }>({
@@ -25,6 +31,7 @@ export default function EnhancedTable<T extends { id: number }>({
   headCells: passedHeadCells,
   defaultOrderBy,
   excludedColumns,
+  customCells,
   ...rest
 }: EnhancedTableProps<T>) {
   const [state, setState] = React.useState({
@@ -190,7 +197,12 @@ export default function EnhancedTable<T extends { id: number }>({
                         scope={cellIndex === 0 ? "row" : undefined}
                         padding="normal"
                       >
-                        {String(row[headCell.id])}
+                        {customCells &&
+                        customCells.some((renderer) => renderer.id === headCell.id)
+                          ? customCells
+                              .find((renderer) => renderer.id === headCell.id)
+                              ?.render(row, headCell.id)
+                          : String(row[headCell.id])}
                       </TableCell>
                     ))}
                   </TableRow>
