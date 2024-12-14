@@ -14,44 +14,60 @@ import { EnhancedTableToolbar } from './Toolbar';
 import { getComparator, Order } from './utils';
 
 export interface EnhancedTableProps<T extends { id: number }> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  info: T[];
-  headCells: HeadCell<T>[];
-  defaultOrderBy: keyof T;
+  data: T[];
+  headCells?: HeadCell<T>[];
+  defaultOrderBy?: keyof T;
+  excludedColumns?: (keyof T)[];
 }
 
 export default function EnhancedTable<T extends { id: number }>({
-  info,
-  headCells,
+  data,
+  headCells: passedHeadCells,
   defaultOrderBy,
+  excludedColumns,
   ...rest
 }: EnhancedTableProps<T>) {
   const [state, setState] = React.useState({
     order: 'asc' as Order,
-    orderBy: defaultOrderBy,
+    orderBy: defaultOrderBy || 'id' as keyof T,
     selected: [] as readonly number[],
     page: 0,
     rowsPerPage: 5,
     searchQuery: '',
-    data: info,
-    visibleRows: info,
+    currentData: data,
+    visibleRows: data,
     emptyRows: 0,
   });
+
+  const generateHeadCells = React.useCallback((): HeadCell<T>[] => {
+    if (data.length === 0) return [];
+    return Object.keys(data[0])
+      .filter((key) => !(excludedColumns || []).includes(key as keyof T))
+      .map((key) => ({
+        id: key as keyof T,
+        disablePadding: false,
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+        numeric: typeof data[0][key as keyof T] === 'number',
+      }));
+  }, [data, excludedColumns]);
+
+  const headCells = passedHeadCells || generateHeadCells();
 
   const handleSearch = (query: string) => {
     setState((prevState) => ({ ...prevState, searchQuery: query.toLowerCase() }));
   };
 
   React.useEffect(() => {
-    const filteredData = info.filter((row) =>
+    const filteredData = data.filter((row) =>
       Object.values(row).some((value) =>
         value.toString().toLowerCase().includes(state.searchQuery)
       )
     );
-    setState((prevState) => ({ ...prevState, data: filteredData }));
-  }, [info, state.searchQuery]);
+    setState((prevState) => ({ ...prevState, currentData: filteredData }));
+  }, [data, state.searchQuery]);
 
   React.useEffect(() => {
-    const sortedData = [...state.data].sort(
+    const sortedData = [...state.currentData].sort(
       getComparator<T, keyof T>(state.order, state.orderBy)
     );
     const paginatedData = sortedData.slice(
@@ -60,14 +76,14 @@ export default function EnhancedTable<T extends { id: number }>({
     );
     const calculatedEmptyRows = Math.max(
       0,
-      (1 + state.page) * state.rowsPerPage - state.data.length
+      (1 + state.page) * state.rowsPerPage - state.currentData.length
     );
     setState((prevState) => ({
       ...prevState,
       visibleRows: paginatedData,
       emptyRows: calculatedEmptyRows,
     }));
-  }, [state.data, state.order, state.orderBy, state.page, state.rowsPerPage]);
+  }, [state.currentData, state.order, state.orderBy, state.page, state.rowsPerPage]);
 
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: keyof T) => {
     const isAsc = state.orderBy === property && state.order === 'asc';
@@ -80,7 +96,7 @@ export default function EnhancedTable<T extends { id: number }>({
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = state.data.map((n) => n.id);
+      const newSelected = state.currentData.map((n) => n.id);
       setState((prevState) => ({ ...prevState, selected: newSelected }));
     } else {
       setState((prevState) => ({ ...prevState, selected: [] }));
@@ -139,7 +155,7 @@ export default function EnhancedTable<T extends { id: number }>({
               orderBy={state.orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={state.data.length}
+              rowCount={state.currentData.length}
             />
             <TableBody>
               {state.visibleRows.map((row, index) => {
@@ -172,8 +188,7 @@ export default function EnhancedTable<T extends { id: number }>({
                         component={cellIndex === 0 ? "th" : undefined}
                         id={cellIndex === 0 ? labelId : undefined}
                         scope={cellIndex === 0 ? "row" : undefined}
-                        align={cellIndex === 0 ? "left" : "right"}
-                        padding={cellIndex === 0 ? "none" : "normal"}
+                        padding="normal"
                       >
                         {String(row[headCell.id])}
                       </TableCell>
@@ -196,7 +211,7 @@ export default function EnhancedTable<T extends { id: number }>({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={state.data.length}
+          count={state.currentData.length}
           rowsPerPage={state.rowsPerPage}
           page={state.page}
           onPageChange={handleChangePage}

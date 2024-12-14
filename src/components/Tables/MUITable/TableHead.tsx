@@ -55,9 +55,8 @@ export function EnhancedTableHead<T>({
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
-            key={String(headCell.id)} // Ensure compatibility with `key`
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            key={String(headCell.id)}
+            padding='normal'
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
