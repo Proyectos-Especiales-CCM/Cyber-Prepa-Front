@@ -8,14 +8,20 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { Box, InputBase, Stack } from '@mui/material';
 import SearchIcon from "@mui/icons-material/Search";
 
+export interface CustomSelectedToolbarProps {
+  selected: readonly number[];
+}
+
 interface EnhancedTableToolbarProps {
+  title: string;
   numSelected: number;
   selected: readonly number[];
   onSearch: (query: string) => void;
+  CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
 }
 
 export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, selected, onSearch } = props;
+  const { title, numSelected, selected, onSearch, CustomSelectedToolbar } = props;
 
   const handleDelete = () => {
     console.log("Deleting rows with IDs:", selected);
@@ -35,23 +41,31 @@ export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       ]}
     >
       {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
+        <>
+          <Typography
+            sx={{ flex: '1 1 100%' }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+          >
+            {numSelected} selected
+          </Typography>
+          {CustomSelectedToolbar && <CustomSelectedToolbar selected={selected} />}
+          <Tooltip title="Delete">
+            <IconButton onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </>
       ) : (
         <Stack direction="row" justifyContent="space-between" width={"100%"}>
           <Typography
-            sx={{ flex: '1 1 100%' }}
+            sx={{ flex: '1 1 100%', alignContent: "center", paddingLeft: 1 }}
             variant="h6"
             id="tableTitle"
             component="div"
           >
-            Nutrition
+            {title}
           </Typography>
           <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", border: 1, borderColor: "lightgray", borderRadius: 1 }}>
             <InputBase
@@ -63,20 +77,12 @@ export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
               <SearchIcon />
             </IconButton>
           </Box>
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
         </Stack>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
       )}
     </Toolbar>
   );

@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 
 import { EnhancedTableHead, HeadCell } from './TableHead';
-import { EnhancedTableToolbar } from './Toolbar';
+import { CustomSelectedToolbarProps, EnhancedTableToolbar } from './Toolbar';
 
 import { getComparator, Order } from './utils';
 
@@ -19,21 +19,25 @@ export interface CustomCell<T> {
 }
 
 export interface EnhancedTableProps<T extends { id: number }> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  title: string;
   data: T[];
   headCells?: HeadCell<T>[];
   defaultOrderBy?: keyof T;
   excludedColumns?: (keyof T)[];
   customCells?: CustomCell<T>[];
+  CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
 }
 
-export default function EnhancedTable<T extends { id: number }>({
+export const MUITable = React.memo(<T extends { id: number }>({
+  title,
   data,
   headCells: passedHeadCells,
   defaultOrderBy,
   excludedColumns,
   customCells,
+  CustomSelectedToolbar,
   ...rest
-}: EnhancedTableProps<T>) {
+}: EnhancedTableProps<T>) => {
   const [state, setState] = React.useState({
     order: 'asc' as Order,
     orderBy: defaultOrderBy || 'id' as keyof T,
@@ -145,9 +149,11 @@ export default function EnhancedTable<T extends { id: number }>({
     <div {...rest}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar
+          title={title}
           numSelected={state.selected.length}
           selected={state.selected}
           onSearch={handleSearch}
+          CustomSelectedToolbar={CustomSelectedToolbar}
         />
         <TableContainer>
           <Table
@@ -232,4 +238,4 @@ export default function EnhancedTable<T extends { id: number }>({
       </Paper>
     </div>
   );
-}
+});
