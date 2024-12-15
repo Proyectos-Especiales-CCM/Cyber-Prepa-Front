@@ -154,6 +154,7 @@ export const MUITable = React.memo(<T extends { id: number }>({
           selected={state.selected}
           onSearch={handleSearch}
           CustomSelectedToolbar={CustomSelectedToolbar}
+          data={state.currentData}
         />
         <TableContainer>
           <Table

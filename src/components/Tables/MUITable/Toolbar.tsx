@@ -9,7 +9,8 @@ import { Box, InputBase, Stack } from '@mui/material';
 import SearchIcon from "@mui/icons-material/Search";
 
 export interface CustomSelectedToolbarProps {
-  selected: readonly number[];
+  selected?: readonly number[];
+  data?: unknown[];
 }
 
 interface EnhancedTableToolbarProps {
@@ -18,10 +19,11 @@ interface EnhancedTableToolbarProps {
   selected: readonly number[];
   onSearch: (query: string) => void;
   CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
+  data?: unknown[];
 }
 
 export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { title, numSelected, selected, onSearch, CustomSelectedToolbar } = props;
+  const { title, numSelected, selected, onSearch, CustomSelectedToolbar, data } = props;
 
   const handleDelete = () => {
     console.log("Deleting rows with IDs:", selected);
@@ -50,7 +52,7 @@ export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           >
             {numSelected} selected
           </Typography>
-          {CustomSelectedToolbar && <CustomSelectedToolbar selected={selected} />}
+          {CustomSelectedToolbar && <CustomSelectedToolbar data={data} selected={selected} />}
           <Tooltip title="Delete">
             <IconButton onClick={handleDelete}>
               <DeleteIcon />
