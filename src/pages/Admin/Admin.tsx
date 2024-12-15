@@ -11,14 +11,15 @@ import {
   SanctionsDataTable,
   LogsDataTable,
   ImagesDataTable,
-  MUITable
 } from "../../components";
-import {rows as info, headCells} from "../../components/Tables/MUITable/test-data";
+import { PlaysDataTable as Xd } from '../../components/Tables/NewPlays/NewPlays';
+
 
 const Admin = () => {
   const { admin } = useAppContext();
 
   // Refs para el quick navigation
+  const testRef = useRef(null);
   const playsTableRef = useRef(null);
   const sanctionsTableRef = useRef(null);
   const gamesTableRef = useRef(null);
@@ -36,6 +37,7 @@ const Admin = () => {
   ];
 
   const adminRoutes = [
+    { icon: <SportsEsports />, name: 'Test', action: () => testRef.current && (testRef.current as HTMLElement).scrollIntoView() },
     { icon: <Key />, name: 'Usuarios', action: () => usersTableRef.current && (usersTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <FindInPage />, name: 'Historial', action: () => logsTableRef.current && (logsTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <People />, name: 'Estudiantes', action: () => studentsTableRef.current && (studentsTableRef.current as HTMLElement).scrollIntoView() },
@@ -47,7 +49,7 @@ const Admin = () => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <MUITable info={info} headCells={headCells} defaultOrderBy={'id'} />
+        <Xd ref={testRef} />
         <PlaysDataTable ref={playsTableRef} />
         <SanctionsDataTable ref={sanctionsTableRef} />
         {admin ? (
