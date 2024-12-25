@@ -10,7 +10,6 @@ import {
   Reports,
 } from "../pages";
 import { ROUTES } from "./Constants";
-import { GamesContextProvider } from "../store/gamesContext/gamesContext";
 
 const routes: RouteObject[] = [
   {
@@ -20,9 +19,7 @@ const routes: RouteObject[] = [
       {
         index: true,
         element:
-          <GamesContextProvider>
-            <Home />
-          </GamesContextProvider>
+          <Home />
       },
       { path: ROUTES.LOGIN, element: <Login /> },
       { path: ROUTES.REGLAMENTO, element: <Reglamento /> },
@@ -36,9 +33,7 @@ const routes: RouteObject[] = [
       {
         index: true,
         element:
-          <GamesContextProvider>
-            <Home />
-          </GamesContextProvider>
+          <Home />
       },
       { path: "*", element: <ErrorPage /> },
       { path: ROUTES.ADMIN, element: <Admin /> },

@@ -20,13 +20,6 @@ export { ModifySanctionPanel } from './ModifySanctionPanel'
 export { SelectOrUploadImage } from './SelectOrUploadImage'
 export { CreateImagePanel } from './CreateImagePanel'
 
-export { PlaysDataTable } from './Tables'
-export { GamesDataTable } from './Tables'
-export { StudentsDataTable } from './Tables'
-export { UsersDataTable } from './Tables'
-export { SanctionsDataTable } from './Tables'
 export { LogsDataTable } from './Tables'
-export { ImagesDataTable } from './Tables'
-export { tableOptions } from './Tables'
 
 export { MUITable } from './Tables'

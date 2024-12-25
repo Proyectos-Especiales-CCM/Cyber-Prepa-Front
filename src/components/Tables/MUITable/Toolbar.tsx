@@ -1,40 +1,36 @@
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, InputBase, Stack } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { alpha } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, InputBase, Stack } from '@mui/material';
-import SearchIcon from "@mui/icons-material/Search";
+import Typography from '@mui/material/Typography';
 
 export interface CustomSelectedToolbarProps {
-  selected?: readonly number[];
+  selected?: readonly (number | string)[];
   data?: unknown[];
 }
 
 interface EnhancedTableToolbarProps {
   title: string;
   numSelected: number;
-  selected: readonly number[];
+  selected: readonly (number | string)[];
   onSearch: (query: string) => void;
+  CustomToolbar?: React.FC;
   CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
   data?: unknown[];
 }
 
 export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { title, numSelected, selected, onSearch, CustomSelectedToolbar, data } = props;
-
-  const handleDelete = () => {
-    console.log("Deleting rows with IDs:", selected);
-  };
+  const { title, numSelected, selected, onSearch, CustomToolbar, CustomSelectedToolbar, data } = props;
 
   return (
     <Toolbar
       sx={[
         {
           pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
+          pr: { sm: 1 },
         },
         numSelected > 0 && {
           bgcolor: (theme) =>
@@ -53,11 +49,6 @@ export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             {numSelected} selected
           </Typography>
           {CustomSelectedToolbar && <CustomSelectedToolbar data={data} selected={selected} />}
-          <Tooltip title="Delete">
-            <IconButton onClick={handleDelete}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
         </>
       ) : (
         <Stack direction="row" justifyContent="space-between" width={"100%"}>
@@ -84,6 +75,7 @@ export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
               <FilterListIcon />
             </IconButton>
           </Tooltip>
+          {CustomToolbar && <CustomToolbar />}
         </Stack>
       )}
     </Toolbar>

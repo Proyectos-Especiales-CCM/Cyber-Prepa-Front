@@ -1,31 +1,35 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useAppContext } from "../../../store/appContext/useAppContext";
-import { Play } from "../../../services/types";
-import { MUITable } from "../MUITable/MUITable";
+import { CheckCircleOutline, HighlightOff, Delete } from "@mui/icons-material";
+import { IconButton, Tooltip } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import { deletePlayById, readPlays } from "../../../services";
+import { Play } from "../../../services/types";
+import { useAppContext } from "../../../store/appContext/useAppContext";
 import { ModalMessage } from "../../Modal";
+import { CustomCell, MUITable } from "../MUITable/MUITable";
+import { HeadCell } from "../MUITable/TableHead";
 import { CustomSelectedToolbarProps } from "../MUITable/Toolbar";
+import { useGamesContext } from "../../../store/gamesContext/useGamesContext";
 
 interface PlaysToolbarProps extends CustomSelectedToolbarProps {
   fetchCallback: () => void;
   messageCallback: (severity: string, message: string) => void;
 }
 
-const CustomToolbar = ({ selected, fetchCallback, messageCallback }: PlaysToolbarProps) => {
+const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback }: PlaysToolbarProps) => {
   const { tokens } = useAppContext();
-  
+
   /**
    * Handles the deletion of selected plays.
    * @function
    * @async
-   * @param {MUIDataTableIsRowCheck} selected - Selected rows in the table.
+   * @param {number[]} selected - Selected rows in the table.
    * @returns {Promise<void>}
    */
-  const handleDeletePlay = async (selected?: readonly number[]): Promise<void> => {
+  const handleDeletePlay = async (selected?: readonly (number | string)[]): Promise<void> => {
     try {
       if (!selected) return;
       for (const id of selected) {
-        await deletePlayById(id, tokens?.access_token ?? "");
+        await deletePlayById(Number(id), tokens?.access_token ?? "");
       }
       fetchCallback();
       messageCallback("success", "Partida/s eliminada/s correctamente.");
@@ -35,13 +39,34 @@ const CustomToolbar = ({ selected, fetchCallback, messageCallback }: PlaysToolba
       console.error(error);
     }
   };
-  
+
   return (
-    <>
-      <button onClick={() => handleDeletePlay(selected)}>Eliminar</button>
-    </>
+    <Tooltip title="Eliminar">
+      <IconButton onClick={() => handleDeletePlay(selected)}>
+        <Delete />
+      </IconButton>
+    </Tooltip>
   )
 }
+
+const CustomCells: CustomCell<Play>[] = [
+  {
+    id: "time",
+    render: (row: Play) => new Date(row.time).toLocaleString(),
+  },
+  {
+    id: "ended",
+    render: (row: Play) => (row.ended ? <CheckCircleOutline color="success" /> : <HighlightOff color="error" />),
+  },
+]
+
+const headCells: HeadCell<Play>[] = [
+  { id: "id", label: "ID", numeric: true },
+  { id: "game", label: "Juego", numeric: true },
+  { id: "student", label: "Estudiante", numeric: false },
+  { id: "time", label: "Fecha y hora", numeric: false },
+  { id: "ended", label: "Finalizada", numeric: false },
+];
 
 /**
  * Plays MUI DataTable component.
@@ -58,9 +83,10 @@ const CustomToolbar = ({ selected, fetchCallback, messageCallback }: PlaysToolba
  * 
  * @author Diego Jacobo Mtz. [Github](https://github.com/Djmr5)
  */
-export const PlaysDataTable = React.forwardRef<HTMLDivElement, object>((_props, ref) => {
+export const PlaysDataTable = () => {
 
   const { tokens } = useAppContext();
+  const { games } = useGamesContext();
   const [playsData, setPlaysData] = useState<Play[]>([]);
 
   // Variable de atributos del modal de mensajes (feedback al usuario)
@@ -111,24 +137,30 @@ export const PlaysDataTable = React.forwardRef<HTMLDivElement, object>((_props, 
   const fetchData = useCallback(async (): Promise<void> => {
     try {
       const response = await readPlays(tokens?.access_token ?? "");
+      for (const play of response.data) {
+        const game = games.find((game) => game.id === play.game);
+        if (game) play.game = game.name;
+      }
       setPlaysData(response.data);
     } catch (error) {
       openModalMessage("error", "Ha ocurrido un error al cargar las partidas.");
       console.error(error);
     }
-  }, [openModalMessage, tokens?.access_token]);
+  }, [openModalMessage, tokens?.access_token, games]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return (
-    <div ref={ref}>
+    <>
       <MUITable
         title="Historial de Partidas"
         data={playsData}
+        headCells={headCells as HeadCell<{ id: number | string }>[]}
+        customCells={CustomCells as unknown as CustomCell<{ id: number | string }>[]}
         CustomSelectedToolbar={(props) => (
-          <CustomToolbar
+          <CustomSelectedToolbar
             {...props}
             fetchCallback={fetchData}
             messageCallback={openModalMessage}
@@ -136,6 +168,6 @@ export const PlaysDataTable = React.forwardRef<HTMLDivElement, object>((_props, 
         )}
       />
       <ModalMessage handleCloseModal={closeModalMessage} {...modalMessageAttr} />
-    </div>
+    </>
   );
-});
+};

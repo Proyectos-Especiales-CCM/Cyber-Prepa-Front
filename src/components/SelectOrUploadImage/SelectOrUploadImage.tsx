@@ -9,8 +9,8 @@ import {
     SelectChangeEvent,
 } from '@mui/material';
 import { Image } from '../../services/types';
-import { ImageCell } from '../Tables/CustomBodyCells';
 import { Close, Upload } from '@mui/icons-material';
+import { completeImageUrl } from '../../services';
 
 interface SelectOrUploadImageProps {
     uploadImage: boolean;
@@ -47,10 +47,7 @@ const selectOrUploadImage: React.FC<SelectOrUploadImageProps> = ({ uploadImage, 
                             {images.map((image) => (
                                 <MenuItem value={image.id} key={image.id}>
                                     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <ImageCell
-                                            value={image.image}
-                                            style={{ width: 'auto', height: '25px', maxWidth: '40px' }}
-                                        />
+                                        <img src={completeImageUrl(image.image ?? '')} style={{ width: 'auto', height: '25px', maxWidth: '40px' }} />
                                     </Box>
                                 </MenuItem>
                             ))}

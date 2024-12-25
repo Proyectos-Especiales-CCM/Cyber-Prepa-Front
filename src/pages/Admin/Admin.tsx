@@ -4,22 +4,20 @@ import { useRef } from "react";
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
 import { Explore, SportsEsports, Rule, Warning, Image, People, FindInPage, Key, } from '@mui/icons-material';
 import {
-  PlaysDataTable,
-  GamesDataTable,
-  StudentsDataTable,
-  UsersDataTable,
-  SanctionsDataTable,
   LogsDataTable,
-  ImagesDataTable,
 } from "../../components";
-import { PlaysDataTable as Xd } from '../../components/Tables/NewPlays/NewPlays';
+import { PlaysDataTable } from '../../components/Tables/NewTables/Plays';
+import { SanctionsDataTable } from '../../components/Tables/NewTables/Sanctions';
+import { GamesDataTable } from '../../components/Tables/NewTables/Games';
+import { StudentsDataTable } from '../../components/Tables/NewTables/Students';
+import { UsersDataTable } from '../../components/Tables/NewTables/Users';
+import { ImagesDataTable } from '../../components/Tables/NewTables/Images';
 
 
 const Admin = () => {
   const { admin } = useAppContext();
 
   // Refs para el quick navigation
-  const testRef = useRef(null);
   const playsTableRef = useRef(null);
   const sanctionsTableRef = useRef(null);
   const gamesTableRef = useRef(null);
@@ -37,7 +35,6 @@ const Admin = () => {
   ];
 
   const adminRoutes = [
-    { icon: <SportsEsports />, name: 'Test', action: () => testRef.current && (testRef.current as HTMLElement).scrollIntoView() },
     { icon: <Key />, name: 'Usuarios', action: () => usersTableRef.current && (usersTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <FindInPage />, name: 'Historial', action: () => logsTableRef.current && (logsTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <People />, name: 'Estudiantes', action: () => studentsTableRef.current && (studentsTableRef.current as HTMLElement).scrollIntoView() },
@@ -49,16 +46,27 @@ const Admin = () => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <Xd ref={testRef} />
-        <PlaysDataTable ref={playsTableRef} />
-        <SanctionsDataTable ref={sanctionsTableRef} />
+        <Box ref={playsTableRef} margin={2}>
+          <PlaysDataTable />
+        </Box>
+        <Box ref={sanctionsTableRef} margin={2}>
+          <SanctionsDataTable />
+        </Box>
         {admin ? (
           <>
-            <GamesDataTable ref={gamesTableRef} />
-            <ImagesDataTable ref={imagesTableRef} />
-            <StudentsDataTable ref={studentsTableRef} />
+            <Box ref={gamesTableRef} margin={2} >
+              <GamesDataTable />
+            </Box>
+            <Box ref={imagesTableRef} margin={2} >
+              <ImagesDataTable />
+            </Box>
+            <Box ref={studentsTableRef} margin={2} >
+              <StudentsDataTable />
+            </Box>
             <LogsDataTable ref={logsTableRef} />
-            <UsersDataTable ref={usersTableRef} />
+            <Box ref={usersTableRef} margin={2} >
+              <UsersDataTable />
+            </Box>
           </>
         ) : (
           <></>

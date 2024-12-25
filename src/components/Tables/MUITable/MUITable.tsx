@@ -1,47 +1,47 @@
-import * as React from 'react';
+import Checkbox from '@mui/material/Checkbox';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-
+import React from 'react';
 import { EnhancedTableHead, HeadCell } from './TableHead';
 import { CustomSelectedToolbarProps, EnhancedTableToolbar } from './Toolbar';
-
 import { getComparator, Order } from './utils';
 
-export interface CustomCell<T> { 
-  id: keyof T; 
-  render: (row: T, key: keyof T) => React.ReactNode; 
+export interface CustomCell<T> {
+  id: keyof T;
+  render: (row: T, key: keyof T) => React.ReactNode;
 }
 
-export interface EnhancedTableProps<T extends { id: number }> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export interface EnhancedTableProps<T extends { id: number | string }> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   title: string;
   data: T[];
   headCells?: HeadCell<T>[];
   defaultOrderBy?: keyof T;
   excludedColumns?: (keyof T)[];
   customCells?: CustomCell<T>[];
+  CustomToolbar?: React.FC;
   CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
 }
 
-export const MUITable = React.memo(<T extends { id: number }>({
+export const MUITable = React.memo(<T extends { id: number | string }>({
   title,
   data,
   headCells: passedHeadCells,
   defaultOrderBy,
   excludedColumns,
   customCells,
+  CustomToolbar,
   CustomSelectedToolbar,
   ...rest
 }: EnhancedTableProps<T>) => {
   const [state, setState] = React.useState({
     order: 'asc' as Order,
     orderBy: defaultOrderBy || 'id' as keyof T,
-    selected: [] as readonly number[],
+    selected: [] as readonly (number | string)[],
     page: 0,
     rowsPerPage: 5,
     searchQuery: '',
@@ -56,7 +56,6 @@ export const MUITable = React.memo(<T extends { id: number }>({
       .filter((key) => !(excludedColumns || []).includes(key as keyof T))
       .map((key) => ({
         id: key as keyof T,
-        disablePadding: false,
         label: key.charAt(0).toUpperCase() + key.slice(1),
         numeric: typeof data[0][key as keyof T] === 'number',
       }));
@@ -114,9 +113,9 @@ export const MUITable = React.memo(<T extends { id: number }>({
     }
   };
 
-  const handleClick = (_event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (_event: React.MouseEvent<unknown>, id: number | string) => {
     const selectedIndex = state.selected.indexOf(id);
-    let newSelected: readonly number[] = [];
+    let newSelected: readonly (number | string)[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(state.selected, id);
@@ -153,6 +152,7 @@ export const MUITable = React.memo(<T extends { id: number }>({
           numSelected={state.selected.length}
           selected={state.selected}
           onSearch={handleSearch}
+          CustomToolbar={CustomToolbar}
           CustomSelectedToolbar={CustomSelectedToolbar}
           data={state.currentData}
         />
@@ -205,10 +205,10 @@ export const MUITable = React.memo(<T extends { id: number }>({
                         padding="normal"
                       >
                         {customCells &&
-                        customCells.some((renderer) => renderer.id === headCell.id)
+                          customCells.some((renderer) => renderer.id === headCell.id)
                           ? customCells
-                              .find((renderer) => renderer.id === headCell.id)
-                              ?.render(row, headCell.id)
+                            .find((renderer) => renderer.id === headCell.id)
+                            ?.render(row, headCell.id)
                           : String(row[headCell.id])}
                       </TableCell>
                     ))}

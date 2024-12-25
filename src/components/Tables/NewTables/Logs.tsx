@@ -1,41 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useAppContext } from "../../../store/appContext/useAppContext";
-import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
-import { Box } from "@mui/material";
-import { Log } from "../../../services/types";
+import { useCallback, useEffect, useState } from "react";
+import { ModalMessage, MUITable } from "../..";
 import { readLogs } from "../../../services";
-import { ModalMessage } from "../..";
+import { Log } from "../../../services/types";
+import { useAppContext } from "../../../store/appContext/useAppContext";
+import { HeadCell } from "../MUITable/TableHead";
 
-const logColumns = [
-  {
-    name: "line",
-    label: "Línea",
-    options: {
-      display: "excluded",
-      filter: false,
-    },
-  },
-  {
-    name: "timestamp",
-    label: "Fecha y hora",
-    options: {
-      filterType: "textField",
-    },
-  },
-  {
-    name: "user",
-    label: "Usuario",
-    options: {
-      filterType: "textField",
-    },
-  },
-  {
-    name: "action",
-    label: "Acción realizada",
-    options: {
-      filter: false,
-    },
-  },
+const headCells: HeadCell<Log>[] = [
+  { id: "line", label: "Línea", numeric: false },
+  { id: "timestamp", label: "Fecha y hora", numeric: false },
+  { id: "user", label: "Usuario", numeric: false },
+  { id: "action", label: "Acción realizada", numeric: false },
 ];
 
 /**
@@ -58,7 +32,7 @@ const logColumns = [
  *
  * @author Diego Jacobo Mtz. [Github](https://github.com/Djmr5)
  */
-const LogsDataTable = React.forwardRef((_props, ref) => {
+export const LogsDataTable = () => {
   const { tokens } = useAppContext();
   const [logsData, setLogsData] = useState<Log[]>([]);
 
@@ -129,23 +103,15 @@ const LogsDataTable = React.forwardRef((_props, ref) => {
 
   return (
     <>
-      <Box ref={ref} sx={{ margin: "1rem" }}>
-        <MUIDataTable
-          title={"Historial de los Usuarios"}
-          data={logsData}
-          columns={logColumns as MUIDataTableColumnDef[]}
-          options={{
-            responsive: "simple",
-            selectableRows: "none",
-          }}
-        />
-      </Box>
+      <MUITable
+        title="Historial de los Usuarios"
+        data={logsData}
+        headCells={headCells as HeadCell<{ id: number | string }>[]}
+      />
       <ModalMessage
         handleCloseModal={closeModalMessage}
         {...modalMessageAttr}
       />
     </>
   );
-});
-
-export default LogsDataTable;
+};

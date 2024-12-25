@@ -1,15 +1,13 @@
 import Box from '@mui/material/Box';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
+import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-
 import { Order } from './utils';
 
 export interface HeadCell<T> {
-  disablePadding: boolean;
   id: keyof T;
   label: string;
   numeric: boolean;

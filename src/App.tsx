@@ -1,12 +1,16 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/Router';
 import { AppContextProvider } from './store/appContext/appContext';
+import { GamesContextProvider } from './store/gamesContext/gamesContext';
+
 
 function App() {
   return (
-      <AppContextProvider>
+    <AppContextProvider>
+      <GamesContextProvider>
         <RouterProvider router={router} />
-      </AppContextProvider>
+      </GamesContextProvider>
+    </AppContextProvider>
   )
 }
 
