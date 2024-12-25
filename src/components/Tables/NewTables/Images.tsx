@@ -26,7 +26,7 @@ const CustomToolbar = ({ setCreateImageModal }: { setCreateImageModal: () => voi
   );
 }
 
-interface ImagesSelectedToolbarProps extends CustomSelectedToolbarProps {
+interface ImagesSelectedToolbarProps extends CustomSelectedToolbarProps<Image> {
   fetchCallback: () => void;
   messageCallback: (severity: string, message: string) => void;
 }
@@ -41,11 +41,10 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback }: Ima
    * @param {MUIDataTableIsRowCheck} selectedRows - Selected rows in the table.
    * @returns {Promise<void>}
    */
-  const handleDeleteImage = async (selected: readonly (number | string)[]): Promise<void> => {
+  const handleDeleteImage = async (selected: readonly Image[]): Promise<void> => {
     try {
-      for (const id of selected) {
-        if (typeof id !== "number") return;
-        await deleteImageById(id, tokens?.access_token ?? "");
+      for (const image of selected) {
+        await deleteImageById(image.id, tokens?.access_token ?? "");
       }
       fetchCallback();
       messageCallback("success", "Imagen/es eliminada/s correctamente.");
@@ -221,7 +220,8 @@ export const ImagesDataTable = () => {
         CustomToolbar={() => <CustomToolbar setCreateImageModal={setCreateImageModal} />}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
-            {...props}
+            data={props.data as Image[]}
+            selected={props.selected as readonly Image[]}
             fetchCallback={fetchData}
             messageCallback={openModalMessage} />
         )}

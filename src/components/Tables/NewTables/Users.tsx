@@ -1,4 +1,4 @@
-import { Cancel, CheckCircle, Edit, KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from "@mui/icons-material";
+import { Cancel, CheckCircle, CheckCircleOutline, Edit, HighlightOff, KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from "@mui/icons-material";
 import { Button, IconButton, Stack, Tooltip } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { CreateUserPanel, Modal, ModalMessage, ModifyUserPanel, MUITable } from "../..";
@@ -7,6 +7,7 @@ import { User } from "../../../services/types";
 import { useAppContext } from "../../../store/appContext/useAppContext";
 import { HeadCell } from "../MUITable/TableHead";
 import { CustomSelectedToolbarProps } from "../MUITable/Toolbar";
+import { CustomCell } from "../MUITable/MUITable";
 
 const CustomToolbar = ({ setAddUserModal }: { setAddUserModal: () => void }) => {
   return (
@@ -14,10 +15,10 @@ const CustomToolbar = ({ setAddUserModal }: { setAddUserModal: () => void }) => 
   )
 };
 
-interface UserSelectedToolbarProps extends CustomSelectedToolbarProps {
+interface UserSelectedToolbarProps extends CustomSelectedToolbarProps<User> {
   fetchCallback: () => void;
   messageCallback: (severity: string, message: string) => void;
-  openModifyModal: (selected: readonly (number | string)[]) => void;
+  openModifyModal: (selected: readonly User[]) => void;
 }
 
 const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openModifyModal }: UserSelectedToolbarProps) => {
@@ -30,15 +31,14 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
  * 
  * @function
  * @async
- * @param {readonly (number | string)[]} selected
+ * @param {readonly User[]} selected
  * @param {string} field Field to update.
  * @param {boolean | string} value New value for the field.
  * @returns {Promise<void>}
  */
-  const handleUpdateUser = async (selected: readonly (number | string)[], field: string, value: boolean | string): Promise<void> => {
+  const handleUpdateUser = async (selected: readonly User[], field: string, value: boolean | string): Promise<void> => {
     try {
-      for (const id of selected) {
-        if (typeof id !== "number") return;
+      for (const user of selected) {
         let requestBody = {};
         if (field === "is_active") {
           requestBody = { is_active: value };
@@ -47,7 +47,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
           requestBody = { is_admin: value };
         }
 
-        await patchUserById(id, tokens?.access_token ?? "", requestBody);
+        await patchUserById(user.id, tokens?.access_token ?? "", requestBody);
       }
       fetchCallback();
       messageCallback("success", "Usuario/s actualizado/s correctamente.");
@@ -128,6 +128,17 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
     </Stack>
   )
 };
+
+const CustomCells: CustomCell<User>[] = [
+  {
+    id: "is_admin",
+    render: (row: User) => (row.is_admin ? <CheckCircleOutline color="success" /> : <HighlightOff color="error" />),
+  },
+  {
+    id: "is_active",
+    render: (row: User) => (row.is_active ? <CheckCircleOutline color="success" /> : <HighlightOff color="error" />),
+  },
+];
 
 const headCells: HeadCell<User>[] = [
   { id: "id", label: "Id", numeric: false },
@@ -269,14 +280,12 @@ export const UsersDataTable = () => {
    * @param {MUIDataTableIsRowCheck} selectedRows Selected rows in the table.
    * @returns {void}
    */
-  const setModifyUserModal = (selected: readonly (number | string)[]): void => {
+  const setModifyUserModal = (selected: readonly User[]): void => {
     if (selected.length !== 1) {
       openModalMessage("error", "Solo debes seleccionar un usuario para modificarlo.");
       return;
     }
-    const index = selected[0];
-    if (typeof index !== "number") return;
-    const user = usersData[index];
+    const user = selected[0];
 
     setModalAttr({
       openModal: true,
@@ -304,10 +313,12 @@ export const UsersDataTable = () => {
         title="Usuarios"
         data={usersData}
         headCells={headCells as HeadCell<unknown>[]}
+        customCells={CustomCells as CustomCell<object>[]}
         CustomToolbar={() => <CustomToolbar setAddUserModal={setAddUserModal} />}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
-            {...props}
+            data={props.data as User[]}
+            selected={props.selected as readonly User[]}
             fetchCallback={fetchData}
             messageCallback={openModalMessage}
             openModifyModal={setModifyUserModal}

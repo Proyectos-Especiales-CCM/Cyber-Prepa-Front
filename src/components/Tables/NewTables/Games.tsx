@@ -21,10 +21,10 @@ const CustomToolbar = ({ setCreateGameModal }: { setCreateGameModal: () => void 
   )
 };
 
-interface GameSelectedToolbarProps extends CustomSelectedToolbarProps {
+interface GameSelectedToolbarProps extends CustomSelectedToolbarProps<Game> {
   fetchCallback: () => void;
   messageCallback: (severity: string, message: string) => void;
-  openModifyModal: (selected: readonly (number | string)[]) => void;
+  openModifyModal: (selected: readonly Game[]) => void;
 }
 
 const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openModifyModal }: GameSelectedToolbarProps) => {
@@ -42,11 +42,10 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
  * @param {boolean | string} value New value for the field.
  * @returns {Promise<void>}
  */
-  const handleUpdateGame = async (selected: readonly (number | string)[], field: string, value: boolean | string): Promise<void> => {
+  const handleUpdateGame = async (selected: readonly Game[], field: string, value: boolean | string): Promise<void> => {
     try {
-      for (const id of selected) {
+      for (const game of selected) {
 
-        if (typeof id !== "number") return;
         let requestBody = {};
         if (field === "show") {
           requestBody = { show: value };
@@ -54,7 +53,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
           return;
         }
 
-        await patchGameById(id, tokens?.access_token ?? "", requestBody);
+        await patchGameById(game.id, tokens?.access_token ?? "", requestBody);
       }
       fetchCallback();
       messageCallback("success", "Juego/s actualizado/s correctamente.");
@@ -72,11 +71,10 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
    * @param {MUIDataTableIsRowCheck} selectedRows - Selected rows in the table.
    * @returns {Promise<void>}
    */
-  const handleDeleteGame = async (selected: readonly (number | string)[]) => {
+  const handleDeleteGame = async (selected: readonly Game[]): Promise<void> => {
     try {
-      for (const id of selected) {
-        if (typeof id !== "number") return;
-        await deleteGameById(id, tokens?.access_token ?? "");
+      for (const game of selected) {
+        await deleteGameById(game.id, tokens?.access_token ?? "");
       }
       fetchCallback();
       messageCallback("success", "Juego/s eliminado/s correctamente.");
@@ -306,14 +304,12 @@ export const GamesDataTable = () => {
    * @param {MUIDataTableIsRowCheck} selectedRows Selected rows in the table.
    * @returns {void}
    */
-  const setModifyGameModal = (selected: readonly (number | string)[]) => {
+  const setModifyGameModal = (selected: readonly Game[]) => {
     if (selected.length !== 1) {
       openModalMessage("error", "Solo debes seleccionar un juego para modificarlo.");
       return;
     }
-    const index = selected[0];
-    if (typeof index !== "number") return;
-    const game = gamesData[index];
+    const game = selected[0];
 
     const gameImage = findImageIdWithUrl(images, completeImageUrl(game.image ?? '') ?? '');
 
@@ -349,7 +345,8 @@ export const GamesDataTable = () => {
             CustomToolbar={() => <CustomToolbar setCreateGameModal={setAddGameModal} />}
             CustomSelectedToolbar={(props) => (
               <CustomSelectedToolbar
-                {...props}
+                data={props.data as Game[]}
+                selected={props.selected as readonly Game[]}
                 fetchCallback={fetchData}
                 messageCallback={openModalMessage}
                 openModifyModal={setModifyGameModal}

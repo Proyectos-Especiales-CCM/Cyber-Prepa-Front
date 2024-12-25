@@ -24,7 +24,7 @@ export interface EnhancedTableProps<T extends object> extends React.DetailedHTML
   excludedColumns?: (keyof T)[];
   customCells?: CustomCell<T>[];
   CustomToolbar?: React.FC;
-  CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
+  CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps<T>>;
 }
 
 export const MUITable = React.memo(<T extends object>({
@@ -60,7 +60,7 @@ export const MUITable = React.memo(<T extends object>({
     return {
       order: "asc" as Order,
       orderBy: orderByKey,
-      selected: [] as readonly (number | string)[],
+      selected: [] as readonly T[],
       page: 0,
       rowsPerPage: 5,
       searchQuery: "",
@@ -130,33 +130,31 @@ export const MUITable = React.memo(<T extends object>({
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectionKey = state.orderBy;
     if (event.target.checked) {
-      const newSelected = state.currentData.map((n) => n[selectionKey] as number | string);
-      setState((prevState) => ({ ...prevState, selected: newSelected }));
+      setState((prevState) => ({ ...prevState, selected: [...state.currentData] }));
     } else {
       setState((prevState) => ({ ...prevState, selected: [] }));
     }
-  };
+  };  
 
-  const handleClick = (_event: React.MouseEvent<unknown>, id: number | string) => {
-    const selectedIndex = state.selected.indexOf(id);
-    let newSelected: readonly (number | string)[] = [];
-
+  const handleClick = (_event: React.MouseEvent<unknown>, row: T) => {
+    const selectedIndex = state.selected.findIndex((selectedRow) => selectedRow === row);
+    let newSelected: readonly T[] = [];
+  
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(state.selected, id);
+      newSelected = [...state.selected, row];
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(state.selected.slice(1));
+      newSelected = state.selected.slice(1);
     } else if (selectedIndex === state.selected.length - 1) {
-      newSelected = newSelected.concat(state.selected.slice(0, -1));
+      newSelected = state.selected.slice(0, -1);
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        state.selected.slice(0, selectedIndex),
-        state.selected.slice(selectedIndex + 1)
-      );
+      newSelected = [
+        ...state.selected.slice(0, selectedIndex),
+        ...state.selected.slice(selectedIndex + 1),
+      ];
     }
     setState((prevState) => ({ ...prevState, selected: newSelected }));
-  };
+  };  
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setState((prevState) => ({ ...prevState, page: newPage }));
@@ -200,13 +198,13 @@ export const MUITable = React.memo(<T extends object>({
             <TableBody>
               {state.visibleRows.map((row, index) => {
                 const selectionKey = state.orderBy;
-                const isItemSelected = state.selected.includes(row[selectionKey] as unknown as string | number);
+                const isItemSelected = state.selected.some((selectedRow) => selectedRow === row);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row[selectionKey] as number | string)}
+                    onClick={(event) => handleClick(event, row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}

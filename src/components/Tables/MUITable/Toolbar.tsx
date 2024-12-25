@@ -7,22 +7,22 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-export interface CustomSelectedToolbarProps {
-  selected?: readonly (number | string)[];
-  data?: unknown[];
+export interface CustomSelectedToolbarProps<T> {
+  selected?: readonly T[];
+  data?: T[];
 }
 
-interface EnhancedTableToolbarProps {
+interface EnhancedTableToolbarProps<T> {
   title: string;
   numSelected: number;
-  selected: readonly (number | string)[];
+  selected: readonly T[];
   onSearch: (query: string) => void;
   CustomToolbar?: React.FC;
-  CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
-  data?: unknown[];
+  CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps<T>>;
+  data?: T[];
 }
 
-export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+export function EnhancedTableToolbar<T>(props: EnhancedTableToolbarProps<T>) {
   const { title, numSelected, selected, onSearch, CustomToolbar, CustomSelectedToolbar, data } = props;
 
   return (

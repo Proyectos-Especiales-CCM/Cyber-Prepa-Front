@@ -10,7 +10,7 @@ import { HeadCell } from "../MUITable/TableHead";
 import { CustomSelectedToolbarProps } from "../MUITable/Toolbar";
 import { useGamesContext } from "../../../store/gamesContext/useGamesContext";
 
-interface PlaysToolbarProps extends CustomSelectedToolbarProps {
+interface PlaysToolbarProps extends CustomSelectedToolbarProps<Play> {
   fetchCallback: () => void;
   messageCallback: (severity: string, message: string) => void;
 }
@@ -25,11 +25,11 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback }: Pla
    * @param {number[]} selected - Selected rows in the table.
    * @returns {Promise<void>}
    */
-  const handleDeletePlay = async (selected?: readonly (number | string)[]): Promise<void> => {
+  const handleDeletePlay = async (selected?: readonly Play[]): Promise<void> => {
     try {
       if (!selected) return;
-      for (const id of selected) {
-        await deletePlayById(Number(id), tokens?.access_token ?? "");
+      for (const row of selected) {
+        await deletePlayById(row.id, tokens?.access_token ?? "");
       }
       fetchCallback();
       messageCallback("success", "Partida/s eliminada/s correctamente.");
@@ -161,7 +161,8 @@ export const PlaysDataTable = () => {
         customCells={CustomCells as CustomCell<object>[]}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
-            {...props}
+            selected={props.selected as readonly Play[]}
+            data={props.data as Play[]}
             fetchCallback={fetchData}
             messageCallback={openModalMessage}
           />

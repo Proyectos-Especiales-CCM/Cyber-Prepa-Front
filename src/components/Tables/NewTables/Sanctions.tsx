@@ -21,10 +21,10 @@ const CustomToolbar = ({ setAddSanctionModal }: { setAddSanctionModal: () => voi
   )
 };
 
-interface SanctionsToolbarProps extends CustomSelectedToolbarProps {
+interface SanctionsToolbarProps extends CustomSelectedToolbarProps<Sanction> {
   fetchCallback: () => void;
   messageCallback: (severity: string, message: string) => void;
-  openModifyModal: (selected: readonly (number | string)[]) => void;
+  openModifyModal: (selected: readonly Sanction[]) => void;
 }
 
 const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openModifyModal }: SanctionsToolbarProps) => {
@@ -37,11 +37,11 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
    * @param {MUIDataTableIsRowCheck} selectedRows - Selected rows in the table.
    * @returns {Promise<void>}
    */
-  const handleDeleteSanction = async (selected?: readonly (number | string)[]): Promise<void> => {
+  const handleDeleteSanction = async (selected?: readonly Sanction[]): Promise<void> => {
     try {
       if (!selected) return;
-      for (const id of selected) {
-        await deleteSanctionById(Number(id), tokens?.access_token ?? "");
+      for (const row of selected) {
+        await deleteSanctionById(row.id, tokens?.access_token ?? "");
       }
       fetchCallback();
       messageCallback("success", "Sanción/es eliminada/s correctamente.");
@@ -239,14 +239,12 @@ export const SanctionsDataTable = () => {
    * @param {readonly (number | string)[]} selectedRows - Selected rows in the table.
    * @returns {void}
    */
-  const setModifySanctionModal = (selected: readonly (number | string)[]): void => {
+  const setModifySanctionModal = (selected: readonly Sanction[]): void => {
     if (selected.length !== 1) {
       openModalMessage("error", "Solo debes seleccionar un juego para modificarlo.");
       return;
     }
-    const index = selected[0];
-    if (typeof index !== "number") return;
-    const sanction = sanctionsData[index];
+    const sanction = selected[0];
 
     setModalAttr({
       openModal: true,
@@ -277,7 +275,8 @@ export const SanctionsDataTable = () => {
         CustomToolbar={() => <CustomToolbar setAddSanctionModal={setAddSanctionModal} />}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
-            {...props}
+            selected={props.selected as readonly Sanction[]}
+            data={props.data as Sanction[]}
             fetchCallback={fetchData}
             messageCallback={openModalMessage}
             openModifyModal={setModifySanctionModal}
