@@ -157,8 +157,8 @@ export const PlaysDataTable = () => {
       <MUITable
         title="Historial de Partidas"
         data={playsData}
-        headCells={headCells as HeadCell<{ id: number | string }>[]}
-        customCells={CustomCells as unknown as CustomCell<{ id: number | string }>[]}
+        headCells={headCells as HeadCell<unknown>[]}
+        customCells={CustomCells as CustomCell<object>[]}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
             {...props}

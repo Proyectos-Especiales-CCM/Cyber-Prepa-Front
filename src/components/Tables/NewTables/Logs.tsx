@@ -106,7 +106,8 @@ export const LogsDataTable = () => {
       <MUITable
         title="Historial de los Usuarios"
         data={logsData}
-        headCells={headCells as HeadCell<{ id: number | string }>[]}
+        headCells={headCells as HeadCell<unknown>[]}
+        defaultOrderBy="line"
       />
       <ModalMessage
         handleCloseModal={closeModalMessage}

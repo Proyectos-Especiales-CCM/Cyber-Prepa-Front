@@ -272,8 +272,8 @@ export const SanctionsDataTable = () => {
       <MUITable
         title="Sanciones"
         data={sanctionsData}
-        headCells={headCells as HeadCell<{ id: number | string }>[]}
-        customCells={CustomCells as unknown as CustomCell<{ id: number | string }>[]}
+        headCells={headCells as HeadCell<unknown>[]}
+        customCells={CustomCells as CustomCell<object>[]}
         CustomToolbar={() => <CustomToolbar setAddSanctionModal={setAddSanctionModal} />}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar

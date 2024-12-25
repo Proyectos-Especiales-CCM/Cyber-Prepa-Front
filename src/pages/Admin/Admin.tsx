@@ -3,9 +3,7 @@ import { useAppContext } from "../../store/appContext/useAppContext";
 import { useRef } from "react";
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
 import { Explore, SportsEsports, Rule, Warning, Image, People, FindInPage, Key, } from '@mui/icons-material';
-import {
-  LogsDataTable,
-} from "../../components";
+import { LogsDataTable } from '../../components/Tables/NewTables/Logs';
 import { PlaysDataTable } from '../../components/Tables/NewTables/Plays';
 import { SanctionsDataTable } from '../../components/Tables/NewTables/Sanctions';
 import { GamesDataTable } from '../../components/Tables/NewTables/Games';
@@ -63,7 +61,9 @@ const Admin = () => {
             <Box ref={studentsTableRef} margin={2} >
               <StudentsDataTable />
             </Box>
-            <LogsDataTable ref={logsTableRef} />
+            <Box ref={logsTableRef} margin={2}>
+              <LogsDataTable />
+            </Box>
             <Box ref={usersTableRef} margin={2} >
               <UsersDataTable />
             </Box>

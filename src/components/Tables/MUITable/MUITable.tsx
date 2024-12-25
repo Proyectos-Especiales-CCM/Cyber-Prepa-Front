@@ -16,18 +16,18 @@ export interface CustomCell<T> {
   render: (row: T, key: keyof T) => React.ReactNode;
 }
 
-export interface EnhancedTableProps<T extends { id: number | string }> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export interface EnhancedTableProps<T extends object> extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   title: string;
   data: T[];
   headCells?: HeadCell<T>[];
-  defaultOrderBy?: keyof T;
+  defaultOrderBy?: string;
   excludedColumns?: (keyof T)[];
   customCells?: CustomCell<T>[];
   CustomToolbar?: React.FC;
   CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps>;
 }
 
-export const MUITable = React.memo(<T extends { id: number | string }>({
+export const MUITable = React.memo(<T extends object>({
   title,
   data,
   headCells: passedHeadCells,
@@ -38,21 +38,41 @@ export const MUITable = React.memo(<T extends { id: number | string }>({
   CustomSelectedToolbar,
   ...rest
 }: EnhancedTableProps<T>) => {
-  const [state, setState] = React.useState({
-    order: 'asc' as Order,
-    orderBy: defaultOrderBy || 'id' as keyof T,
-    selected: [] as readonly (number | string)[],
-    page: 0,
-    rowsPerPage: 5,
-    searchQuery: '',
-    currentData: data,
-    visibleRows: data,
-    emptyRows: 0,
+
+  const getDefaultOrderByKey = React.useCallback((): keyof T => {
+    if (data.length === 0) return "id" as keyof T;
+
+    const keys = data.length > 0 ? (Object.keys(data[0]) as (keyof T)[]) : [];
+
+    if (defaultOrderBy) {
+      if (keys.includes(defaultOrderBy as keyof T)) {
+        return defaultOrderBy as keyof T;
+      } else {
+        console.warn(`{defaultOrderBy}: "${defaultOrderBy}" not found among the object keys. Falling back to automatic key detection.`);
+      }
+    }
+
+    return (keys.includes("id" as keyof T) ? "id" : keys[0]) as keyof T;
+  }, [data, defaultOrderBy]);
+
+  const [state, setState] = React.useState(() => {
+    const orderByKey = getDefaultOrderByKey();
+    return {
+      order: "asc" as Order,
+      orderBy: orderByKey,
+      selected: [] as readonly (number | string)[],
+      page: 0,
+      rowsPerPage: 5,
+      searchQuery: "",
+      currentData: data,
+      visibleRows: data,
+      emptyRows: 0,
+    };
   });
 
   const generateHeadCells = React.useCallback((): HeadCell<T>[] => {
     if (data.length === 0) return [];
-    return Object.keys(data[0])
+    return Object.keys(data[0] as object)
       .filter((key) => !(excludedColumns || []).includes(key as keyof T))
       .map((key) => ({
         id: key as keyof T,
@@ -68,9 +88,14 @@ export const MUITable = React.memo(<T extends { id: number | string }>({
   };
 
   React.useEffect(() => {
+    const orderByKey = getDefaultOrderByKey();
+    setState((prevState) => ({ ...prevState, orderBy: orderByKey }));
+  }, [data, getDefaultOrderByKey]);
+
+  React.useEffect(() => {
     const filteredData = data.filter((row) =>
-      Object.values(row).some((value) =>
-        value.toString().toLowerCase().includes(state.searchQuery)
+      Object.values(row as Record<string, unknown>).some((value) =>
+        typeof value === 'string' && value.toLowerCase().includes(state.searchQuery)
       )
     );
     setState((prevState) => ({ ...prevState, currentData: filteredData }));
@@ -105,8 +130,9 @@ export const MUITable = React.memo(<T extends { id: number | string }>({
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectionKey = state.orderBy;
     if (event.target.checked) {
-      const newSelected = state.currentData.map((n) => n.id);
+      const newSelected = state.currentData.map((n) => n[selectionKey] as number | string);
       setState((prevState) => ({ ...prevState, selected: newSelected }));
     } else {
       setState((prevState) => ({ ...prevState, selected: [] }));
@@ -173,17 +199,18 @@ export const MUITable = React.memo(<T extends { id: number | string }>({
             />
             <TableBody>
               {state.visibleRows.map((row, index) => {
-                const isItemSelected = state.selected.includes(row.id);
+                const selectionKey = state.orderBy;
+                const isItemSelected = state.selected.includes(row[selectionKey] as unknown as string | number);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleClick(event, row[selectionKey] as number | string)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={String(row[selectionKey])}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >

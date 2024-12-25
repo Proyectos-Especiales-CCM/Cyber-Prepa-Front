@@ -105,7 +105,7 @@ export const StudentsDataTable = () => {
       <MUITable
         title="Estudiantes"
         data={studentsData}
-        headCells={headCells as HeadCell<{ id: number | string }>[]}
+        headCells={headCells as HeadCell<unknown>[]}
       />
       <ModalMessage handleCloseModal={closeModalMessage} {...modalMessageAttr} />
     </>

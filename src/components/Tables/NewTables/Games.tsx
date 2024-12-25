@@ -339,23 +339,27 @@ export const GamesDataTable = () => {
 
   return (
     <>
-      <MUITable
-        title="Catálogo de Juegos"
-        data={gamesData}
-        headCells={headCells as HeadCell<{ id: number | string }>[]}
-        customCells={CustomCells as unknown as CustomCell<{ id: number | string }>[]}
-        CustomToolbar={() => <CustomToolbar setCreateGameModal={setAddGameModal} />}
-        CustomSelectedToolbar={(props) => (
-          <CustomSelectedToolbar
-            {...props}
-            fetchCallback={fetchData}
-            messageCallback={openModalMessage}
-            openModifyModal={setModifyGameModal}
+      {gamesData && (
+        <>
+          <MUITable
+            title="Catálogo de Juegos"
+            data={gamesData}
+            headCells={headCells as HeadCell<unknown>[]}
+            customCells={CustomCells as CustomCell<object>[]}
+            CustomToolbar={() => <CustomToolbar setCreateGameModal={setAddGameModal} />}
+            CustomSelectedToolbar={(props) => (
+              <CustomSelectedToolbar
+                {...props}
+                fetchCallback={fetchData}
+                messageCallback={openModalMessage}
+                openModifyModal={setModifyGameModal}
+              />
+            )}
           />
-        )}
-      />
-      <ModalMessage handleCloseModal={closeModalMessage} {...modalMessageAttr} />
-      <Modal handleCloseModal={handleCloseModal} {...modalAttr} />
+          <ModalMessage handleCloseModal={closeModalMessage} {...modalMessageAttr} />
+          <Modal handleCloseModal={handleCloseModal} {...modalAttr} />
+        </>
+      )}
     </>
   )
 };

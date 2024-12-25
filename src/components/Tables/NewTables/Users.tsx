@@ -303,7 +303,7 @@ export const UsersDataTable = () => {
       <MUITable
         title="Usuarios"
         data={usersData}
-        headCells={headCells as HeadCell<{ id: number | string }>[]}
+        headCells={headCells as HeadCell<unknown>[]}
         CustomToolbar={() => <CustomToolbar setAddUserModal={setAddUserModal} />}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
