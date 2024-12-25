@@ -20,6 +20,4 @@ export { ModifySanctionPanel } from './ModifySanctionPanel'
 export { SelectOrUploadImage } from './SelectOrUploadImage'
 export { CreateImagePanel } from './CreateImagePanel'
 
-export { LogsDataTable } from './Tables'
-
 export { MUITable } from './Tables'
