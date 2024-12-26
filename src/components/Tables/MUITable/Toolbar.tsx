@@ -51,7 +51,7 @@ export function EnhancedTableToolbar<T>(props: EnhancedTableToolbarProps<T>) {
           {CustomSelectedToolbar && <CustomSelectedToolbar data={data} selected={selected} />}
         </>
       ) : (
-        <Stack direction="row" justifyContent="space-between" width={"100%"}>
+        <Stack direction="row" justifyContent="space-between" width={"100%"} alignItems={"center"}>
           <Typography
             sx={{ flex: '1 1 100%', alignContent: "center", paddingLeft: 1 }}
             variant="h6"

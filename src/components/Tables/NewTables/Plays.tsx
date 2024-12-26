@@ -159,6 +159,7 @@ export const PlaysDataTable = () => {
         data={playsData}
         headCells={headCells as HeadCell<unknown>[]}
         customCells={CustomCells as CustomCell<object>[]}
+        defaultOrder="desc"
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
             selected={props.selected as readonly Play[]}

@@ -20,7 +20,9 @@ export interface EnhancedTableProps<T extends object> extends React.DetailedHTML
   title: string;
   data: T[];
   headCells?: HeadCell<T>[];
+  deactivateSelect?: boolean;
   defaultOrderBy?: string;
+  defaultOrder?: Order;
   excludedColumns?: (keyof T)[];
   customCells?: CustomCell<T>[];
   CustomToolbar?: React.FC;
@@ -31,7 +33,9 @@ export const MUITable = React.memo(<T extends object>({
   title,
   data,
   headCells: passedHeadCells,
+  deactivateSelect,
   defaultOrderBy,
+  defaultOrder,
   excludedColumns,
   customCells,
   CustomToolbar,
@@ -58,7 +62,7 @@ export const MUITable = React.memo(<T extends object>({
   const [state, setState] = React.useState(() => {
     const orderByKey = getDefaultOrderByKey();
     return {
-      order: "asc" as Order,
+      order: defaultOrder || 'asc',
       orderBy: orderByKey,
       selected: [] as readonly T[],
       page: 0,
@@ -120,6 +124,16 @@ export const MUITable = React.memo(<T extends object>({
     }));
   }, [state.currentData, state.order, state.orderBy, state.page, state.rowsPerPage]);
 
+  React.useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      selected: prevState.selected.filter((selectedRow) =>
+        data.some((row) => row === selectedRow)
+      ),
+    }));
+  }, [data]);
+
+
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: keyof T) => {
     const isAsc = state.orderBy === property && state.order === 'asc';
     setState((prevState) => ({
@@ -135,12 +149,12 @@ export const MUITable = React.memo(<T extends object>({
     } else {
       setState((prevState) => ({ ...prevState, selected: [] }));
     }
-  };  
+  };
 
   const handleClick = (_event: React.MouseEvent<unknown>, row: T) => {
     const selectedIndex = state.selected.findIndex((selectedRow) => selectedRow === row);
     let newSelected: readonly T[] = [];
-  
+
     if (selectedIndex === -1) {
       newSelected = [...state.selected, row];
     } else if (selectedIndex === 0) {
@@ -154,7 +168,7 @@ export const MUITable = React.memo(<T extends object>({
       ];
     }
     setState((prevState) => ({ ...prevState, selected: newSelected }));
-  };  
+  };
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setState((prevState) => ({ ...prevState, page: newPage }));
@@ -191,9 +205,10 @@ export const MUITable = React.memo(<T extends object>({
               numSelected={state.selected.length}
               order={state.order}
               orderBy={state.orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              onSelectAllClick={deactivateSelect ? undefined : handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={state.currentData.length}
+              deactivateSelectAll={deactivateSelect}
             />
             <TableBody>
               {state.visibleRows.map((row, index) => {
@@ -204,7 +219,7 @@ export const MUITable = React.memo(<T extends object>({
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row)}
+                    onClick={deactivateSelect ? undefined : (event) => handleClick(event, row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -212,15 +227,17 @@ export const MUITable = React.memo(<T extends object>({
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          'aria-labelledby': labelId,
-                        }}
-                      />
-                    </TableCell>
+                    {!deactivateSelect && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            'aria-labelledby': labelId,
+                          }}
+                        />
+                      </TableCell>
+                    )}
                     {headCells.map((headCell, cellIndex) => (
                       <TableCell
                         key={String(headCell.id)}

@@ -106,6 +106,7 @@ export const StudentsDataTable = () => {
         title="Estudiantes"
         data={studentsData}
         headCells={headCells as HeadCell<unknown>[]}
+        deactivateSelect
       />
       <ModalMessage handleCloseModal={closeModalMessage} {...modalMessageAttr} />
     </>

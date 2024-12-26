@@ -12,6 +12,7 @@ import { CustomSelectedToolbarProps } from '../MUITable/Toolbar';
 const CustomToolbar = ({ setCreateGameModal }: { setCreateGameModal: () => void }) => {
   return (
     <Button
+      size='small'
       variant='contained'
       color='success'
       onClick={setCreateGameModal}

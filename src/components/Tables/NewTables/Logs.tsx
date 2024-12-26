@@ -108,6 +108,8 @@ export const LogsDataTable = () => {
         data={logsData}
         headCells={headCells as HeadCell<unknown>[]}
         defaultOrderBy="line"
+        defaultOrder="desc"
+        deactivateSelect
       />
       <ModalMessage
         handleCloseModal={closeModalMessage}

@@ -12,6 +12,7 @@ import { CustomCell } from '../MUITable/MUITable';
 const CustomToolbar = ({ setAddSanctionModal }: { setAddSanctionModal: () => void }) => {
   return (
     <Button
+      size='small'
       variant='contained'
       color='success'
       onClick={setAddSanctionModal}
@@ -272,6 +273,7 @@ export const SanctionsDataTable = () => {
         data={sanctionsData}
         headCells={headCells as HeadCell<unknown>[]}
         customCells={CustomCells as CustomCell<object>[]}
+        defaultOrder="desc"
         CustomToolbar={() => <CustomToolbar setAddSanctionModal={setAddSanctionModal} />}
         CustomSelectedToolbar={(props) => (
           <CustomSelectedToolbar
