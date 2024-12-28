@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { EnhancedTableHead, HeadCell } from './TableHead';
 import { CustomSelectedToolbarProps, EnhancedTableToolbar } from './Toolbar';
 import { getComparator, Order } from './utils';
@@ -27,6 +27,20 @@ export interface EnhancedTableProps<T extends object> extends React.DetailedHTML
   customCells?: CustomCell<T>[];
   CustomToolbar?: React.FC;
   CustomSelectedToolbar?: React.FC<CustomSelectedToolbarProps<T>>;
+}
+
+interface EnhancedTableState<T> {
+  order: Order;
+  orderBy: keyof T;
+  selected: readonly T[];
+  page: number;
+  rowsPerPage: number;
+  searchQuery: string;
+  filterFunc: (row: T) => boolean;
+  filteredData: T[];
+  currentData: T[];
+  visibleRows: T[];
+  emptyRows: number;
 }
 
 export const MUITable = React.memo(<T extends object>({
@@ -59,7 +73,7 @@ export const MUITable = React.memo(<T extends object>({
     return (keys.includes("id" as keyof T) ? "id" : keys[0]) as keyof T;
   }, [data, defaultOrderBy]);
 
-  const [state, setState] = React.useState(() => {
+  const [state, setState] = React.useState<EnhancedTableState<T>>(() => {
     const orderByKey = getDefaultOrderByKey();
     return {
       order: defaultOrder || 'asc',
@@ -68,6 +82,8 @@ export const MUITable = React.memo(<T extends object>({
       page: 0,
       rowsPerPage: 5,
       searchQuery: "",
+      filterFunc: () => true,
+      filteredData: data,
       currentData: data,
       visibleRows: data,
       emptyRows: 0,
@@ -96,15 +112,28 @@ export const MUITable = React.memo(<T extends object>({
     setState((prevState) => ({ ...prevState, orderBy: orderByKey }));
   }, [data, getDefaultOrderByKey]);
 
+  // Filter data based on applied filters
   React.useEffect(() => {
-    const filteredData = data.filter((row) =>
+    const newFilteredData = data.filter(state.filterFunc);
+
+    setState((prevState) => ({
+      ...prevState,
+      filteredData: newFilteredData,
+      currentData: newFilteredData,
+    }));
+  }, [data, state.filterFunc]);
+
+  // Search data based on search query
+  React.useEffect(() => {
+    const searchResults = state.filteredData.filter((row) =>
       Object.values(row as Record<string, unknown>).some((value) =>
         typeof value === 'string' && value.toLowerCase().includes(state.searchQuery)
       )
     );
-    setState((prevState) => ({ ...prevState, currentData: filteredData }));
-  }, [data, state.searchQuery]);
+    setState((prevState) => ({ ...prevState, currentData: searchResults }));
+  }, [state.filteredData, state.searchQuery]);
 
+  // Sort and paginate data to display TablePagination and visible rows respectively
   React.useEffect(() => {
     const sortedData = [...state.currentData].sort(
       getComparator<T, keyof T>(state.order, state.orderBy)
@@ -124,6 +153,7 @@ export const MUITable = React.memo(<T extends object>({
     }));
   }, [state.currentData, state.order, state.orderBy, state.page, state.rowsPerPage]);
 
+  // Remove selected rows deleted from the data to prevent stale selected state
   React.useEffect(() => {
     setState((prevState) => ({
       ...prevState,
@@ -182,6 +212,10 @@ export const MUITable = React.memo(<T extends object>({
     }));
   };
 
+  const handleFilterChange = useCallback((filterFunc: (row: T) => boolean) => {
+    setState((prevState) => ({ ...prevState, filterFunc }));
+  }, []);
+
   return (
     <div {...rest}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -189,10 +223,12 @@ export const MUITable = React.memo(<T extends object>({
           title={title}
           numSelected={state.selected.length}
           selected={state.selected}
+          onFilterChange={handleFilterChange}
           onSearch={handleSearch}
+          headCells={headCells}
           CustomToolbar={CustomToolbar}
           CustomSelectedToolbar={CustomSelectedToolbar}
-          data={state.currentData}
+          data={data}
         />
         <TableContainer>
           <Table
