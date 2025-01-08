@@ -3,12 +3,34 @@ export interface APITokens {
     refresh: string,
 }
 
+export interface Notice {
+    id: number,
+    cause: string,
+    play: number,
+    student: string,
+    created_at: string,
+}
+
+export interface OwedMaterial {
+    id: number,
+    material: number,
+    material_name: string,
+    amount: number,
+    delivered: number,
+    student: string,
+    delivery_deadline?: string,
+    updated_at: string,
+    created_at: string,
+}
+
 export interface Play {
     id: number;
     ended: boolean;
     time: string;
     student: string;
     game: number | string;
+    notices: Notice[];
+    owed_materials: OwedMaterial[];
 }
 
 export interface Game {

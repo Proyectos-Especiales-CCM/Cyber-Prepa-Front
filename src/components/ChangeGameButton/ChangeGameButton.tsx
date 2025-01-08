@@ -1,32 +1,22 @@
 import { MoveUpOutlined } from '@mui/icons-material';
-import { Alert, AlertColor, Button, IconButton, Menu, MenuItem, Snackbar, Tooltip } from "@mui/material";
+import { Alert, AlertColor, IconButton, Menu, MenuItem, Snackbar, Tooltip } from "@mui/material";
 import { useState } from "react";
 import { patchPlayById } from "../../services";
 import { Play } from "../../services/types";
 import { useAppContext } from "../../store/appContext/useAppContext";
 import { useGamesContext } from "../../store/gamesContext/useGamesContext";
 
-export function ChangeIconButton({ handleClick }: { handleClick: React.MouseEventHandler<HTMLButtonElement> }) {
+function ChangeButton({ handleClick }: { handleClick: React.MouseEventHandler<HTMLButtonElement> }) {
   return (
     <Tooltip title="Cambiar de juego">
-      <IconButton onClick={handleClick}>
+      <IconButton
+        size='medium'
+        onClick={handleClick}
+        sx={{ bgcolor: 'secondary.main' }}
+      >
         <MoveUpOutlined />
       </IconButton>
     </Tooltip>
-  )
-}
-
-function ChangeButton({ handleClick }: { handleClick: React.MouseEventHandler<HTMLButtonElement> }) {
-  return (
-    <Button
-      onClick={handleClick}
-      variant="contained"
-      sx={{ width: 120 }}
-      color='secondary'
-    >
-      Cambiar jugador
-      <MoveUpOutlined />
-    </Button>
   )
 }
 
