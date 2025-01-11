@@ -2,7 +2,7 @@ import './admin.css';
 import { useAppContext } from "../../store/appContext/useAppContext";
 import { useRef } from "react";
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
-import { Explore, SportsEsports, Rule, Warning, Image, People, FindInPage, Key, } from '@mui/icons-material';
+import { Explore, SportsEsports, Rule, Warning, Image, People, FindInPage, Key, VideogameAsset, VideogameAssetOff } from '@mui/icons-material';
 import { LogsDataTable } from '../../components/Tables/NewTables/Logs';
 import { PlaysDataTable } from '../../components/Tables/NewTables/Plays';
 import { SanctionsDataTable } from '../../components/Tables/NewTables/Sanctions';
@@ -10,6 +10,7 @@ import { GamesDataTable } from '../../components/Tables/NewTables/Games';
 import { StudentsDataTable } from '../../components/Tables/NewTables/Students';
 import { UsersDataTable } from '../../components/Tables/NewTables/Users';
 import { ImagesDataTable } from '../../components/Tables/NewTables/Images';
+import { MaterialDataTable } from '../../components/Tables/NewTables/Materials';
 
 
 const Admin = () => {
@@ -17,7 +18,9 @@ const Admin = () => {
 
   // Refs para el quick navigation
   const playsTableRef = useRef(null);
+  const owedMaterialsTableRef = useRef(null);
   const sanctionsTableRef = useRef(null);
+  const materialsTableRef = useRef(null);
   const gamesTableRef = useRef(null);
   const imagesTableRef = useRef(null);
   const studentsTableRef = useRef(null);
@@ -29,6 +32,7 @@ const Admin = () => {
   // so the last route will be the topmost in the SpeedDial
   const routes = [
     { icon: <Warning />, name: 'Sanciones', action: () => sanctionsTableRef.current && (sanctionsTableRef.current as HTMLElement).scrollIntoView() },
+    { icon: <VideogameAssetOff />, name: 'Deben material', action: () => owedMaterialsTableRef.current && (owedMaterialsTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <Rule />, name: 'Partidas', action: () => playsTableRef.current && (playsTableRef.current as HTMLElement).scrollIntoView() },
   ];
 
@@ -38,6 +42,7 @@ const Admin = () => {
     { icon: <People />, name: 'Estudiantes', action: () => studentsTableRef.current && (studentsTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <Image />, name: 'Imágenes', action: () => imagesTableRef.current && (imagesTableRef.current as HTMLElement).scrollIntoView() },
     { icon: <SportsEsports />, name: 'Juegos', action: () => gamesTableRef.current && (gamesTableRef.current as HTMLElement).scrollIntoView() },
+    { icon: <VideogameAsset />, name: 'Materiales', action: () => materialsTableRef.current && (materialsTableRef.current as HTMLElement).scrollIntoView() },
     ...routes,
   ];
 
@@ -47,11 +52,17 @@ const Admin = () => {
         <Box ref={playsTableRef} margin={2}>
           <PlaysDataTable />
         </Box>
+        <Box ref={owedMaterialsTableRef} margin={2}>
+          Aqui va la tabla de materiales adeudados
+        </Box>
         <Box ref={sanctionsTableRef} margin={2}>
           <SanctionsDataTable />
         </Box>
         {admin ? (
           <>
+            <Box ref={materialsTableRef} margin={2}>
+              <MaterialDataTable />
+            </Box>
             <Box ref={gamesTableRef} margin={2} >
               <GamesDataTable />
             </Box>

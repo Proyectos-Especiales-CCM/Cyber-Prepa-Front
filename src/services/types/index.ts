@@ -11,6 +11,13 @@ export interface Notice {
     created_at: string,
 }
 
+export interface Material {
+    id: number;
+    name: string;
+    amount: number;
+    description?: string;
+}
+
 export interface OwedMaterial {
     id: number,
     material: number,
