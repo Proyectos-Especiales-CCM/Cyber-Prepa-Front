@@ -52,7 +52,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback }: Pla
 const CustomCells: CustomCell<Play>[] = [
   {
     id: "time",
-    render: (row: Play) => new Date(row.time).toLocaleString(),
+    render: (row: Play) => new Date(row.time).toLocaleString('es-MX'),
   },
   {
     id: "ended",

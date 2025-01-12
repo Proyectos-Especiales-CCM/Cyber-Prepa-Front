@@ -4,18 +4,19 @@ export const createOwedMaterial = async (
     material_id: number,
     amount: number,
     student_id: string,
-    delivery_deadline: string,
     token: string,
+    delivery_deadline?: string,
 ) => {
     let res;
     const endpoint = `rental/owed-materials/`;
 
     const requestBody = {
-        material_id: material_id,
+        material: material_id,
         amount: amount,
-        student_id: student_id,
+        student: student_id,
         delivery_deadline: delivery_deadline,
     }
+    console.log(requestBody);
 
     await httpInstance
         .post(endpoint, JSON.stringify(requestBody), {

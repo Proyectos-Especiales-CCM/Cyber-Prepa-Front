@@ -35,6 +35,16 @@ export const ModifyMaterialPanel: React.FC<ModifyUserPanelProps> = ({ openModalM
       return;
     }
 
+    if (name === '') {
+      openModalMessage('error', 'Por favor, ingresa un nombre para el material.');
+      return;
+    }
+
+    if (amount < 0) {
+      openModalMessage('error', 'Por favor, ingresa una cantidad válida. (Mayor o igual 0)');
+      return
+    }
+
     // Create request body
     const requestBody = {
       ...(name !== prevName && { name: name }),
@@ -99,7 +109,7 @@ export const ModifyMaterialPanel: React.FC<ModifyUserPanelProps> = ({ openModalM
               </FormControl>
             </Grid>
             <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant="contained" color="success" type="submit">Añadir</Button>
+              <Button variant="contained" color="success" type="submit">Actualizar</Button>
             </Grid>
           </Grid>
         </ThemeProvider>

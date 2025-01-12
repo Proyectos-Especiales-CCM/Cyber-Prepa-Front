@@ -1,8 +1,8 @@
 import httpInstance from "../httpInstance";
 
-export const deleteMaterialById = async (materialId: number, token: string) => {
+export const deleteOwedMaterialById = async (owedMaterialId: number, token: string) => {
     let res;
-    const endpoint = `rental/materials/${materialId}/`;
+    const endpoint = `rental/owed-materials/${owedMaterialId}/`;
 
     await httpInstance
         .delete(endpoint, {

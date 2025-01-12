@@ -7,10 +7,12 @@ import { readMaterials } from "../../../services/rental/readMaterials";
 import { useAppContext } from "../../../store/appContext/useAppContext";
 import { Modal, ModalMessage } from "../../Modal";
 import { HeadCell } from "../MUITable/TableHead";
-import CreateMaterialPanel from "../TableComponents/CreateMaterialPanel";
+
 import { Delete, Edit } from "@mui/icons-material";
 import { deleteMaterialById } from "../../../services/rental/deleteMaterialById";
 import { ModifyMaterialPanel } from "../TableComponents/ModifyMaterialPanel";
+import { CreateMaterialPanel } from "../TableComponents/CreateMaterialPanel";
+import { useGamesContext } from "../../../store/gamesContext/useGamesContext";
 
 const CustomToolbar = ({ setAddMaterialModal }: { setAddMaterialModal: () => void }) => {
   return (
@@ -31,7 +33,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
    * Handles the deletion of selected sanctions.
    * @function
    * @async
-   * @param {MUIDataTableIsRowCheck} selectedRows - Selected rows in the table.
+   * @param {readonly Material[]} selected - Selected rows in the table.
    * @returns {Promise<void>}
    */
   const handleDeleteMaterial = async (selected?: readonly Material[]): Promise<void> => {
@@ -89,6 +91,8 @@ const headCells: HeadCell<Material>[] = [
 
 export const MaterialDataTable = () => {
   const { tokens } = useAppContext();
+  const { setMaterials } = useGamesContext();
+
   const [materialsData, setMaterialsData] = useState<Material[]>([]);
   // Variable de atributos del modal de mensajes (feedback al usuario)
   const [modalMessageAttr, setModalMessageAttr] = useState({
@@ -168,33 +172,33 @@ export const MaterialDataTable = () => {
     });
   };
 
-    /**
-   * Sets the modal attributes for modifying a user.
-   * @function
-   * @param {MUIDataTableIsRowCheck} selectedRows Selected rows in the table.
-   * @returns {void}
-   */
-    const setModifyMaterialModal = (selected: readonly Material[]): void => {
-      if (selected.length !== 1) {
-        openModalMessage("error", "Solo debes seleccionar un usuario para modificarlo.");
-        return;
-      }
-      const material = selected[0];
-  
-      setModalAttr({
-        openModal: true,
-        title: "Modificando material " + material.name,
-        children: (<><ModifyMaterialPanel
-          openModalMessage={openModalMessage}
-          closeModal={handleCloseModal}
-          updateUsersData={fetchData}
-          materialId={material.id}
-          prevName={material.name}
-          prevAmount={material.amount}
-          prevDescrip={material.description}
-        /></>),
-      });
-    };
+  /**
+ * Sets the modal attributes for modifying a user.
+ * @function
+ * @param {MUIDataTableIsRowCheck} selectedRows Selected rows in the table.
+ * @returns {void}
+ */
+  const setModifyMaterialModal = (selected: readonly Material[]): void => {
+    if (selected.length !== 1) {
+      openModalMessage("error", "Solo debes seleccionar un usuario para modificarlo.");
+      return;
+    }
+    const material = selected[0];
+
+    setModalAttr({
+      openModal: true,
+      title: "Modificando material " + material.name,
+      children: (<><ModifyMaterialPanel
+        openModalMessage={openModalMessage}
+        closeModal={handleCloseModal}
+        updateUsersData={fetchData}
+        materialId={material.id}
+        prevName={material.name}
+        prevAmount={material.amount}
+        prevDescrip={material.description}
+      /></>),
+    });
+  };
 
   /**
    * Fetches materials data from the server.
@@ -206,6 +210,8 @@ export const MaterialDataTable = () => {
     try {
       const response = await readMaterials(tokens?.access_token ?? '');
       setMaterialsData(response.data);
+      // Add materials data to the wrapper context for use in other components
+      setMaterials(response.data);
     } catch (error) {
       openModalMessage('error', 'Ha ocurrido un error al cargar los usuarios.');
       console.error(error);
@@ -224,13 +230,13 @@ export const MaterialDataTable = () => {
         headCells={headCells as HeadCell<unknown>[]}
         CustomToolbar={() => <CustomToolbar setAddMaterialModal={setAddMaterialModal} />}
         CustomSelectedToolbar={(props) => (
-                  <CustomSelectedToolbar
-                    data={props.data as Material[]}
-                    selected={props.selected as readonly Material[]}
-                    fetchCallback={fetchData}
-                    messageCallback={openModalMessage}
-                    openModifyModal={setModifyMaterialModal}
-                  />)}
+          <CustomSelectedToolbar
+            data={props.data as Material[]}
+            selected={props.selected as readonly Material[]}
+            fetchCallback={fetchData}
+            messageCallback={openModalMessage}
+            openModifyModal={setModifyMaterialModal}
+          />)}
       />
       <ModalMessage handleCloseModal={closeModalMessage} {...modalMessageAttr} />
       <Modal handleCloseModal={handleCloseModal} {...modalAttr} />

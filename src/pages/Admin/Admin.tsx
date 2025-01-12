@@ -1,16 +1,17 @@
-import './admin.css';
-import { useAppContext } from "../../store/appContext/useAppContext";
-import { useRef } from "react";
+import { Explore, FindInPage, Image, Key, People, Rule, SportsEsports, VideogameAsset, VideogameAssetOff, Warning } from '@mui/icons-material';
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
-import { Explore, SportsEsports, Rule, Warning, Image, People, FindInPage, Key, VideogameAsset, VideogameAssetOff } from '@mui/icons-material';
+import { useRef } from "react";
+import { GamesDataTable } from '../../components/Tables/NewTables/Games';
+import { ImagesDataTable } from '../../components/Tables/NewTables/Images';
 import { LogsDataTable } from '../../components/Tables/NewTables/Logs';
+import { MaterialDataTable } from '../../components/Tables/NewTables/Materials';
+import { OwedMaterialDataTable } from '../../components/Tables/NewTables/OwedMaterials';
 import { PlaysDataTable } from '../../components/Tables/NewTables/Plays';
 import { SanctionsDataTable } from '../../components/Tables/NewTables/Sanctions';
-import { GamesDataTable } from '../../components/Tables/NewTables/Games';
 import { StudentsDataTable } from '../../components/Tables/NewTables/Students';
 import { UsersDataTable } from '../../components/Tables/NewTables/Users';
-import { ImagesDataTable } from '../../components/Tables/NewTables/Images';
-import { MaterialDataTable } from '../../components/Tables/NewTables/Materials';
+import { useAppContext } from "../../store/appContext/useAppContext";
+import './admin.css';
 
 
 const Admin = () => {
@@ -53,7 +54,7 @@ const Admin = () => {
           <PlaysDataTable />
         </Box>
         <Box ref={owedMaterialsTableRef} margin={2}>
-          Aqui va la tabla de materiales adeudados
+          <OwedMaterialDataTable />
         </Box>
         <Box ref={sanctionsTableRef} margin={2}>
           <SanctionsDataTable />

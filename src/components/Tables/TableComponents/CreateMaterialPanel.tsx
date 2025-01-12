@@ -17,7 +17,7 @@ interface CreateUserPanelProps {
   updateMaterialsData: () => Promise<void>;
 }
 
-const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, closeModal, updateMaterialsData }) => {
+export const CreateMaterialPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, closeModal, updateMaterialsData }) => {
   const { tokens, admin } = useAppContext();
   const [name, setName] = useState('');
   const [amount, setAmount] = useState(0);
@@ -106,4 +106,3 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
     </>
   )
 }
-export default CreateUserPanel;

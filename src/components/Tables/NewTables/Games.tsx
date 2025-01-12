@@ -147,7 +147,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
 const CustomCells: CustomCell<Game>[] = [
   {
     id: "start_time",
-    render: (row: Game) => row.start_time ? new Date(row.start_time).toLocaleString() : "",
+    render: (row: Game) => row.start_time ? new Date(row.start_time).toLocaleString('es-MX') : "",
   },
   {
     id: "show",

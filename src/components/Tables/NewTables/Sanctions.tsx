@@ -87,11 +87,11 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
 const CustomCells: CustomCell<Sanction>[] = [
   {
     id: "start_time",
-    render: (row: Sanction) => row.start_time ? new Date(row.start_time).toLocaleString() : "",
+    render: (row: Sanction) => row.start_time ? new Date(row.start_time).toLocaleString('es-MX') : "",
   },
   {
     id: "end_time",
-    render: (row: Sanction) => row.end_time ? new Date(row.end_time).toLocaleString() : "",
+    render: (row: Sanction) => row.end_time ? new Date(row.end_time).toLocaleString('es-MX') : "",
   },
   {
     id: "play",
