@@ -1,11 +1,8 @@
-import { ThemeProvider } from "@emotion/react";
 import { Block } from "@mui/icons-material";
-import { FormControl, FormHelperText, Grid, TextField } from "@mui/material";
+import { FormControl, FormHelperText, Grid, IconButton, TextField, Tooltip } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
-import { blue } from "@mui/material/colors";
 import Snackbar from "@mui/material/Snackbar";
-import { createTheme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -21,18 +18,6 @@ interface SanctionButtonProps {
   player: Play;
   cardGameId: number;
 }
-
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#FF5733',
-    },
-    secondary: {
-      main: blue[300],
-    },
-  },
-})
 
 const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
   const [open, setOpen] = useState(false);
@@ -122,65 +107,64 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ThemeProvider theme={theme}>
-        <div className="sanction-form" id={`sanction-form-${player.id}`}>
-          <input type="hidden" name="student_id" value={`${player.id}`} />
+      <div className="sanction-form" id={`sanction-form-${player.id}`}>
+        <input type="hidden" name="student_id" value={`${player.id}`} />
 
-          <Button variant="contained"
-            color="primary"
+        <Tooltip title="Sancionar jugador">
+          <IconButton
+            size="small"
             onClick={handleSanction}
-            sx={{ width: 120 }}>
-            Sancionar jugador
+            sx={{ bgcolor: 'error.main' }}>
             <Block />
-          </Button>
+          </IconButton>
+        </Tooltip>
 
-          <CustomModal
-            openModal={modalOpen}
-            handleCloseModal={handleCloseModal}
-            title={`Llenar detalles de la sanción para ${player.student}`}
-          >
-            <form onSubmit={handlePerformSanction} id='createSanctionPanel'>
-              <Grid container direction='column' spacing={2} padding={'1rem'}>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-                      <DatePicker
-                        label="Fecha de fin de la sanción (Este día termina la sanción)"
-                        value={endTime}
-                        format='DD/MM/YYYY'
-                        onChange={(newValue) => setEndTime(newValue)}
-                      />
-                    </LocalizationProvider>
-                    <FormHelperText error id="end-time-helper-text">{displayHelperTextEndTime}</FormHelperText>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <TextField
-                      id="cause-outlined-multiline-static"
-                      label="Causa de la sanción"
-                      multiline
-                      rows={4}
-                      value={cause}
-                      onChange={(e) => setCause(e.target.value)}
+        <CustomModal
+          openModal={modalOpen}
+          handleCloseModal={handleCloseModal}
+          title={`Llenar detalles de la sanción para ${player.student}`}
+        >
+          <form onSubmit={handlePerformSanction} id='createSanctionPanel'>
+            <Grid container direction='column' spacing={2} padding={'1rem'}>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+                    <DatePicker
+                      label="Fecha de fin de la sanción (Este día termina la sanción)"
+                      value={endTime}
+                      format='DD/MM/YYYY'
+                      onChange={(newValue) => setEndTime(newValue)}
                     />
-                    <FormHelperText error id="cause-helper-text">{displayHelperTextCause}</FormHelperText>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button variant="contained" color="error" type="submit">Sancionar</Button>
-                </Grid>
+                  </LocalizationProvider>
+                  <FormHelperText error id="end-time-helper-text">{displayHelperTextEndTime}</FormHelperText>
+                </FormControl>
               </Grid>
-            </form>
-          </CustomModal>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <TextField
+                    id="cause-outlined-multiline-static"
+                    label="Causa de la sanción"
+                    multiline
+                    rows={4}
+                    value={cause}
+                    onChange={(e) => setCause(e.target.value)}
+                  />
+                  <FormHelperText error id="cause-helper-text">{displayHelperTextCause}</FormHelperText>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant="contained" color="error" type="submit">Sancionar</Button>
+              </Grid>
+            </Grid>
+          </form>
+        </CustomModal>
 
-          <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="error" variant="filled" sx={{ width: "100%" }}>
-              {alertMessage}
-            </Alert>
-          </Snackbar>
-        </div>
-      </ThemeProvider>
+        <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" variant="filled" sx={{ width: "100%" }}>
+            {alertMessage}
+          </Alert>
+        </Snackbar>
+      </div>
     </LocalizationProvider>
   );
 };

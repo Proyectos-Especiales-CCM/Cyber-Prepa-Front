@@ -1,9 +1,9 @@
 import httpInstance from "../httpInstance";
-import { ApiResponse, Play } from "../types";
+import { ApiResponse, Material } from "../types";
 
-export const readPlays = async (token: string, page?: number): Promise<ApiResponse<Play>> => {
+export const readMaterials = async (token?: string): Promise<ApiResponse<Material>> => {
     let res;
-    const endpoint = `rental/plays/?page=${page ? page : 1}`;
+    const endpoint = `rental/materials/`;
 
     const headers = {
         'Content-Type': 'application/json',
@@ -12,16 +12,17 @@ export const readPlays = async (token: string, page?: number): Promise<ApiRespon
 
     await httpInstance
         .get(endpoint, {
-            headers,
+            headers
         })
         .then((response) => {
             res = {
-                data: response.data.results,
+                data: response.data,
                 status: response.status,
             };
         })
         .catch((error) => {
             throw new Error(error.response.data.detail);
         });
-    return res || {} as ApiResponse<Play>;
+
+    return res || {} as ApiResponse<Material>;
 };

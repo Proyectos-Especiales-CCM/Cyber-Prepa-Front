@@ -3,9 +3,8 @@ import { UserObject } from '../../store/appContext/types';
 import React, { useEffect, useRef, useState } from 'react'
 import { initCountdown } from './initCountdown';
 import { CardExpander } from '..';
-import { ImageCell } from '../Tables/CustomBodyCells';
 import { Game } from '../../services/types';
-import { patchPlayById, readGameById } from '../../services';
+import { completeImageUrl, patchPlayById, readGameById } from '../../services';
 import { SnackbarComponent } from '../SnackbarComponent';
 import './Card.css';
 
@@ -155,10 +154,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
                               }
                          </span><br />
                          
-                         <ImageCell
-                              value={gameData.image ? `${gameData.image}` : "/media/images/game.png"}
-                              style={{ width: '150px', height: 'auto' }}
-                         />
+                         <img src={completeImageUrl(gameData.image ?? '')} alt={gameData.name} width="150" height="auto" />
                          
                          <div className="remaining__time">
                               <p ref={countdownRef} id={`cyber__countdown__${gameData.id}`}></p>

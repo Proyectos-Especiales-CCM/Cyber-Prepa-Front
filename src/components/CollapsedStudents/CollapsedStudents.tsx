@@ -61,7 +61,7 @@ const CollapsedStudents: React.FC<CollapsedStudentProps> = ({ cardGame, shouldUp
           <p>No estás autorizado para ver la data de los {studentsData} jugadores</p>
         ) : (
           studentsData.map((player) => (
-            <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id} isGameActive={isGameActive} />
+            <CollapsedStudentItem key={player.id} player={player} cardGameId={cardGame.id} isGameActive={isGameActive} notices={player.notices} owedMaterials={player.owed_materials}/>
           ))
         )}
       </ul>

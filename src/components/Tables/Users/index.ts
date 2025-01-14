@@ -1,1 +1,0 @@
-export { default as UsersDataTable } from './Users';

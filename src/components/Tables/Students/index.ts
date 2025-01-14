@@ -1,1 +1,0 @@
-export { default as StudentsDataTable } from './Students';

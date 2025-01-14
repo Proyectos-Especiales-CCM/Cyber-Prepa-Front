@@ -1,4 +1,4 @@
-import Button from "@mui/material/Button";
+import { IconButton, Tooltip } from "@mui/material";
 import { patchPlayById } from "../../services";
 import { Play } from "../../services/types";
 import { useEffect, useState } from "react";
@@ -69,15 +69,16 @@ const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId, isGam
       <input type="hidden" name="game_id" value={`${cardGameId}`} />
 
 
-      <Button
-        variant="contained"
-        onClick={handleEndPlay}
-        sx={{ width: 120 }}
-        disabled={!isGameActive}
-      >
-        Finalizar juego
-        <Rule />
-      </Button>
+      <Tooltip title="Terminar juego para el jugador">
+        <IconButton
+          size="large"
+          onClick={handleEndPlay}
+          disabled={!isGameActive}
+          sx={{ bgcolor: 'primary.main' }}
+        >
+          <Rule />
+        </IconButton>
+      </Tooltip>
 
       <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
         <Alert
