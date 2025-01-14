@@ -1,6 +1,6 @@
 import { Explore, FindInPage, Image, Key, People, Rule, SportsEsports, VideogameAsset, VideogameAssetOff, Warning } from '@mui/icons-material';
-import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
-import { useRef } from "react";
+import { Box, Button, SpeedDial, SpeedDialAction, Stack, Typography } from "@mui/material";
+import { useRef, useState } from "react";
 import { GamesDataTable } from '../../components/Tables/NewTables/Games';
 import { ImagesDataTable } from '../../components/Tables/NewTables/Images';
 import { LogsDataTable } from '../../components/Tables/NewTables/Logs';
@@ -16,6 +16,12 @@ import './admin.css';
 
 const Admin = () => {
   const { admin } = useAppContext();
+
+  const [isStudentsTableVisible, setIsStudentsTableVisible] = useState(false);
+
+  const handleButtonClick = () => {
+    setIsStudentsTableVisible(prevState => !prevState);
+  };
 
   // Refs para el quick navigation
   const playsTableRef = useRef(null);
@@ -71,7 +77,13 @@ const Admin = () => {
               <ImagesDataTable />
             </Box>
             <Box ref={studentsTableRef} margin={2} >
-              <StudentsDataTable />
+              {isStudentsTableVisible ?
+                <StudentsDataTable /> :
+                <Stack direction="row" justifyContent="space-between" alignItems="center" paddingY={25} paddingX={5} spacing={4}>
+                  <Button variant="contained" color='secondary' onClick={handleButtonClick}>Mostrar tabla de estudiantes</Button>
+                  <Typography>La tabla de estudiantes carga una gran cantidad de datos, para verla presione el botón y espere alrededor de 1 minuto para ver los datos de los alumnos como veces que jugó esta semana, el día de hoy, etc.</Typography>
+                </Stack>
+              }
             </Box>
             <Box ref={logsTableRef} margin={2}>
               <LogsDataTable />

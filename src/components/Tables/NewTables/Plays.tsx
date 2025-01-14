@@ -1,14 +1,14 @@
-import { CheckCircleOutline, HighlightOff, Delete } from "@mui/icons-material";
+import { CheckCircleOutline, Delete, HighlightOff } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { deletePlayById, readPlays } from "../../../services";
 import { Play } from "../../../services/types";
 import { useAppContext } from "../../../store/appContext/useAppContext";
+import { useGamesContext } from "../../../store/gamesContext/useGamesContext";
 import { ModalMessage } from "../../Modal";
 import { CustomCell, MUITable } from "../MUITable/MUITable";
 import { HeadCell } from "../MUITable/TableHead";
 import { CustomSelectedToolbarProps } from "../MUITable/Toolbar";
-import { useGamesContext } from "../../../store/gamesContext/useGamesContext";
 
 interface PlaysToolbarProps extends CustomSelectedToolbarProps<Play> {
   fetchCallback: () => void;

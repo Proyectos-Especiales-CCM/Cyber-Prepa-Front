@@ -30,6 +30,12 @@ export interface OwedMaterial {
     created_at: string,
 }
 
+export interface PlaysPagination {
+    count: number,
+    num_pages: number,
+    page_size: number,
+}
+
 export interface Play {
     id: number;
     ended: boolean;
