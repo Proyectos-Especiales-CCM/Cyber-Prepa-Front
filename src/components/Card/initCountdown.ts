@@ -2,7 +2,7 @@ import { Game } from "../../services/types";
 
 export const initCountdown = (
   cardGame: Game,
-  countdownRef: React.RefObject<HTMLDivElement>,
+  countdownRef: React.RefObject<HTMLDivElement | null>,
   setStatusCallback: (status: string) => void,
 ) => {
   if (countdownRef.current) {
