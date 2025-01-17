@@ -15,13 +15,13 @@ const Reglamento = () => {
       { 
         id: 2, 
         title: "Horario de Servicio", 
-        description: "Horario de servicio: 7:30am a 17:00hrs.", 
+        description: "Horario de servicio: 8:30 am a 5:00 pm.", 
         backgroundClass: "background2" 
       },
       { 
         id: 3, 
         title: "Registro para Uso de Juegos", 
-        description: "Para hacer uso de los juegos, es necesario llevar a cabo tu registro personalmente presentando tu credencial vigente.", 
+        description: "El registro es personal presetando tu credencial física vigente.", 
         backgroundClass: "background3" 
       },
       { 
@@ -32,8 +32,8 @@ const Reglamento = () => {
       },
       { 
         id: 5, 
-        title: "Entrega y Recogida de Juegos", 
-        description: "En caso de preguntar sobre la entrega de algún juego, se le entregará a aquel que esté al pendiente y cerca del módulo.", 
+        title: "Disponibilidad de Juegos",
+        description: "Se entregará aquel juego al primero que pregunte, este al pendiente y cerca del módulo.",
         backgroundClass: "background5" 
       },
       { 
@@ -45,43 +45,43 @@ const Reglamento = () => {
       { 
         id: 7, 
         title: "Limitaciones de Juego Semanal", 
-        description: "Podrás jugar 3 veces a la semana durante 50 minutos cada día, sin embargo, no puedes jugar más de una ocasión el mismo día. 1 vez por día aplica en toda el área, no por juego.", 
+        description: "Podrás jugar 3 veces a la semana durante 50 minutos en una sola exhibición por día, sin embargo, no puedes jugar más de una ocasión el mismo día. 1 vez por día aplica en toda el área, no por juego.", 
         backgroundClass: "background8"
       },
       { 
         id: 8, 
         title: "Verificación y Sanciones de Tiempo de Juego", 
-        description: "Recuerda verificar tu tiempo de juego; ya que si excedes el mismo puede generar alguna sanción, por favor entrega a tiempo el equipo.", 
+        description: "Eres responsable de verificar tu tiempo de juego, ya que si excedes el mismo puede generar alguna sanción, por favor entrega a tiempo el equipo.", 
         backgroundClass: "background9"
       },
       { 
         id: 9, 
         title: "Uso de Juegos de Mesa",
-        description: "Para usar los juegos de mesa (Jenga, Ajedrez, Turista mundial, etc.), el estudiante debe registrarse y dejar su credencial la cual le será devuelta al entregar el juego.", 
+        description: "Los juegos de mesa tales como (Jenga, Ajedrez, Turista mundial, etc.), son de tiempo libre siempre y cuando se mantenga entre los horarios de atención, solo se queda una credencial como responsable. Pídelo únicamente el tiempo que lo jugarás.", 
         backgroundClass: "background10"
       },
       { 
         id: 10,
         title: "Registro de Grupo para Juego", 
-        description: "En caso de jugar en grupo, deberá registrarse cada uno de los integrantes.", 
+        description: "En caso de jugar en grupo, todos tendrán que registrarse, incluyendo si te integras iniciado el juego.", 
         backgroundClass: "background11"
       },
       { 
         id: 11, 
         title: "Consecuencias por Jugar sin Registro", 
-        description: "Si alguien es sorprendido jugando sin registro se recogerá el juego a todo el grupo, se tomaran los nombres de todos, incluyendo aquel que no se registró como un llamado de atención, en caso de que alguno reincida en el mismo u otro juego, quedará sancionado por 15 días, no podrá  jugar; de continuar con la conducta, se restringirá el acceso por el tiempo que consideren los responsables del área.", 
+        description: "Si alguien es sorprendido jugando sin registro se recogerá el juego a todo el grupo, se tomarán los nombres de todos, incluyendo aquel que no se registró, quedarán sancionados por 15 días sin jugar; de continuar con la conducta, se restringirá el acceso por el tiempo que consideren los responsables del área.",
         backgroundClass: "background12"
       },
       { 
         id: 12, 
         title: "Integración y Tiempo de Juego", 
-        description: "Si te integras a un juego, entras con el tiempo del primer registro, de modo que tendrás de juego lo que le falte a ese primer registro. Tú decides si agotas tu tiempo o esperas a jugar tu tiempo completo.", 
+        description: "Si te integras a un juego, entras con el tiempo del primer registro, de modo que tendrás de tiempo de juego lo que le falte a ese primer registro. Tú decides si agotas tu tiempo o esperas a jugar tu tiempo completo.",
         backgroundClass: "background13"
       },
       { 
         id: 13, 
         title: "Entrega de Juegos Solicitados", 
-        description: "El estudiante que solicite algún juego debe entregarlo (él mismo) en el lugar de donde lo recibió, en buen estado y completo, el estudiante caerá en sanción si envía el equipo o juego prestado con una persona ajena o lo deja abandonado.", 
+        description: "El estudiante es responsable de entregar el juego personalmente en buen estado y completo para poder recojer su credencial y evitar una sanción por abandono.",
         backgroundClass: "background14"
       },
       { 
