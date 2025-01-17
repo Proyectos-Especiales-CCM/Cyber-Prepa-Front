@@ -1,4 +1,4 @@
-export const initCardsFunctionality = (cardsRef: React.RefObject<HTMLDivElement>) => {
+export const initCardsFunctionality = (cardsRef: React.RefObject<HTMLDivElement | null>) => {
      if (cardsRef.current) {
           
           // Open and close card when clicked on card
