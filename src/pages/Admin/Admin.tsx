@@ -1,5 +1,7 @@
-import { Explore, FindInPage, Image, Key, People, Rule, SportsEsports, VideogameAsset, VideogameAssetOff, Warning } from '@mui/icons-material';
-import { Box, Button, SpeedDial, SpeedDialAction, Stack, Typography } from "@mui/material";
+import { Explore, FindInPage, Help, Image, Key, People, Rule, SportsEsports, VideogameAsset, VideogameAssetOff, Warning } from '@mui/icons-material';
+import { Box, Button, Chip, createTheme, Divider, IconButton, SpeedDial, SpeedDialAction, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
+import { driver } from 'driver.js';
+import "driver.js/dist/driver.css";
 import { useRef, useState } from "react";
 import { GamesDataTable } from '../../components/Tables/NewTables/Games';
 import { ImagesDataTable } from '../../components/Tables/NewTables/Images';
@@ -11,8 +13,18 @@ import { SanctionsDataTable } from '../../components/Tables/NewTables/Sanctions'
 import { StudentsDataTable } from '../../components/Tables/NewTables/Students';
 import { UsersDataTable } from '../../components/Tables/NewTables/Users';
 import { useAppContext } from "../../store/appContext/useAppContext";
-import './admin.css';
 
+const darkTheme = createTheme({
+  palette: { mode: 'dark' }
+});
+
+const goToTurotials = driver({
+  animate: true,
+  steps: [
+    { element: '#tutorials', popover: { title: 'Tutoriales', description: 'Aquí podrás encontrar tutoriales para aprender a usar la sección de administrador.' } },
+    { element: '#search-tutorials', popover: { title: 'Buscar tutoriales', description: 'Puedes buscar tutoriales específicos escribiendo en este campo.' } },
+  ]
+});
 
 const Admin = () => {
   const { admin } = useAppContext();
@@ -56,6 +68,11 @@ const Admin = () => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
+        <ThemeProvider theme={darkTheme}>
+          <IconButton sx={{ marginLeft: 'auto' }} onClick={() => goToTurotials.drive()}>
+            <Help />
+          </IconButton>
+        </ThemeProvider>
         <Box ref={playsTableRef} margin={2}>
           <PlaysDataTable />
         </Box>
@@ -95,6 +112,18 @@ const Admin = () => {
         ) : (
           <></>
         )}
+
+        <ThemeProvider theme={darkTheme}>
+          <Divider />
+          <Stack direction='row' alignItems='bottom' padding={2} marginBottom={2} sx={{ flexWrap: 'wrap' }} >
+            <Typography width={301} marginBottom={2} marginLeft={4} fontFamily='fantasy' variant='h3' id="tutorials">Guías y tutoriales</Typography>
+            <TextField sx={{ marginLeft: 'auto', width: '100%', maxWidth: 280 }} id='search-tutorials' label='Buscar tutoriales' variant='outlined' />
+          </Stack>
+          <Divider sx={{ marginX: 4 }} >
+            <Chip label="TUTORIALES" size="small" />
+          </Divider>
+        </ThemeProvider>
+
         <SpeedDial
           ariaLabel="quick-navigation"
           sx={{ position: 'fixed', bottom: 10, right: 10 }}
