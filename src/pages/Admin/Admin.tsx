@@ -71,36 +71,36 @@ const Admin = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box margin={2}>
         <ThemeProvider theme={darkTheme}>
-          <Stack direction='row' justifyContent='space-between' margin={2} >
+          <Stack direction='row' justifyContent='space-between' >
             <Typography marginLeft={4} fontFamily='fantasy' variant='h3'>Panel</Typography>
             <IconButton sx={{ height: 'fit' }} onClick={() => goToTurotials.drive()}>
               <Help fontSize='large' />
             </IconButton>
           </Stack>
         </ThemeProvider>
-        <Box ref={playsTableRef} margin={2}>
+        <Box ref={playsTableRef} >
           <PlaysDataTable />
         </Box>
-        <Box ref={owedMaterialsTableRef} margin={2}>
+        <Box ref={owedMaterialsTableRef} >
           <OwedMaterialDataTable />
         </Box>
-        <Box ref={sanctionsTableRef} margin={2}>
+        <Box ref={sanctionsTableRef} >
           <SanctionsDataTable />
         </Box>
         {admin ? (
           <>
-            <Box ref={materialsTableRef} margin={2}>
+            <Box ref={materialsTableRef} >
               <MaterialDataTable />
             </Box>
-            <Box ref={gamesTableRef} margin={2} >
+            <Box ref={gamesTableRef}  >
               <GamesDataTable />
             </Box>
-            <Box ref={imagesTableRef} margin={2} >
+            <Box ref={imagesTableRef}  >
               <ImagesDataTable />
             </Box>
-            <Box ref={studentsTableRef} margin={2} >
+            <Box ref={studentsTableRef}  >
               {isStudentsTableVisible ?
                 <StudentsDataTable /> :
                 <Stack direction="row" justifyContent="space-between" alignItems="center" paddingY={25} paddingX={5} spacing={4}>
@@ -109,10 +109,10 @@ const Admin = () => {
                 </Stack>
               }
             </Box>
-            <Box ref={logsTableRef} margin={2}>
+            <Box ref={logsTableRef} >
               <LogsDataTable />
             </Box>
-            <Box ref={usersTableRef} margin={2} >
+            <Box ref={usersTableRef}  >
               <UsersDataTable />
             </Box>
           </>
