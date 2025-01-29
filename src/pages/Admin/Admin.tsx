@@ -13,6 +13,7 @@ import { SanctionsDataTable } from '../../components/Tables/NewTables/Sanctions'
 import { StudentsDataTable } from '../../components/Tables/NewTables/Students';
 import { UsersDataTable } from '../../components/Tables/NewTables/Users';
 import { useAppContext } from "../../store/appContext/useAppContext";
+import "./Admin.css";
 
 const darkTheme = createTheme({
   palette: { mode: 'dark' }
@@ -20,6 +21,9 @@ const darkTheme = createTheme({
 
 const goToTurotials = driver({
   animate: true,
+  nextBtnText: 'Siguiente',
+  prevBtnText: 'Atrás',
+  doneBtnText: 'Finalizar',
   steps: [
     { element: '#tutorials', popover: { title: 'Tutoriales', description: 'Aquí podrás encontrar tutoriales para aprender a usar la sección de administrador.' } },
     { element: '#search-tutorials', popover: { title: 'Buscar tutoriales', description: 'Puedes buscar tutoriales específicos escribiendo en este campo.' } },
@@ -69,9 +73,12 @@ const Admin = () => {
     <>
       <Box sx={{ width: '100%' }}>
         <ThemeProvider theme={darkTheme}>
-          <IconButton sx={{ marginLeft: 'auto' }} onClick={() => goToTurotials.drive()}>
-            <Help />
-          </IconButton>
+          <Stack direction='row' justifyContent='space-between' margin={2} >
+            <Typography marginLeft={4} fontFamily='fantasy' variant='h3'>Panel</Typography>
+            <IconButton sx={{ height: 'fit' }} onClick={() => goToTurotials.drive()}>
+              <Help fontSize='large' />
+            </IconButton>
+          </Stack>
         </ThemeProvider>
         <Box ref={playsTableRef} margin={2}>
           <PlaysDataTable />

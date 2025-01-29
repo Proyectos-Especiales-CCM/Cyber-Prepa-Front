@@ -1,0 +1,16 @@
+.driver-popover-navigation-btns button {
+  color: white;
+  text-shadow: none;
+  padding: 0.5rem 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02857em;
+}
+
+.driver-popover-next-btn {
+  background-color: #1565c0 !important;
+}
+
+.driver-popover-prev-btn {
+  background-color: #4eacf9 !important;
+}
