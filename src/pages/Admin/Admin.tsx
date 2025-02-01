@@ -1,8 +1,8 @@
 import { Explore, FindInPage, Help, Image, Key, People, Rule, SportsEsports, VideogameAsset, VideogameAssetOff, Warning } from '@mui/icons-material';
 import { Box, Button, Chip, createTheme, Divider, IconButton, SpeedDial, SpeedDialAction, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
-import { driver } from 'driver.js';
 import "driver.js/dist/driver.css";
 import { useRef, useState } from "react";
+import { AdminTutorials } from '../../components/AdminTutorials/AdminTutorials';
 import { GamesDataTable } from '../../components/Tables/NewTables/Games';
 import { ImagesDataTable } from '../../components/Tables/NewTables/Images';
 import { LogsDataTable } from '../../components/Tables/NewTables/Logs';
@@ -16,22 +16,20 @@ import { useAppContext } from "../../store/appContext/useAppContext";
 import "./Admin.css";
 
 const darkTheme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 300,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: { mode: 'dark' }
 });
 
-const goToTurotials = driver({
-  animate: true,
-  nextBtnText: 'Siguiente',
-  prevBtnText: 'Atrás',
-  doneBtnText: 'Finalizar',
-  steps: [
-    { element: '#tutorials', popover: { title: 'Tutoriales', description: 'Aquí podrás encontrar tutoriales para aprender a usar la sección de administrador.' } },
-    { element: '#search-tutorials', popover: { title: 'Buscar tutoriales', description: 'Puedes buscar tutoriales específicos escribiendo en este campo.' } },
-  ]
-});
-
 const Admin = () => {
-  const { admin } = useAppContext();
+  const { admin, driverObj } = useAppContext();
 
   const [isStudentsTableVisible, setIsStudentsTableVisible] = useState(false);
 
@@ -73,9 +71,15 @@ const Admin = () => {
     <>
       <Box margin={2}>
         <ThemeProvider theme={darkTheme}>
-          <Stack direction='row' justifyContent='space-between' >
+          <Stack direction='row' justifyContent='space-between' marginBottom={2} >
             <Typography marginLeft={4} fontFamily='fantasy' variant='h3'>Panel</Typography>
-            <IconButton sx={{ height: 'fit' }} onClick={() => goToTurotials.drive()}>
+            <IconButton sx={{ height: 'fit' }} onClick={() => {
+              driverObj?.setSteps([
+                { element: '#tutorials', popover: { title: 'Tutoriales', description: 'Aquí podrás encontrar tutoriales para aprender a usar la sección de administrador.' } },
+                { element: '#search-tutorials', popover: { title: 'Buscar tutoriales', description: 'Puedes buscar tutoriales específicos escribiendo en este campo.' } },
+              ])
+              driverObj?.drive()
+            }}>
               <Help fontSize='large' />
             </IconButton>
           </Stack>
@@ -122,13 +126,14 @@ const Admin = () => {
 
         <ThemeProvider theme={darkTheme}>
           <Divider />
-          <Stack direction='row' alignItems='bottom' padding={2} marginBottom={2} sx={{ flexWrap: 'wrap' }} >
+          <Stack flexWrap='wrap' direction='row' alignItems='bottom' margin={2} >
             <Typography width={301} marginBottom={2} marginLeft={4} fontFamily='fantasy' variant='h3' id="tutorials">Guías y tutoriales</Typography>
             <TextField sx={{ marginLeft: 'auto', width: '100%', maxWidth: 280 }} id='search-tutorials' label='Buscar tutoriales' variant='outlined' />
           </Stack>
-          <Divider sx={{ marginX: 4 }} >
+          <Divider sx={{ marginX: 4, marginBottom: 3 }} >
             <Chip label="TUTORIALES" size="small" />
           </Divider>
+          <AdminTutorials />
         </ThemeProvider>
 
         <SpeedDial

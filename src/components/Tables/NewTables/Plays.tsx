@@ -42,7 +42,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback }: Pla
 
   return (
     <Tooltip title="Eliminar">
-      <IconButton onClick={() => handleDeletePlay(selected)}>
+      <IconButton onClick={() => handleDeletePlay(selected)} id="delete-play-button">
         <Delete />
       </IconButton>
     </Tooltip>
@@ -155,6 +155,7 @@ export const PlaysDataTable = () => {
   return (
     <>
       <MUITable
+        id="plays-table"
         title="Historial de Partidas"
         data={playsData}
         headCells={headCells as HeadCell<unknown>[]}
