@@ -147,7 +147,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
                 <FormGroup>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={isAdmin} onChange={handleChange} name="is_admin" />
+                      <Checkbox id='is-admin-checkbox' checked={isAdmin} onChange={handleChange} name="is_admin" />
                     }
                     label="Administrador"
                   />
@@ -155,7 +155,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
               </FormControl>
             </Grid>
             <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant="contained" color="success" type="submit">Añadir</Button>
+              <Button id='submit-new-user-button' variant="contained" color="success" type="submit">Añadir</Button>
             </Grid>
           </Grid>
         </ThemeProvider>

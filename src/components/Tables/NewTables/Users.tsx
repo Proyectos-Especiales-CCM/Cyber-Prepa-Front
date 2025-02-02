@@ -11,7 +11,7 @@ import { CustomCell } from "../MUITable/MUITable";
 
 const CustomToolbar = ({ setAddUserModal }: { setAddUserModal: () => void }) => {
   return (
-    <Button size="small" variant='contained' color='success' onClick={setAddUserModal}>Añadir Usuario</Button>
+    <Button id="create-user-button" size="small" variant='contained' color='success' onClick={setAddUserModal}>Añadir Usuario</Button>
   )
 };
 
@@ -310,6 +310,7 @@ export const UsersDataTable = () => {
   return (
     <>
       <MUITable
+        id="users-table"
         title="Usuarios"
         data={usersData}
         headCells={headCells as HeadCell<unknown>[]}
