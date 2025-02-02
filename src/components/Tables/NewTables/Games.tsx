@@ -12,6 +12,7 @@ import { CustomSelectedToolbarProps } from '../MUITable/Toolbar';
 const CustomToolbar = ({ setCreateGameModal }: { setCreateGameModal: () => void }) => {
   return (
     <Button
+      id='add-game-button'
       size='small'
       variant='contained'
       color='success'
@@ -90,6 +91,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
     <Stack id='game-options' direction="row">
       <Tooltip title="Editar">
         <IconButton
+          id='edit-game-button'
           aria-label="edit"
           color="info"
           size="large"
@@ -103,6 +105,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
       </Tooltip>
       <Tooltip title="Mostrar">
         <IconButton
+          id='show-game-button'
           aria-label="show"
           color="inherit"
           size="large"
@@ -116,6 +119,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
       </Tooltip>
       <Tooltip title="Ocultar">
         <IconButton
+          id='hide-game-button'
           aria-label="not-show"
           color="inherit"
           size="large"
@@ -339,6 +343,7 @@ export const GamesDataTable = () => {
       {gamesData && (
         <>
           <MUITable
+            id='games-table'
             title="Catálogo de Juegos"
             data={gamesData}
             headCells={headCells as HeadCell<unknown>[]}
