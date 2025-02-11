@@ -141,6 +141,11 @@ export const AdminTutorials = () => {
           popover: {
             title: 'Cambiar tipo de usuario',
             description: 'Haz click en este botón para hacer a los usuarios seleccionados administradores.',
+            onPrevClick: () => {
+              const checkbox = document.querySelector("#users-table tbody tr td span input");
+              if (checkbox) (checkbox as HTMLInputElement).click();
+              driverObj && driverObj.movePrevious();
+            }
           },
           onDeselected: () => {
             if (!driverObj?.isActive()) {
