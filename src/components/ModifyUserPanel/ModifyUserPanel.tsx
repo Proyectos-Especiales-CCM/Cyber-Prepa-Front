@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Button, Grid, FormControl, InputLabel, Input, FormHelperText, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
-import { useAppContext } from "../../store/appContext/useAppContext";
-import { patchUserById } from '../../services';
+import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Input, InputLabel } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react';
+import { patchUserById } from '../../services';
+import { useAppContext } from "../../store/appContext/useAppContext";
 
 const darkTheme = createTheme({
   palette: {
@@ -137,38 +137,40 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 <FormHelperText error id="email-helper-text">{displayHelperTextEmail()}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="pass">Contraseña</InputLabel>
-                <Input
-                  id="pass"
-                  aria-describedby="pass-helper-text"
-                  type='password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <FormHelperText error id="pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="c-pass">Confirmar Contraseña</InputLabel>
-                <Input
-                  id="c-pass"
-                  aria-describedby="c-pass-helper-text"
-                  type='password'
-                  value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value)}
-                />
-                <FormHelperText id="c-pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
-              </FormControl>
-            </Grid>
+            <div id='password-fields'>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="pass">Contraseña</InputLabel>
+                  <Input
+                    id="pass"
+                    aria-describedby="pass-helper-text"
+                    type='password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <FormHelperText error id="pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="c-pass">Confirmar Contraseña</InputLabel>
+                  <Input
+                    id="c-pass"
+                    aria-describedby="c-pass-helper-text"
+                    type='password'
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                  />
+                  <FormHelperText id="c-pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
+                </FormControl>
+              </Grid>
+            </div>
             <Grid item xs={12}>
               <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={isAdmin} onChange={handleIsAdminChange} name="is_admin" />
+                      <Checkbox id='is_admin' checked={isAdmin} onChange={handleIsAdminChange} name="is_admin" />
                     }
                     label="Administrador"
                   />
@@ -180,7 +182,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 <FormGroup>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={isActive} onChange={handleIsActiveChange} name="is_active" />
+                      <Checkbox id='is_active' checked={isActive} onChange={handleIsActiveChange} name="is_active" />
                     }
                     label="Activo"
                   />
@@ -188,7 +190,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
               </FormControl>
             </Grid>
             <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant="contained" color="info" type="submit">Actualizar</Button>
+              <Button id='update-user' variant="contained" color="info" type="submit">Actualizar</Button>
             </Grid>
           </Grid>
         </ThemeProvider>

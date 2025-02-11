@@ -1,10 +1,10 @@
-import { DriveStep } from "driver.js";
 import { Button, Card, Grid2 as Grid, Stack, Typography } from "@mui/material";
+import { DriveStep } from "driver.js";
 import { useAppContext } from "../../store/appContext/useAppContext";
 
 interface Tutorial {
   title: string
-  description: string
+  description: React.ReactNode
   steps: DriveStep[]
 }
 
@@ -72,11 +72,9 @@ export const AdminTutorials = () => {
             description: 'Ingresa un correo valido para el nuevo usuario (terminado en @tec.mx).',
           },
           onDeselected: () => {
-            if (driverObj?.isActive()) return;
-            console.log("Deselected");
-            const closeModalButton = document.querySelector("#close-modal-button");
-            if (closeModalButton) {
-              (closeModalButton as HTMLInputElement).click();
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
             }
           }
         },
@@ -87,11 +85,9 @@ export const AdminTutorials = () => {
             description: 'Ingresa una contraseña segura para el nuevo usuario, debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial.',
           },
           onDeselected: () => {
-            if (driverObj?.isActive()) return;
-            console.log("Deselected");
-            const closeModalButton = document.querySelector("#close-modal-button");
-            if (closeModalButton) {
-              (closeModalButton as HTMLInputElement).click();
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
             }
           }
         },
@@ -102,11 +98,9 @@ export const AdminTutorials = () => {
             description: 'Únicamente seleccionar esta casilla sí el usuario es administrador. Podrá borrar registros y crear/borrar nuevos juegos/usuarios, etc.',
           },
           onDeselected: () => {
-            if (driverObj?.isActive()) return;
-            console.log("Deselected");
-            const closeModalButton = document.querySelector("#close-modal-button");
-            if (closeModalButton) {
-              (closeModalButton as HTMLInputElement).click();
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
             }
           }
         },
@@ -117,11 +111,173 @@ export const AdminTutorials = () => {
             description: 'Finaliza el proceso y espera el mensaje de confirmación.',
           },
           onDeselected: () => {
-            if (driverObj?.isActive()) return;
-            console.log("Deselected");
-            const closeModalButton = document.querySelector("#close-modal-button");
-            if (closeModalButton) {
-              (closeModalButton as HTMLInputElement).click();
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
+            }
+          }
+        }
+      ]
+    },
+    {
+      title: "Modificar usuarios",
+      description: <span>Cómo cambiar la <strong>contraseña</strong> o el tipo de usuario de un usuario.</span>,
+      steps: [
+        { element: '#users-table', popover: { title: 'Tabla de Usuarios', description: 'Aquí puedes ver los usuarios del sistema.' } },
+        {
+          element: '#users-table tbody tr td span input',
+          popover: {
+            title: 'Seleccionar',
+            description: 'Selecciona un usuario para modificar.',
+            onNextClick: () => {
+              const checkbox = document.querySelector("#users-table tbody tr td span input");
+              if (checkbox) (checkbox as HTMLInputElement).click();
+              driverObj && driverObj.moveNext();
+            }
+          }
+        },
+        {
+          element: "#make-admin-button",
+          popover: {
+            title: 'Cambiar tipo de usuario',
+            description: 'Haz click en este botón para hacer a los usuarios seleccionados administradores.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: "#make-non-admin-button",
+          popover: {
+            title: 'Cambiar tipo de usuario',
+            description: 'Haz click en este botón para hacer a los usuarios seleccionados becarios.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: "#deactivate-user-button",
+          popover: {
+            title: 'Desactivar usuario',
+            description: 'Haz click en este botón para desactivar a los usuarios seleccionados. Esto evitará que puedan iniciar sesión en el sistema.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: "#activate-user-button",
+          popover: {
+            title: 'Activar usuario',
+            description: 'En caso de que uno o varios usuarios estén desactivados, puedes volver a reactivarlos con este botón.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: '#edit-user-button',
+          popover: {
+            title: 'Editar',
+            description: 'Haz click en este botón para editar el usuario seleccionado. Únicamente puedes modificar un usuario a la vez.',
+            onNextClick: () => {
+              const button = document.querySelector("#edit-user-button");
+              if (button) (button as HTMLInputElement).click();
+              driverObj?.moveNext();
+            }
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: "#email",
+          popover: {
+            title: 'Cambiar correo',
+            description: 'En caso de necesitar cambiar el correo del usuario, puedes hacerlo en este campo.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: "#password-fields",
+          popover: {
+            title: 'Cambiar contraseña',
+            description: 'Para cambiar/recuperar la contraseña de algún usuario, ingresa la nueva contraseña en ambos campos.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: "#is_admin",
+          popover: {
+            title: 'Cambiar tipo de usuario',
+            description: 'Selecciona esta casilla si deseas que el usuario sea administrador.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: "#is_active",
+          popover: {
+            title: 'Activación de usuario',
+            description: 'El usuario no podrá iniciar sesión si esta casilla no está seleccionada. Cuando un becario termina su periodo, puedes desactivar su cuenta para denegarle el acceso al sistema hasta que sea se vuelva a inscribir en el programa de servicio becario.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
+            }
+          }
+        },
+        {
+          element: '#update-user',
+          popover: {
+            title: 'Actualizar usuario',
+            description: 'Finaliza el proceso y espera el mensaje de confirmación.',
+          },
+          onDeselected: () => {
+            if (!driverObj?.isActive()) {
+              const closeModalButton = document.querySelector("#close-modal-button");
+              if (closeModalButton) (closeModalButton as HTMLInputElement).click();
+              const selectedUser = document.querySelector("#users-table tbody tr td span input");
+              if (selectedUser) (selectedUser as HTMLInputElement).click();
             }
           }
         }
@@ -260,7 +416,7 @@ export const AdminTutorials = () => {
               if (button) {
                 (button as HTMLInputElement).click();
               }
-              driverObj?.moveNext();
+              driverObj?.movePrevious();
             }
           },
           onDeselected: () => {
@@ -430,7 +586,9 @@ export const AdminTutorials = () => {
             <Stack justifyContent='space-between' height='100%'>
               <div>
                 <Typography variant='h4'>{tutorial.title}</Typography>
-                <Typography sx={{ marginY: 1 }}>{tutorial.description}</Typography>
+                <div style={{ margin: '0.5rem 0' }} >
+                  {tutorial.description}
+                </div>
               </div>
               <Button
                 variant='outlined'

@@ -1,13 +1,13 @@
 import { Cancel, CheckCircle, CheckCircleOutline, Edit, HighlightOff, KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from "@mui/icons-material";
 import { Button, IconButton, Stack, Tooltip } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CreateUserPanel, Modal, ModalMessage, ModifyUserPanel, MUITable } from "../..";
 import { patchUserById, readUsers } from "../../../services";
 import { User } from "../../../services/types";
 import { useAppContext } from "../../../store/appContext/useAppContext";
+import { CustomCell } from "../MUITable/MUITable";
 import { HeadCell } from "../MUITable/TableHead";
 import { CustomSelectedToolbarProps } from "../MUITable/Toolbar";
-import { CustomCell } from "../MUITable/MUITable";
 
 const CustomToolbar = ({ setAddUserModal }: { setAddUserModal: () => void }) => {
   return (
@@ -23,6 +23,13 @@ interface UserSelectedToolbarProps extends CustomSelectedToolbarProps<User> {
 
 const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openModifyModal }: UserSelectedToolbarProps) => {
   const { tokens } = useAppContext();
+  const stackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (stackRef.current) {
+      stackRef.current.style.setProperty("overflow", "visible", "important");
+    }
+  }, []);
 
   /**
  * Updates user's data in the server.
@@ -59,9 +66,10 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
   };
 
   return (
-    <Stack id='user-options' direction="row">
+    <Stack id='user-options' direction="row" ref={stackRef}>
       <Tooltip title="Editar">
         <IconButton
+          id="edit-user-button"
           aria-label="edit"
           color="info"
           size="large"
@@ -75,6 +83,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
       </Tooltip>
       <Tooltip title="Hacer administrador">
         <IconButton
+          id="make-admin-button"
           aria-label="make-admin"
           color="warning"
           size="large"
@@ -88,6 +97,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
       </Tooltip>
       <Tooltip title="Hacer becario">
         <IconButton
+          id="make-non-admin-button"
           aria-label="make-non-admin"
           color="info"
           size="large"
@@ -101,6 +111,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
       </Tooltip>
       <Tooltip title="Activar">
         <IconButton
+          id="activate-user-button"
           aria-label="activate"
           color="success"
           size="large"
@@ -114,6 +125,7 @@ const CustomSelectedToolbar = ({ selected, fetchCallback, messageCallback, openM
       </Tooltip>
       <Tooltip title="Desactivar">
         <IconButton
+          id="deactivate-user-button"
           aria-label="deactivate"
           color="error"
           size="large"
