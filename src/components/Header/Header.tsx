@@ -103,7 +103,7 @@ const Header = () => {
                 <MenuIcon />
               </IconButton>
               <Menu
-                id="menu-appbar"
+                id="menu-appbar-logged-in"
                 anchorEl={anchorElNav}
                 anchorOrigin={{
                   vertical: 'bottom',

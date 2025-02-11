@@ -1,6 +1,6 @@
 import { FC, ReactElement } from "react";
 import { Typography, Box, Container, Stack, Hidden, Link } from "@mui/material";
-import { Copyright, GitHub } from "@mui/icons-material";
+import { Copyright, GitHub, Mail, WhatsApp } from "@mui/icons-material";
 import { CyberPrepaLogo } from "../CyberPrepaLogo";
 import './Footer.css';
 
@@ -78,6 +78,7 @@ export const Footer: FC = (): ReactElement => {
             >
               <GitHub sx={{ width: '80px', my: '1rem', fontSize: '4rem' }} />
             </a>
+            <Typography variant="body2" color="gray">version 1.1.0</Typography>
           </Stack>
           <Box
             sx={{
@@ -130,24 +131,22 @@ export const Footer: FC = (): ReactElement => {
                 textDecoration: 'none',
               }}
             >
-              Soporte
+              Soporte Técnico
             </Typography>
             <Typography variant="body2" color="white" align="center" sx={{ my: 2 }}>
               Hecho con ❤️ por estudiantes del Tec de Monterrey
             </Typography>
             <Typography variant="body2" color="white" align="center">
-              Contactanos a través de:
+              Contacto con desarrolladores:
             </Typography>
-            <Typography variant="body2" color="gray" align="center">
-              <Link href="mailto:A01656583@tec.mx" color="inherit">
-                A01656583@tec.mx
+            <Stack direction='row' justifyContent='center' spacing={1} marginTop={1}>
+              <Link href="mailto:A01656583@tec.mx" >
+                <Mail />
               </Link>
-            </Typography>
-            <Typography variant="body2" color="gray" align="center">
-              <Link href="https://wa.me/525635046140" color="inherit" target="_blank">
-                +52 56 3504 6140 (WhatsApp)
+              <Link href="https://wa.me/525635046140" target="_blank">
+                <WhatsApp />
               </Link>
-            </Typography>
+            </Stack>
           </Stack>
         </Stack>
       </Container>

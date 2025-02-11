@@ -1,21 +1,20 @@
-import { Box, Typography, Modal, Grid, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { Box, IconButton, Modal, Stack, Typography } from '@mui/material';
 
 const styleModal = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 0.5,
-    bgcolor: 'black',
-    border: '0.25rem solid #D9D9D9',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '1rem',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 0.5,
+  bgcolor: 'black',
+  border: '0.25rem solid #D9D9D9',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '1rem',
 };
 
-import { ReactNode } from 'react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 /**
  * CustomModal component for displaying a modal in the center of the screen with a title and children components inside the modal.
@@ -55,33 +54,30 @@ import React from 'react';
  * @author Diego Jacobo Mtz. [Github](https://github.com/Djmr5)
 */
 export default function CustomModal({ openModal, handleCloseModal, title, children }: { openModal: boolean, handleCloseModal: () => void, title: string, children: ReactNode }): React.JSX.Element {
-    return (
-        <Modal
-            open={openModal || false}
-            onClose={handleCloseModal}
-        >
-            <Box sx={{ ...styleModal }}>
-                <Grid container justifyContent="space-between" alignItems="center">
-                    <Grid item xs={10}>
-                        <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', mb: '10px' }}>
-                            {title}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={2} container justifyContent="flex-end">
-                        <IconButton
-                            aria-label="close"
-                            color="inherit"
-                            size="medium"
-                            onClick={() => {
-                                handleCloseModal();
-                            }}
-                        >
-                            <CloseIcon fontSize="inherit" />
-                        </IconButton>
-                    </Grid>
-                </Grid>
-                {children}
-            </Box>
-        </Modal>
-    );
+  return (
+    <Modal
+      open={openModal || false}
+      onClose={handleCloseModal}
+    >
+      <Box sx={{ ...styleModal }}>
+        <Stack direction='row' justifyContent="space-between" alignItems="center">
+          <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', mb: '10px' }}>
+            {title}
+          </Typography>
+          <IconButton
+            id='close-modal-button'
+            aria-label="close"
+            color="inherit"
+            size="medium"
+            onClick={() => {
+              handleCloseModal();
+            }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        </Stack>
+        {children}
+      </Box>
+    </Modal>
+  );
 }

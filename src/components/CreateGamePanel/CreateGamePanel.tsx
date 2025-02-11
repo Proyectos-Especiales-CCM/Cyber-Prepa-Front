@@ -120,7 +120,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                                 <FormGroup>
                                     <FormControlLabel
                                         control={
-                                            <Checkbox checked={show} onChange={handleShowChange} name="show" />
+                                            <Checkbox id='show-game-checkbox' checked={show} onChange={handleShowChange} name="show" />
                                         }
                                         label="Mostrar"
                                     />
@@ -141,7 +141,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
                             </SelectOrUploadImage>
                         </Grid>
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" color="success" type="submit">Añadir</Button>
+                            <Button id='submit-game' variant="contained" color="success" type="submit">Añadir</Button>
                         </Grid>
                     </Grid>
                 </ThemeProvider>

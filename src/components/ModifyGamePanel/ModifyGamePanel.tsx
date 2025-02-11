@@ -149,7 +149,7 @@ const ModifyGamePanel: React.FC<ModifyGamePanelProps> = ({ openModalMessage, clo
                             </SelectOrUploadImage>
                         </Grid>
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" color="success" type="submit">Actualizar</Button>
+                            <Button id='submit-mod-game' variant="contained" color="success" type="submit">Actualizar</Button>
                         </Grid>
                     </Grid>
                 </ThemeProvider>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Driver } from "driver.js";
 
 export type UserObject = {
   id: string;
@@ -18,6 +19,8 @@ export interface Token {
 }
 
 export type AppState = {
+  driverObj: Driver | undefined;
+  setDriverObj: (driverObj: Driver) => void;
   user: UserObject | undefined;
   setUser: (user: UserObject) => void;
   tokens: Tokens | undefined;
