@@ -39,10 +39,7 @@ cd Cyber-Prepa-Front
 Install the necessary packages via:
 
 ```bash
-npm install yarn
-# Or install yarn globally
-# npm install -g yarn
-yarn install
+npm install
 ```
 
 ### Run the development server
@@ -50,7 +47,7 @@ yarn install
 Run the server via:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 ### Set environment variables
@@ -74,7 +71,7 @@ To deploy the app, you must turn on the IIS feature on your Windows machine.
 Run the following command to build the app.
 
 ```bash
-yarn build
+npm run build
 ```
 
 This will create a `dist` folder in the root of the project.

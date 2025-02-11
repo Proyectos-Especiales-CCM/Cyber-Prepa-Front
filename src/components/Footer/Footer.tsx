@@ -78,7 +78,7 @@ export const Footer: FC = (): ReactElement => {
             >
               <GitHub sx={{ width: '80px', my: '1rem', fontSize: '4rem' }} />
             </a>
-            <Typography variant="body2" color="gray">version 1.1.1</Typography>
+            <Typography variant="body2" color="gray">version 1.1.2</Typography>
           </Stack>
           <Box
             sx={{
