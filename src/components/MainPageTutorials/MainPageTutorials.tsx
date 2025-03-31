@@ -17,13 +17,13 @@ export const MainPageTutorials = () => {
       description: "Cómo introducir un jugador a cierto juego",
       steps: [
         {
-          element: "#Billar 1",
+          element: ".cyber__card",
           popover: {
             title: "Seleccionar ",
             description:
               "Aqui puedes seleccionar el juego al que hay que añadir",
             onNextClick: () => {
-              const checkbox = document.querySelector("#Billar 1");
+              const checkbox = document.querySelector(".cyber__card__inner");
               if (checkbox) {
                 (checkbox as HTMLInputElement).click();
               }
@@ -32,7 +32,7 @@ export const MainPageTutorials = () => {
           },
         },
         {
-          element: "#form input",
+          element: ".cyber__card #form input",
           popover: {
             title: "Ingresar Matricula",
             description: "Agrega la matrícula del usuario",
