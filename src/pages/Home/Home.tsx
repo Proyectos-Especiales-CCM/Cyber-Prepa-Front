@@ -159,31 +159,38 @@ const Home = () => {
             message={alertMessage}
           />
         )}
-        <ThemeProvider theme={darkTheme}>
-          <Divider />
-          <Stack flexWrap="wrap" direction="row" alignItems="bottom" margin={2}>
-            <Typography
-              width={301}
-              marginBottom={2}
-              marginLeft={4}
-              fontFamily="fantasy"
-              variant="h3"
-              id="tutorials"
+        {user && (
+          <ThemeProvider theme={darkTheme}>
+            <Divider />
+            <Stack
+              flexWrap="wrap"
+              direction="row"
+              alignItems="bottom"
+              margin={2}
             >
-              Guías y tutoriales
-            </Typography>
-            <TextField
-              sx={{ marginLeft: "auto", width: "100%", maxWidth: 280 }}
-              id="search-tutorials"
-              label="Buscar tutoriales"
-              variant="outlined"
-            />
-          </Stack>
-          <Divider sx={{ marginX: 4, marginBottom: 3 }}>
-            <Chip label="TUTORIALES" size="small" />
-          </Divider>
-          <MainPageTutorials />
-        </ThemeProvider>
+              <Typography
+                width={301}
+                marginBottom={2}
+                marginLeft={4}
+                fontFamily="fantasy"
+                variant="h3"
+                id="tutorials"
+              >
+                Guías y tutoriales
+              </Typography>
+              <TextField
+                sx={{ marginLeft: "auto", width: "100%", maxWidth: 280 }}
+                id="search-tutorials"
+                label="Buscar tutoriales"
+                variant="outlined"
+              />
+            </Stack>
+            <Divider sx={{ marginX: 4, marginBottom: 3 }}>
+              <Chip label="TUTORIALES" size="small" />
+            </Divider>
+            <MainPageTutorials />
+          </ThemeProvider>
+        )}
       </div>
     </div>
   );

@@ -32,14 +32,14 @@ export const MainPageTutorials = () => {
           },
         },
         {
-          element: ".cyber__card #form input",
+          element: ".cyber__card__expander",
           popover: {
             title: "Ingresar Matricula",
             description: "Agrega la matrícula del usuario",
           },
         },
         {
-          element: "#form button",
+          element: ".cyber__card__expander",
           popover: {
             title: "Agregar estudiante",
             description: "Presiona el botón para agregar un estudiante",
@@ -52,12 +52,12 @@ export const MainPageTutorials = () => {
       description: "Cómo cambiar el juego actual de un alumno",
       steps: [
         {
-          element: "#div ul div div button",
+          element: ".cyber__card",
           popover: {
             title: "Seleccionar",
-            description: "Aqui puedes seleccionar el juego actual del alumno",
+            description: "Selecciona el juego actual del alumno",
             onNextClick: () => {
-              const checkbox = document.querySelector("#Billar 1");
+              const checkbox = document.querySelector(".cyber__card__inner");
               if (checkbox) {
                 (checkbox as HTMLInputElement).click();
               }
@@ -66,30 +66,53 @@ export const MainPageTutorials = () => {
           },
         },
         {
-          element: "#form input",
+          element: ".cyber__card__expander",
           popover: {
-            title: "Ingresar Matricula",
-            description: "Agrega la matricula del usuario",
+            title: "Seleccionar alumno",
+            description: "Elige el alumno al que desees cambiar de juego",
           },
         },
         {
-          element: "#form button",
+          element: '[aria-label="Cambiar de juego"]',
           popover: {
-            title: "Agregar estudiante",
-            description: "Presiona el botón para agregar un estudiante",
+            title: "Seleccionar cambio de juego",
+            description:
+              "Presiona el botón para cambiar el juego, y elige el juego al que lo vas a cambiar",
           },
         },
       ],
     },
     {
       title: "Terminar la partida de un jugador",
-      description: "Después de que terminó su tiempo",
+      description: "Antes de que su tiempo termine",
       steps: [
         {
+          element: ".cyber__card",
           popover: {
-            title: "Seleccionar estudiante",
+            title: "Seleccionar juego Actual",
             description:
               "Elige el estudiante al que quieras eliminar del juego",
+            onNextClick: () => {
+              const checkbox = document.querySelector(".cyber__card__inner");
+              if (checkbox) {
+                (checkbox as HTMLInputElement).click();
+              }
+              driverObj && driverObj.moveNext();
+            },
+          },
+        },
+        {
+          element: ".cyber__card__expander",
+          popover: {
+            title: "Seleccionar alumno",
+            description: "Elige el alumno que terminó su partida",
+          },
+        },
+        {
+          element: '[aria-label = "Terminar juego para el jugador"]',
+          popover: {
+            title: "Terminar Juego",
+            description: "Oprimir el botón para terminar su partida actual",
           },
         },
       ],
