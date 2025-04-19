@@ -93,7 +93,7 @@ const ModifySanctionPanel: React.FC<ModifySanctionPanelProps> = ({ sanctionId, p
             <form onSubmit={handleSubmit} id='createUserPanel'>
                 <ThemeProvider theme={darkTheme}>
                     <Grid container direction='column' spacing={2} padding={'1rem'}>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="student">Matrícula</InputLabel>
                                 <Input
@@ -107,7 +107,7 @@ const ModifySanctionPanel: React.FC<ModifySanctionPanelProps> = ({ sanctionId, p
                                 <FormHelperText error id="student-helper-text">{displayHelperTextStudent()}</FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <FormControl fullWidth>
                                 <TextField
                                     id="cause-outlined-multiline-static"
@@ -119,7 +119,7 @@ const ModifySanctionPanel: React.FC<ModifySanctionPanelProps> = ({ sanctionId, p
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <FormControl fullWidth>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
                                     <DatePicker
@@ -132,7 +132,7 @@ const ModifySanctionPanel: React.FC<ModifySanctionPanelProps> = ({ sanctionId, p
                                 <FormHelperText error id="end-time-helper-text">{displayHelperTextEndTime()}</FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button variant="contained" color="error" type="submit">Modificar Sanción</Button>
                         </Grid>
                     </Grid>

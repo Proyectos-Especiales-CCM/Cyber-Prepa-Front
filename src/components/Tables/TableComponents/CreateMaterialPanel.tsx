@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid2 as Grid, Input, InputLabel, TextareaAutosize } from '@mui/material';
+import { Button, FormControl, Grid, Input, InputLabel, TextareaAutosize } from '@mui/material';
 import { useState } from 'react';
 import { useAppContext } from '../../../store/appContext/useAppContext';
 

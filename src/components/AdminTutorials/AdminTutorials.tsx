@@ -1,4 +1,4 @@
-import { Button, Card, Grid2 as Grid, Stack, Typography } from "@mui/material";
+import { Button, Card, Grid, Stack, Typography } from "@mui/material";
 import { DriveStep } from "driver.js";
 import { useAppContext } from "../../store/appContext/useAppContext";
 

@@ -102,7 +102,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
       <form onSubmit={handleSubmit} id='createUserPanel'>
         <ThemeProvider theme={darkTheme}>
           <Grid container direction='column' spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="email">Correo</InputLabel>
                 <Input
@@ -116,7 +116,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
                 <FormHelperText error id="email-helper-text">{displayHelperTextEmail()}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="pass">Contraseña</InputLabel>
                 <Input
@@ -129,7 +129,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
                 <FormHelperText error id="pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="c-pass">Confirmar Contraseña</InputLabel>
                 <Input
@@ -142,7 +142,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
                 <FormHelperText id="c-pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
@@ -154,7 +154,7 @@ const CreateUserPanel: React.FC<CreateUserPanelProps> = ({ openModalMessage, clo
                 </FormGroup>
               </FormControl>
             </Grid>
-            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button id='submit-new-user-button' variant="contained" color="success" type="submit">Añadir</Button>
             </Grid>
           </Grid>
