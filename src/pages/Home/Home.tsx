@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { MainPageTutorials } from "../../components/MainPageTutorials/MainPageTutorials";
 import "./Home.css";
+import "driver.js/dist/driver.css";
 
 const darkTheme = createTheme({
   breakpoints: {
@@ -118,16 +119,16 @@ const Home = () => {
       const data =
         message === "Plays updated"
           ? {
-              type: "plays_updated",
-              message,
-              info,
-              sender,
-            }
+            type: "plays_updated",
+            message,
+            info,
+            sender,
+          }
           : {
-              type: "update_message",
-              message,
-              sender,
-            };
+            type: "update_message",
+            message,
+            sender,
+          };
 
       sendMessage(JSON.stringify(data));
     },
@@ -136,10 +137,11 @@ const Home = () => {
 
   return (
     <div className="cyber__wrapper">
-      <Announcements lastMessage={lastMessage}/>
-      <div className="cyber__cards" id="cyberCards">
-        {Array.isArray(gamesData)
-          ? gamesData.map((game) => (
+      <ThemeProvider theme={darkTheme}>
+        <Announcements lastMessage={lastMessage} />
+        <div className="cyber__cards" id="cyberCards">
+          {Array.isArray(gamesData)
+            ? gamesData.map((game) => (
               <Card
                 key={game.id}
                 cardGame={game}
@@ -151,24 +153,26 @@ const Home = () => {
                 }
               />
             ))
-          : "No hay juegos registrados."}
+            : "No hay juegos registrados."}
 
-        {open && (
-          <SnackbarComponent
-            open={open}
-            onClose={handleClose}
-            severity="warning"
-            message={alertMessage}
-          />
-        )}
+          {open && (
+            <SnackbarComponent
+              open={open}
+              onClose={handleClose}
+              severity="warning"
+              message={alertMessage}
+            />
+          )}
+        </div>
         {user && (
-          <ThemeProvider theme={darkTheme}>
+          <>
             <Divider />
             <Stack
               flexWrap="wrap"
               direction="row"
               alignItems="bottom"
-              margin={2}
+              marginX={2}
+              marginTop={3}
             >
               <Typography
                 width={301}
@@ -191,9 +195,10 @@ const Home = () => {
               <Chip label="TUTORIALES" size="small" />
             </Divider>
             <MainPageTutorials />
-          </ThemeProvider>
+            <Divider />
+          </>
         )}
-      </div>
+      </ThemeProvider>
     </div>
   );
 };

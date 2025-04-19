@@ -118,6 +118,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
             value={studentId}
             type="text"
             name="student_id"
+            id="student_id"
             placeholder="Matricula de estudiante"
             aria-label="Matricula de estudiante"
             aria-describedby="basic-addon2"
@@ -158,6 +159,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
             variant="contained"
             color='success'
             type='submit'
+            id='submit-new-player-button'
             sx={{
               marginLeft: '1rem',
               height: 55,
