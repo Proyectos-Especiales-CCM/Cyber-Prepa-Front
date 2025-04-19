@@ -123,7 +123,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
       <form onSubmit={handleSubmit} id='createUserPanel'>
         <ThemeProvider theme={darkTheme}>
           <Grid container direction='column' spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="email">Correo</InputLabel>
                 <Input
@@ -138,7 +138,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
               </FormControl>
             </Grid>
             <div id='password-fields'>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="pass">Contraseña</InputLabel>
                   <Input
@@ -151,7 +151,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                   <FormHelperText error id="pass-helper-text">{displayHelperTextPassword()}</FormHelperText>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="c-pass">Confirmar Contraseña</InputLabel>
                   <Input
@@ -165,7 +165,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 </FormControl>
               </Grid>
             </div>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
@@ -177,7 +177,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 </FormGroup>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <FormControl sx={{ m: 1 }}>
                 <FormGroup>
                   <FormControlLabel
@@ -189,7 +189,7 @@ const ModifyUserPanel: React.FC<ModifyUserPanelProps> = ({ openModalMessage, clo
                 </FormGroup>
               </FormControl>
             </Grid>
-            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button id='update-user' variant="contained" color="info" type="submit">Actualizar</Button>
             </Grid>
           </Grid>

@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid2 as Grid, Input, InputLabel, TextareaAutosize } from '@mui/material';
+import { Button, FormControl, Grid, Input, InputLabel, TextareaAutosize } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { patchMaterialById } from '../../../services/rental/patchMaterialById';

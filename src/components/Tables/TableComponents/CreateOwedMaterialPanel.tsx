@@ -1,4 +1,4 @@
-import { Button, FormControl, FormHelperText, Grid2 as Grid, Input, InputLabel, MenuItem, Select, Tooltip } from '@mui/material';
+import { Button, FormControl, FormHelperText, Grid, Input, InputLabel, MenuItem, Select, Tooltip } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

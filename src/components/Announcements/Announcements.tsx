@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { createTheme, IconButton, Stack, ThemeProvider, Typography } from "@mui/material";
+import { createTheme, Divider, IconButton, Stack, ThemeProvider, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { readAnnouncements } from "../../services/rental/readAnnouncements";
 import { Announcement as AnnouncementType } from "../../services/types";
@@ -129,6 +129,9 @@ export const Announcements = ({ lastMessage }: { lastMessage: MessageEvent<any> 
         }} closeModal={() => { setModalAttr({ ...modalAttr, open: false, announcement: null }) }} />
       </Modal>
       <SnackbarComponent open={snackbarAttr.open} onClose={handleClose} severity={snackbarAttr.severity} message={snackbarAttr.message} />
+      {admin && (
+        <Divider />
+      )}
     </ThemeProvider>
   )
 }

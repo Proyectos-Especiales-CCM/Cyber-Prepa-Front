@@ -1,5 +1,5 @@
 import { FC, ReactElement } from "react";
-import { Typography, Box, Container, Stack, Hidden, Link } from "@mui/material";
+import { Typography, Box, Container, Stack, Link } from "@mui/material";
 import { Copyright, GitHub, Mail, WhatsApp } from "@mui/icons-material";
 import { CyberPrepaLogo } from "../CyberPrepaLogo";
 import './Footer.css';
@@ -78,7 +78,7 @@ export const Footer: FC = (): ReactElement => {
             >
               <GitHub sx={{ width: '80px', my: '1rem', fontSize: '4rem' }} />
             </a>
-            <Typography variant="body2" color="gray">version 1.1.2</Typography>
+            <Typography variant="body2" color="gray">version 1.2.0</Typography>
           </Stack>
           <Box
             sx={{
@@ -86,9 +86,9 @@ export const Footer: FC = (): ReactElement => {
               fontSize: '1.5rem',
             }}
           >
-            <Hidden smDown>
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
               |
-            </Hidden>
+            </Box>
           </Box>
           <Stack alignContent="center" spacing={1}>
             <CustomTypographyLink text="Tec de Monterrey" href="https://www.tec.mx" />
@@ -106,18 +106,17 @@ export const Footer: FC = (): ReactElement => {
               </div>
             </a>
           </Stack>
-          <Hidden mdDown>
-            <Box
-              sx={{
-                color: 'white',
-                fontSize: '1.5rem',
-                marginLeft: '1rem',
-                marginRight: '1rem',
-              }}
-            >
-              |
-            </Box>
-          </Hidden>
+          <Box
+            sx={{
+              color: 'white',
+              fontSize: '1.5rem',
+              marginLeft: '1rem',
+              marginRight: '1rem',
+              display: { sm: 'none', md: 'block' },
+            }}
+          >
+            |
+          </Box>
           <Stack direction={'column'}>
             <Typography
               variant="h6"

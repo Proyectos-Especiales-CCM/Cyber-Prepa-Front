@@ -28,9 +28,14 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
      const [isDragOver, setIsDragOver] = useState(false);
      // Countdown status [AGOTADO,LIBRE,COUNTING]
      const [countdownStatus, setCountdownStatus] = useState('');
+     // cardRef to insert inline styles to avoid CSS conflicts with driver.js
+     const cardRef = useRef<HTMLDivElement>(null);
 
 
      useEffect(() => {
+          if (cardRef.current) {
+               cardRef.current.style.setProperty("overflow", "visible", "important");
+          }
        const tokensString = localStorage.getItem('tokens');
        if (tokensString) {
          const tokens = JSON.parse(tokensString);
@@ -130,6 +135,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
      return (
      
           <div 
+               ref={cardRef}
                key = {gameData.id} 
                data-cardgameid={gameData.id}
                className={`cyber__card [ is-collapsed ] ${isDragOver ? 'card-highlight' : ''}`}
