@@ -8,6 +8,7 @@ import { Game } from "../../services/types";
 import { UserObject } from "../../store/appContext/types";
 import { useAppContext } from "../../store/appContext/useAppContext";
 import { useGamesContext } from "../../store/gamesContext/useGamesContext";
+import { Announcements } from '../../components/Announcements';
 import { getGamesData } from "./getGames";
 import './Home.css';
 
@@ -105,6 +106,7 @@ const Home = () => {
 
   return (
     <div className="cyber__wrapper">
+      <Announcements lastMessage={lastMessage}/>
       <div className="cyber__cards" id="cyberCards">
 
         {Array.isArray(gamesData)

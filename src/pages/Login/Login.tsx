@@ -117,7 +117,7 @@ const Login = () => {
           </div>
         )}
         <div className="forgot-password">
-          ¿Perdiste tu constraseña? <span>¡Haz click aqui!</span>
+          ¿Perdiste tu constraseña? <span onClick={() => alert("Por el momento no esta disponible la funcionalidad de recuperar contraseñas, lamentamos las molestias.")}>¡Haz click aqui!</span>
         </div>
         <div className="submit-container">
           <button

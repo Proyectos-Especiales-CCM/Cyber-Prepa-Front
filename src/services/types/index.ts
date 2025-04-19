@@ -95,6 +95,14 @@ export interface Image {
     image: string,
 }
 
+export interface Announcement {
+    id: number,
+    title: string,
+    content: string,
+    start_at: string,
+    end_at: string,
+}
+
 export interface ApiResponse<T> {
     data: T[]
     status: number
