@@ -7,12 +7,10 @@ import React, { CSSProperties } from 'react';
 
 interface CardExpanderProps {
   cardGame: Game;
-  shouldUpdate: boolean;
-  onUpdated(): void;
   countdownStatus: string;
 }
 
-const CardExpander: React.FC<CardExpanderProps> = ({ cardGame, shouldUpdate, onUpdated, countdownStatus }) => {
+const CardExpander: React.FC<CardExpanderProps> = ({ cardGame, countdownStatus }) => {
 
   const isGameActive = countdownStatus !== "AGOTADO";
   const showEndPlayForAllButton = Array.isArray(cardGame.plays) && cardGame.plays.length >= 1;
@@ -33,8 +31,6 @@ const CardExpander: React.FC<CardExpanderProps> = ({ cardGame, shouldUpdate, onU
       </Box>
       <CollapsedStudents
         cardGame={cardGame}
-        shouldUpdate={shouldUpdate}
-        onUpdated={onUpdated}
         isGameActive={isGameActive}
       />
     </div>

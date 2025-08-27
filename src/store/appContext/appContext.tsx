@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from 'react';
 import { AppContextProps, AppState, Tokens, UserObject } from './types';
 import { Driver, driver } from 'driver.js';
 
+let updateTokensHelper: ((access: string, refresh: string) => void) | null = null;
+
 export const AppContext = createContext<AppState | undefined>(undefined);
 
 export const AppContextProvider = ({ children }: AppContextProps) => {
@@ -33,6 +35,7 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
         setTokens(newTokens);
         localStorage.setItem('tokens', JSON.stringify(newTokens));
     };
+    updateTokensHelper = setTokensState;
 
     const logOut = () => {
         setUser(undefined);
@@ -73,3 +76,5 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
         </AppContext.Provider>
     );
 }
+
+export { updateTokensHelper };

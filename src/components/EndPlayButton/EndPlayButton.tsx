@@ -1,10 +1,11 @@
+import { Rule } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import { useState } from "react";
 import { patchPlayById } from "../../services";
 import { Play } from "../../services/types";
-import { useEffect, useState } from "react";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import { Rule } from "@mui/icons-material";
+import { useAppContext } from "../../store/appContext/useAppContext";
 
 interface EndPlayButtonProps {
   player: Play;
@@ -15,30 +16,14 @@ interface EndPlayButtonProps {
 
 const EndPlayButton: React.FC<EndPlayButtonProps> = ({ player, cardGameId, isGameActive }) => {
 
+  const { tokens } = useAppContext();
   const [open, setOpen] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    const tokensString = localStorage.getItem('tokens');
-    if (tokensString) {
-      const tokens = JSON.parse(tokensString);
-      setAccessToken(tokens.access_token);
-    }
-  }, []);
-
-  useEffect(() => {
-    const tokensString = localStorage.getItem('tokens');
-    if (tokensString) {
-      const tokens = JSON.parse(tokensString);
-      setAccessToken(tokens.access_token);
-    }
-  }, []);
 
   const handleEndPlay = async () => {
     try {
-      await patchPlayById(player.id, accessToken ?? '', { ended: true });
+      await patchPlayById(player.id, tokens?.access_token || '', { ended: true });
       setAlertMessage(`Juego del estudiante ${player.student} terminado exitosamente.`);
       setOpenSuccess(true);
     } catch (error) {
