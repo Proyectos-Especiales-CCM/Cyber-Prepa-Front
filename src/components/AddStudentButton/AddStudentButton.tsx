@@ -1,9 +1,10 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { Game, PlayResponse } from '../../services/types';
 import { createPlay } from '../../services';
 import { Loading } from '..';
 import { Box, Button, TextField } from '@mui/material';
 import { SnackbarComponent } from '../SnackbarComponent';
+import { useAppContext } from '../../store/appContext/useAppContext';
 
 interface AddStudentProps {
   cardGame: Game;
@@ -11,21 +12,13 @@ interface AddStudentProps {
 }
 
 const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
+  const { tokens } = useAppContext();
   const [studentId, setStudentId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
   const [openSuccess, setOpenSuccess] = React.useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const [accessToken, setAccessToken] = useState<string>('');
   const [inputState, setInputState] = useState<'error' | 'success' | 'standard'>('standard');
-
-  useEffect(() => {
-    const tokensString = localStorage.getItem('tokens');
-    if (tokensString) {
-      const tokens = JSON.parse(tokensString);
-      setAccessToken(tokens.access_token);
-    }
-  }, []);
 
   const regexPattern = /^[Aa]\d{8}$/;
 
@@ -50,7 +43,7 @@ const AddStudentButton: React.FC<AddStudentProps> = ({ cardGame, style }) => {
   const addStudent = async (studentId: string) => {
     try {
       setIsLoading(true);
-      const response: PlayResponse = await createPlay(false, studentId.toLowerCase(), cardGame.id, accessToken);
+      const response: PlayResponse = await createPlay(false, studentId.toLowerCase(), cardGame.id, tokens?.access_token || '');
 
       if (response.detail === 'Invalid student id') {
         setAlertMessage('Matricula inválida, vuelve a intentarlo');

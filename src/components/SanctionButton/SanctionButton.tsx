@@ -8,10 +8,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs, { Dayjs } from 'dayjs';
 import "dayjs/locale/es";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { createSanction, patchPlayById } from "../../services";
 import { Play } from "../../services/types";
 import CustomModal from "../Modal/Modal";
+import { useAppContext } from "../../store/appContext/useAppContext";
 
 
 interface SanctionButtonProps {
@@ -20,9 +21,9 @@ interface SanctionButtonProps {
 }
 
 const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
+  const { tokens } = useAppContext();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
   const [modalOpen, setModalOpen] = useState(false);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
   const [cause, setCause] = useState<string>("");
@@ -51,14 +52,6 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
     setModalOpen(false);
   };
 
-  useEffect(() => {
-    const tokensString = localStorage.getItem("tokens");
-    if (tokensString) {
-      const tokens = JSON.parse(tokensString);
-      setAccessToken(tokens.access_token);
-    }
-  }, []);
-
   const handlePerformSanction = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -75,18 +68,15 @@ const SanctionButton: React.FC<SanctionButtonProps> = ({ player }) => {
     }
 
     try {
-      if (!accessToken) {
-        throw new Error("No access token found");
-      }
 
       await createSanction(
-        accessToken,
+        tokens?.access_token || '',
         cause ?? "",
         endTime.toJSON(),
         player.student,
         player.id,
       );
-      await patchPlayById(player.id, accessToken, { ended: true });
+      await patchPlayById(player.id, tokens?.access_token || '', { ended: true });
       setAlertMessage(`Jugador ${player.id} sancionado exitosamente.`);
       setOpen(true);
     } catch (error) {

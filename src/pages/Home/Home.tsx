@@ -145,9 +145,7 @@ const Home = () => {
               <Card
                 key={game.id}
                 cardGame={game}
-                user={user}
-                shouldUpdate={game.needsUpdate || false}
-                onUpdated={() => resetUpdateFlagForGame(game.id)}
+                onUpdate={() => resetUpdateFlagForGame(game.id)}
                 sendMessage={(cardGameId: number) =>
                   sendUpdateMessage("Plays updated", user, cardGameId)
                 }

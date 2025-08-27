@@ -1,5 +1,6 @@
 import axios from "axios";
 import Config from "../config";
+import { updateTokensHelper } from "../store/appContext/appContext";
 
 interface AxiosError {
   response?: {
@@ -33,7 +34,7 @@ httpInstance.interceptors.response.use(
         const response = await axios.post(`${Config.API_URL}token/refresh/`, { "refresh": refreshToken }, { headers: { 'Content-Type': 'application/json' } });
         const access = response.data.access;
 
-        localStorage.setItem('tokens', JSON.stringify({ access_token: access, refresh_token: refreshToken }));
+        if (updateTokensHelper) updateTokensHelper(access, refreshToken)
 
         // Retry the original request with the new token
         originalRequest.headers.Authorization = `Bearer ${access}`;
