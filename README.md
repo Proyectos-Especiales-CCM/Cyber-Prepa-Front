@@ -39,7 +39,7 @@ cd Cyber-Prepa-Front
 Install the necessary packages via:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Run the development server
@@ -47,7 +47,7 @@ npm install
 Run the server via:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ### Set environment variables
@@ -71,7 +71,7 @@ To deploy the app, you must turn on the IIS feature on your Windows machine.
 Run the following command to build the app.
 
 ```bash
-npm run build
+pnpm build
 ```
 
 This will create a `dist` folder in the root of the project.

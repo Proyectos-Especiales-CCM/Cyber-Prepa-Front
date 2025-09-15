@@ -1,25 +1,23 @@
 import { initCardsFunctionality } from './initCardsFunctionality';
-import { UserObject } from '../../store/appContext/types';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { initCountdown } from './initCountdown';
 import { CardExpander } from '..';
 import { Game } from '../../services/types';
 import { completeImageUrl, patchPlayById, readGameById } from '../../services';
 import { SnackbarComponent } from '../SnackbarComponent';
 import './Card.css';
+import { useAppContext } from '../../store/appContext/useAppContext';
 
 interface CardProps {
      cardGame: Game;
-     user: UserObject | undefined;
-     shouldUpdate: boolean,
-     onUpdated(): void,
+     onUpdate(): void;
      sendMessage(cardGameId: number): void,
 }
 
-const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, sendMessage }) => {
+const Card: React.FC<CardProps> = ({ cardGame, onUpdate, sendMessage }) => {
      
+     const { tokens, user } = useAppContext();
      const [gameData, setGameData] = useState<Game>(cardGame);
-     const [accessToken, setAccessToken] = useState<string>('');
      const cardsRef = useRef<HTMLDivElement>(null);
      const countdownRef = useRef<HTMLDivElement>(null);
      const [open, setOpen] = useState(false);
@@ -31,18 +29,6 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
      // cardRef to insert inline styles to avoid CSS conflicts with driver.js
      const cardRef = useRef<HTMLDivElement>(null);
 
-
-     useEffect(() => {
-          if (cardRef.current) {
-               cardRef.current.style.setProperty("overflow", "visible", "important");
-          }
-       const tokensString = localStorage.getItem('tokens');
-       if (tokensString) {
-         const tokens = JSON.parse(tokensString);
-         setAccessToken(tokens.access_token);
-       }
-     }, []);
-     
      useEffect(() => {
           if (user !== undefined) {
                initCardsFunctionality(cardsRef)
@@ -59,27 +45,27 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
           };
       }, [gameData]);
 
-     useEffect(() => {
-          const fetchUpdatedGame = async () => {
-               if (shouldUpdate) {
-                    try {
-                         const res = await readGameById(gameData.id, accessToken)
-                         if (res && res.data) { 
-                              setGameData(res.data);
-                         } else {
-                              throw 401
-                         }
-                    } catch (err) {
-                         setAlertMessage('Error actualizando la data del juego, porfavor refresca la página');
-                         setOpen(true);
-                    }
+     const fetchUpdatedGame = useCallback(async () => {
+          try {
+               const res = await readGameById(cardGame.id, tokens?.access_token);
+               if (res && res.data) {
+                    setGameData(res.data);
+               } else {
+                    throw new Error("Invalid response");
                }
+          } catch (err) {
+               setAlertMessage(
+                    "Error actualizando la data del juego, por favor refresca la página"
+               );
+               setOpen(true);
           }
-          
-          if (shouldUpdate) {
-               fetchUpdatedGame()
-          }
-     }, [shouldUpdate, cardGame.id, accessToken, gameData.id, user, onUpdated])
+     }, [cardGame.id, tokens]);
+
+     useEffect(() => {
+          if (!cardGame.needsUpdate) return;
+          fetchUpdatedGame();
+          onUpdate()
+     }, [fetchUpdatedGame, cardGame.needsUpdate]);        
 
      const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
           if (reason === 'clickaway') {
@@ -106,7 +92,7 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
           const dragData = JSON.parse(dragDataString)
           try {
                if (cardGameId) {
-                    await patchPlayById(parseInt(dragData.playerId), accessToken, { game: parseInt(cardGameId) });
+                    await patchPlayById(parseInt(dragData.playerId), tokens?.access_token || '', { game: parseInt(cardGameId) });
                     //await deletePlayById(parseInt(dragData.playerId), accessToken);
                     // Check if not the same cardGameId as the origin drag student
                     // Check if new cardGame has expired students, else, end-game-for-all for that cardGame, then createPlay
@@ -171,8 +157,6 @@ const Card: React.FC<CardProps> = ({ cardGame, user, shouldUpdate, onUpdated, se
                {user !== undefined ? (
                     <CardExpander
                          cardGame={gameData}
-                         shouldUpdate={shouldUpdate}
-                         onUpdated={() => onUpdated}
                          countdownStatus={countdownStatus}
                     />
                ) : null}
