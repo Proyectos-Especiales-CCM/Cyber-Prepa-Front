@@ -8,6 +8,7 @@ import {
   Reglamento,
   Admin,
   Reports,
+  StudentHistory,
 } from "../pages";
 import { ROUTES } from "./Constants";
 
@@ -38,6 +39,7 @@ const routes: RouteObject[] = [
       { path: "*", element: <ErrorPage /> },
       { path: ROUTES.ADMIN, element: <Admin /> },
       { path: ROUTES.REPORTS, element: <Reports /> },
+      { path: ROUTES.STUDENT_HISTORY, element: <StudentHistory /> },
     ]
   },
 ]

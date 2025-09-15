@@ -125,13 +125,18 @@ const Header = () => {
                     <Typography sx={{ color: "white" }} textAlign="center">REGLAMENTO</Typography>
                   </Button>
                 </MenuItem>
-                {admin && (
-                  <MenuItem key={'/admin'} onClick={handleCloseNavMenu}>
-                    <Button onClick={() => navigate('/admin')}>
-                      <Typography sx={{ color: "white" }} textAlign="center">ADMIN</Typography>
-                    </Button>
-                  </MenuItem>
-                )}
+                  {admin && [
+                    <MenuItem key="/admin" onClick={handleCloseNavMenu}>
+                      <Button onClick={() => navigate('/admin')}>
+                        <Typography sx={{ color: "white" }} textAlign="center">ADMIN</Typography>
+                      </Button>
+                    </MenuItem>,
+                    <MenuItem key="/student-history" onClick={handleCloseNavMenu}>
+                      <Button onClick={() => navigate('/student-history')}>
+                        <Typography sx={{ color: "white" }} textAlign="center">HISTORIAL DE ALUMNOS</Typography>
+                      </Button>
+                    </MenuItem>
+                  ]}
                 {user ? (
                   <MenuItem key={'/logout'} onClick={handleCloseNavMenu}>
                     <Button
@@ -195,6 +200,25 @@ const Header = () => {
                     }}
                   >
                     ADMIN
+                  </Button>
+                  <Button
+                    sx={{
+                      my: 2,
+                      color: 'white',
+                      display: 'block',
+                      paddingBottom: '0',
+                      borderBottom: '2px solid transparent',
+                      transition: 'border-bottom 0.3s ease',
+                      '&:hover': {
+                        borderBottom: '2px solid white',
+                      }
+                    }}
+                    onClick={() => {
+                      handleCloseNavMenu()
+                      navigate("/student-history")
+                    }}
+                  >
+                    HISTORIAL DE ALUMNOS
                   </Button>
                 </>
               ) : null}
