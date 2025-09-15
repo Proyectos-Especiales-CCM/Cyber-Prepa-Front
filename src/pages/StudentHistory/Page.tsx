@@ -16,6 +16,7 @@ export default function Page() {
   const [student, setStudent] = useState<Student | null>(null);
   const [plays, setPlays] = useState<Play[]>([]);
   const [inputId, setInputId] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const getData = async (studentId: string) => {
     if (!studentId) return;
@@ -28,8 +29,10 @@ export default function Page() {
       // fetch plays
       const { data: playsData } = await readPlays(tokens?.access_token || "", undefined, studentId);
       setPlays(playsData || []);
+      setError(null);
     } catch (err) {
       console.error("Error fetching data:", err);
+      setError("Hubo un error al conseguir la información")
     }
   };
 
@@ -48,6 +51,7 @@ export default function Page() {
           />
           <Button onClick={() => getData(inputId)}>Buscar</Button>
         </Stack>
+        {error && <Typography color="red">{error}</Typography>}
 
         <Box sx={{ display: 'flex', flexWrap: 'wrap', marginTop: '1rem' }}>
           {student && (
