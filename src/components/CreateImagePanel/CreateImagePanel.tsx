@@ -46,7 +46,7 @@ const CreateImagePanel: React.FC<CreateImagePanelProps> = ({ openModalMessage, c
                 <Grid container direction='column' spacing={2} padding={'1rem'}>
                     <Grid size={12}>
                         <Typography>Seleccione una imagen desde su dispositivo</Typography>
-                        <input type="file" accept='image/png, image/jpeg, image/jpg' onChange={handleImageFileChange} />
+                        <input type="file" accept='image/*' onChange={handleImageFileChange} />
                     </Grid>
                     <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Tooltip title={"Subir imagen"}>

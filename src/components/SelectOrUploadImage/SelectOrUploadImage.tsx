@@ -31,7 +31,7 @@ const selectOrUploadImage: React.FC<SelectOrUploadImageProps> = ({ uploadImage, 
             spacing={2}
         >
             {
-                uploadImage ? <input id='upload-image-input' type="file" accept='image/png, image/jpeg, image/jpg' onChange={handleImageFileChange} /> : (
+                uploadImage ? <input id='upload-image-input' type="file" accept='image/*' onChange={handleImageFileChange} /> : (
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120, backgroundColor: '#949fb0', borderRadius: '2px' }}>
                         <InputLabel id="imageId-label" sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Imagen</InputLabel>
                         <Select
