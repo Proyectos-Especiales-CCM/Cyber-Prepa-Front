@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './styles.css';
-// Import other necessary dependencies
 
 const Reglamento = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -174,55 +173,60 @@ const Reglamento = () => {
   };
 
   return (
-    <div className="container">
-    <div className="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-    <header className="navigation-header">
-    <div className="header-row">
-        <div className="header-spacer"></div>
-        <div className="search-container">
-        <label className="search-label" htmlFor="fixed-header-drawer-exp">
-            Buscar en el reglamento
-        </label>
-        <input
-            className="search-input"
-            type="text"
-            id="fixed-header-drawer-exp"
-            value={searchQuery}
-            onChange={handleSearchChange}
-        />
-        </div>
-    </div>
-    </header>
-      <div className="mdl-layout__drawer navigation">
-        <span className="mdl-layout-title navigation-title">Reglas</span>
-        <nav className="left-grid">
-            {regulations.map((regulation) => (
-            <a key={regulation.id} className="navigation-link" href={`#regulation-${regulation.id}`}>{regulation.id}. {regulation.title}</a>
-          ))}
-        </nav>
-      </div>
-      <main className="mdl-layout__content">
-        <div className="page-content">
-          <div className="mdl-grid">
-            {filteredRegulations.map((regulation) => (
-              <div key={regulation.id} className={`mdl-cell mdl-card mdl-shadow--2dp ${regulation.backgroundClass} background`}>
-                <div className="mdl-card__title">
-                  <h3 className="mdl-card__title-text mdl-color-text--white card-title">{regulation.title}</h3>
-                </div>
-                <div className="mdl-card__supporting-text mdl-color-text--white">
-                  {regulation.description}
-                </div>
-              </div>
-            ))}
-            <div key={27} className={`mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp background1 background`}>
-                <div className="mdl-card__title">
-                  <h3 className="mdl-card__title-text mdl-color-text--white card-title">Atentamente: Cyber Prepa CCM<br></br><br></br>Cualquier duda y/o aclaración, favor de acudir con los responsables del área del área.</h3>
-                </div>
-              </div>
+    <div className="reglamento-container">
+      <header className="navigation-header">
+        <div className="header-row">
+          <h1 className="reglamento-title">Reglamento Cyber Prepa</h1>
+          <div className="search-container">
+            <label className="search-label" htmlFor="reglamento-search-input">
+              Buscar en el reglamento
+            </label>
+            <input
+              className="search-input"
+              type="text"
+              id="reglamento-search-input"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Escribe una palabra clave"
+            />
           </div>
         </div>
-      </main>
-    </div>
+      </header>
+
+      <div className="reglamento-layout">
+        <aside className="navigation">
+          <span className="navigation-title">Reglas</span>
+          <nav className="left-grid">
+            {regulations.map((regulation) => (
+              <a key={regulation.id} className="navigation-link" href={`#regulation-${regulation.id}`}>
+                {regulation.id}. {regulation.title}
+              </a>
+            ))}
+          </nav>
+        </aside>
+
+        <main className="reglamento-content">
+          <div className="reglamento-grid">
+            {filteredRegulations.map((regulation) => (
+              <article
+                id={`regulation-${regulation.id}`}
+                key={regulation.id}
+                className={`reglamento-card ${regulation.backgroundClass} background`}
+              >
+                <h3 className="card-title">{regulation.title}</h3>
+                <p className="card-description">{regulation.description}</p>
+              </article>
+            ))}
+
+            <article className="reglamento-card reglamento-footer-card background1 background reglamento-card-fullwidth">
+              <h3 className="card-title">Atentamente: Cyber Prepa CCM</h3>
+              <p className="card-description">
+                Cualquier duda y/o aclaración, favor de acudir con los responsables del área del área.
+              </p>
+            </article>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
