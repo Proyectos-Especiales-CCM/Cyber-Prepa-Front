@@ -10,18 +10,49 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
 
     const [user, setUser] = useState<UserObject | undefined>(() => {
         const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : undefined;
+        if (!storedUser) return undefined;
+
+        try {
+            const parsedUser = JSON.parse(storedUser);
+            if (
+                parsedUser &&
+                typeof parsedUser === 'object' &&
+                typeof parsedUser.id !== 'undefined' &&
+                typeof parsedUser.email === 'string'
+            ) {
+                return parsedUser as UserObject;
+            }
+        } catch {
+            // Ignore malformed local storage values.
+        }
+
+        localStorage.removeItem('user');
+        return undefined;
     });
 
     const [tokens, setTokens] = useState<Tokens | undefined>(() => {
         const storedTokens = localStorage.getItem('tokens');
-        return storedTokens ? JSON.parse(storedTokens) : undefined;
+        if (!storedTokens) return undefined;
+
+        try {
+            const parsedTokens = JSON.parse(storedTokens);
+            if (
+                parsedTokens &&
+                typeof parsedTokens.access_token === 'string' &&
+                typeof parsedTokens.refresh_token === 'string'
+            ) {
+                return parsedTokens as Tokens;
+            }
+        } catch {
+            // Ignore malformed local storage values.
+        }
+
+        localStorage.removeItem('tokens');
+        return undefined;
     });
 
-    const [admin, setIsAdmin] = useState<boolean>(() => {
-        const storedAdmin = localStorage.getItem('isAdmin');
-        return storedAdmin ? JSON.parse(storedAdmin) : false;
-    });
+    // Admin status must come from the backend, never from mutable local storage.
+    const [admin, setIsAdmin] = useState<boolean>(false);
 
     const [driverObj, setDriverObj] = useState<Driver>(driver({
         animate: true,
@@ -52,11 +83,6 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
             localStorage.setItem('user', JSON.stringify(user));
         }
     }, [user]);
-
-    // Save to localStorage when admin status changes
-    useEffect(() => {
-        localStorage.setItem('isAdmin', JSON.stringify(admin));
-    }, [admin]);
 
     return (
         <AppContext.Provider
