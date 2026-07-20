@@ -1,4 +1,5 @@
 export { Header } from './Header'
+export { ConnectedUsersTooltip } from './ConnectedUsersTooltip'
 export { Footer } from './Footer'
 export { Loading } from './Loading'
 export { Card } from './Card'
