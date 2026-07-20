@@ -1,13 +1,15 @@
 import httpInstance from "../httpInstance";
 import { ApiResponseSingle, Image } from "../types";
+import { convertImageToModernFormat } from "../../utils/convertImageToModernFormat";
 
 export const createImage = async ( token: string, image: File ): Promise<ApiResponseSingle<Image>> => {
 
     let res;
     const endpoint = `rental/images/`;
+    const optimizedImage = await convertImageToModernFormat(image);
 
     const requestBody = new FormData();
-    requestBody.append('image', image);
+    requestBody.append('image', optimizedImage);
 
     await httpInstance
         .post(endpoint, requestBody, {

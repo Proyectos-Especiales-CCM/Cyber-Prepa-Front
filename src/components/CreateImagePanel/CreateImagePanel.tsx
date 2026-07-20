@@ -35,7 +35,7 @@ const CreateImagePanel: React.FC<CreateImagePanelProps> = ({ openModalMessage, c
             openModalMessage('success', 'Imagen subida exitosamente.');
             closeModal();
         } catch (error) {
-            openModalMessage('error', 'No se pudo subir la imagen.');
+            openModalMessage('error', 'No se pudo subir la imagen. Verifica que sea una imagen válida para convertir a AVIF/WebP.');
             console.error(error);
         }
     };
@@ -47,6 +47,9 @@ const CreateImagePanel: React.FC<CreateImagePanelProps> = ({ openModalMessage, c
                     <Grid size={12}>
                         <Typography>Seleccione una imagen desde su dispositivo</Typography>
                         <input type="file" accept='image/*' onChange={handleImageFileChange} />
+                        <Typography variant="caption" sx={{ display: 'block', mt: 0.5, opacity: 0.85 }}>
+                            La imagen se optimiza automáticamente a AVIF o WebP antes de subirse.
+                        </Typography>
                     </Grid>
                     <Grid size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Tooltip title={"Subir imagen"}>
