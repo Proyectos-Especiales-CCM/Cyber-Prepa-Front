@@ -22,8 +22,6 @@ export const readUserMe = async (token: string,
                 status: response.status,
             };
 
-            localStorage.setItem("user", res.data.id.toString());
-
             // Obtener los tokens del localStorage
             // const tokensJson = localStorage.getItem("tokens") ?? "";
             // const tokens = JSON.parse(tokensJson);

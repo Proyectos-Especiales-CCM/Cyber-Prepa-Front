@@ -17,6 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Stack, ThemeProvider, createTheme } from "@mui/material";
 import { CyberPrepaLogo } from "..";
+import ConnectedUsersTooltip from '../ConnectedUsersTooltip/ConnectedUsersTooltip';
 import "./Header.css"
 
 const theme = createTheme({
@@ -36,7 +37,7 @@ const theme = createTheme({
 
 
 const Header = () => {
-  const { logOut, user, admin } = useAppContext();
+  const { logOut, user, admin, tokens } = useAppContext();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -223,6 +224,12 @@ const Header = () => {
                 </>
               ) : null}
             </Box>
+
+            {user ? (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ConnectedUsersTooltip accessToken={tokens?.access_token} />
+              </Box>
+            ) : null}
 
             <Box sx={{ flexGrow: 0, display: { xs: 'none', sm: 'flex' } }}>
               {user ? (

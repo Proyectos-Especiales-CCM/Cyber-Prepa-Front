@@ -80,7 +80,7 @@ const CreateGamePanel: React.FC<CreateGamePanelProps> = ({ openModalMessage, clo
             openModalMessage('success', 'Juego creado exitosamente.');
         } catch (error) {
             // Handle errors
-            openModalMessage('error', 'Lo sentimos, ha ocurrido un error al crear el juego.');
+            openModalMessage('error', 'Lo sentimos, ha ocurrido un error al crear el juego. Si subiste imagen, valida que pueda convertirse a AVIF/WebP.');
             console.error('Error:', error);
         }
     };

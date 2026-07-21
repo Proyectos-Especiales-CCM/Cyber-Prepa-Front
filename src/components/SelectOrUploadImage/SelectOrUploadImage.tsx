@@ -55,6 +55,13 @@ const selectOrUploadImage: React.FC<SelectOrUploadImageProps> = ({ uploadImage, 
                     </FormControl>
                 )
             }
+            {uploadImage ? (
+                <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                    <InputLabel sx={{ fontSize: '0.75rem', opacity: 0.85 }}>
+                        Se convertirá automáticamente a AVIF o WebP.
+                    </InputLabel>
+                </Box>
+            ) : null}
             <IconButton
                 id='change-select-or-upload'
                 color="primary"
